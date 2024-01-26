@@ -1,0 +1,41 @@
+{
+  "name": "ticktack",
+  "version": "1.0.0",
+  "scripts": {
+    "prepare": "husky install",
+    "precommit:fe": "cd frontend && npm run precommit",
+    "precommit:be": "cd backend && npm run precommit",
+    "precommit": "npm run precommit:fe && npm run precommit:be",
+    "lint:fe": "cd frontend && npm run lint",
+    "lint:be": "cd backend && npm run lint",
+    "lint": "npm run lint:fe && npm run lint:be",
+    "pretty:fe": "cd frontend && npm run pretty",
+    "pretty:be": "cd backend && npm run pretty",
+    "pretty": "npm run pretty:fe && npm run pretty:be",
+    "test:fe": "cd frontend && npm run test",
+    "test:be": "cd backend && npm run test",
+    "test": "npm run test:fe && npm run test:be",
+    "start:fe": "cd frontend && npm run start",
+    "start:be": "cd backend && npm run start",
+    "start": "npm-run-all --parallel start:*",
+    "dev:fe": "cd frontend && npm run dev",
+    "dev:be": "cd backend && npm run dev",
+    "dev": "npm-run-all --parallel dev:*"
+  },
+  "author": "HCMUSA18",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.7",
+    "concurrently": "^8.2.2",
+    "husky": "^8.0.0",
+    "npm-run-all": "^4.1.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}
