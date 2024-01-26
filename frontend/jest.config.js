@@ -9,16 +9,10 @@ module.exports = {
     'jest-runner'
   ],
   // setup async-storage mock
-  setupFiles: ['<rootDir>/__mocks__/setupJest.js'],
+  setupFiles: ['<rootDir>/src/test/setup.ts'],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.maestro/', '@react-native'],
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.test.tsx?$': [
-      'ts-jest',
-      {
-        useESM: true,
-        babelConfig: '<rootDir>/babel.config.js'
-      }
-    ]
+    '^.+\\.test.tsx?$': ['ts-jest', { tsconfig: '<rootDir>/src/test/test-tsconfig.json' }]
   }
 }
