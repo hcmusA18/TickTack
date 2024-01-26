@@ -1,0 +1,23 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "allowJs": false,
+    "composite": true,
+    "module": "ESNext",
+    "jsx": "react-native",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "assets/*": ["./src/assets/*"],
+      "libs/*": ["./src/libs/*"],
+      "pages": ["./src/pages"],
+      "pages/*": ["./src/pages/*"],
+      "types" : ["./src/types"],
+      "types/*": ["./src/types/*"],
+      "configs": ["./src/libs/configs"],
+      "configs/*": ["./src/libs/configs/*"],
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "babel.config.js"]
+}
