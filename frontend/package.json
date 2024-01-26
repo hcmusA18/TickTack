@@ -4,7 +4,6 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "prepare": "cd ../ && husky install",
-    "precommit": "pretty-quick --staged",
     "compile": "tsc --noEmit -p . --pretty",
     "pretty": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "pretty:fix": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",

@@ -9,7 +9,7 @@ module.exports = {
     'jest-runner'
   ],
   // setup async-storage mock
-  setupFiles: ['<rootDir>/__mocks__/@react-native-async-storage/async-storage.js'],
+  setupFiles: ['<rootDir>/__mocks__/setupJest.js'],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.maestro/', '@react-native'],
   testEnvironment: 'jsdom',
   transform: {

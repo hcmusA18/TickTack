@@ -9,7 +9,7 @@
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "test": "jest src --passWithNoTests",
     "lint": "eslint --ext .js,.ts src",
-    "pretty": "prettier --write \"src/**/*.ts\"",
+    "pretty": "prettier --check \"src/**/*.ts\"",
     "pretty:fix": "prettier --write \"src/**/*.ts\""
   },
   "author": "",
