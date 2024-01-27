@@ -36,7 +36,7 @@
 - React, React Native (for the mobile app)
 - Redux, Redux Toolkit (for state management)
 - React Navigation (for navigation)
-- UI Kitten (for UI components)
+- React Native Paper (for UI)
 - Axios (for making HTTP requests) -- still not installed
 - FlashList (replace for FlatList)
 - AsyncStorage (replace for LocalStorage)

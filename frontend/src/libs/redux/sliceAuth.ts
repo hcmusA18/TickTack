@@ -14,10 +14,10 @@ const AuthSlice = createSlice({
   } as AuthState,
   reducers: {
     setAuthToken(state, action: PayloadAction<string>) {
-      state.authToken = action.payload
+      merge(state, action.payload)
     },
     setAuthEmail(state, action: PayloadAction<string>) {
-      state.authEmail = action.payload
+      merge(state, action.payload)
     },
     setAuth(state, action: PayloadAction<AuthState>) {
       merge(state, action.payload)

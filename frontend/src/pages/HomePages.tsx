@@ -2,10 +2,10 @@ import React, { FC } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { Screen } from '../components'
 import { AppStackScreenProps } from '../navigators'
-import { Button } from 'react-native-paper'
 import { spacing } from '../theme'
+import { Button } from 'react-native-paper'
 
-interface WelcomePageProps extends AppStackScreenProps<'Welcome'> {}
+interface HomePageProps extends AppStackScreenProps<'Home'> {}
 
 const styles = StyleSheet.create({
   container: {
@@ -25,19 +25,21 @@ const styles = StyleSheet.create({
   }
 })
 
-export const WelcomePage: FC<WelcomePageProps> = (props) => {
+export const HomePage: FC<HomePageProps> = (props) => {
   const { navigation } = props
-
-  const goNext = () => {
-    navigation.navigate('Login')
-  }
 
   return (
     <Screen preset="fixed" safeAreaEdges={['top', 'bottom']} contentContainerStyle={styles.container}>
       <View style={styles.topContainer}>
-        <Text style={styles.welcomeTextStyles}>Welcome to TickTack</Text>
-        <Button onPress={goNext}>Go to Login</Button>
+        <Text style={styles.welcomeTextStyles}>Login successfully</Text>
       </View>
+      <Button
+        mode="contained"
+        onPress={() => {
+          navigation.navigate('Login')
+        }}>
+        Logout
+      </Button>
     </Screen>
   )
 }

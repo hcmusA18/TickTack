@@ -1,4 +1,8 @@
-const plugins = ['@babel/plugin-proposal-export-namespace-from', 'react-native-reanimated/plugin']
+const plugins = [
+  '@babel/plugin-proposal-export-namespace-from',
+  'react-native-reanimated/plugin',
+  'react-native-paper/babel'
+]
 
 module.exports = function (api) {
   api.cache(true)

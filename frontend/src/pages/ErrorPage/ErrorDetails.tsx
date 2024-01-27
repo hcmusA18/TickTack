@@ -1,8 +1,7 @@
 import React, { ErrorInfo } from 'react'
-import { Layout, Text, Button, Icon } from '@ui-kitten/components'
-import { ScrollView, TextStyle, ViewStyle } from 'react-native'
+import { Text, Button, Icon } from 'react-native-paper'
+import { ScrollView, ViewStyle, StyleSheet, View } from 'react-native'
 import { colors, spacing } from '../../theme'
-import { useTheme, useStyleSheet, StyleService } from '@ui-kitten/components'
 import { Screen } from '../../components/Screen'
 
 export interface ErrorDetailsProps {
@@ -11,7 +10,7 @@ export interface ErrorDetailsProps {
   onReset: () => void
 }
 
-const themedStyles = StyleService.create({
+const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     paddingHorizontal: spacing.lg,
@@ -48,21 +47,19 @@ const themedStyles = StyleService.create({
   }
 })
 export const ErrorDetails = (props: ErrorDetailsProps) => {
-  const styles = useStyleSheet(themedStyles)
-
   return (
     <Screen preset="fixed" safeAreaEdges={['top', 'bottom']} contentContainerStyle={styles.container}>
-      <Layout style={styles.topSection}>
-        <Icon name="alert-circle-outline" fill={colors.error} style={{ width: 64, height: 64 }} />
-        <Text category="h1" style={styles.heading}>
+      <View style={styles.topSection}>
+        <Icon source="alert-circle-outline" color={colors.error} size={64} />
+        <Text variant="headlineLarge" style={styles.heading}>
           Something went wrong!
         </Text>
-        <Text category="s1">
+        <Text variant="labelLarge">
           This is the screen that your users will see in production when an error is thrown. You'll want to customize
           this message (located in `app/i18n/en.ts`) and probably the layout as well (`app/screens/ErrorScreen`). If you
           want to remove this entirely, check `app/app.tsx` for the ErrorBoundary component.
         </Text>
-      </Layout>
+      </View>
 
       <ScrollView style={styles.errorSection} contentContainerStyle={styles.errorSectionContentContainer}>
         <Text style={styles.errorText}>{`${props.error}`.trim()}</Text>

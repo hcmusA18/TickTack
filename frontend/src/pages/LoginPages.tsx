@@ -1,13 +1,15 @@
-import React, { ComponentType, FC, useEffect, useMemo, useRef, useState } from 'react'
-import { TextInput, ViewStyle } from 'react-native'
+import React, { FC, useEffect, useState } from 'react'
+import { ViewStyle, StyleSheet } from 'react-native'
+import { Text, Button, TextInput } from 'react-native-paper'
 import { AppStackScreenProps } from '../navigators'
 import { Screen } from '../components'
-import { StyleService, useStyleSheet, Text } from '@ui-kitten/components'
 import { spacing } from '../theme'
+import { useAppDispatch, useAppSelector } from 'libs/redux'
+import { setAuth } from 'libs/redux/sliceAuth'
 
 interface LoginPageProps extends AppStackScreenProps<'Login'> {}
 
-const themedStyles = StyleService.create({
+const styles = StyleSheet.create({
   contentContainer: {
     paddingVertical: spacing.xxl,
     paddingHorizontal: spacing.lg
@@ -15,42 +17,65 @@ const themedStyles = StyleService.create({
 })
 
 export const LoginPage: FC<LoginPageProps> = (props) => {
-  const authPasswordInput = useRef<TextInput>(null)
+  const { navigation } = props
+  const dispatch = useAppDispatch()
+
+  // const authPasswordInput = useRef<Input>(null)
   const [password, setPassword] = useState<string>('')
-  const [email, setEmail] = useState<string>('')
-  const [token, setToken] = useState<string>('')
+  const { authToken, authEmail } = useAppSelector((state) => state.auth)
+  const [inputEmail, setInputEmail] = useState<string>(authEmail || '')
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false)
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
   const [attemptCount, setAttemptCount] = useState<number>(0)
 
-  const styles = useStyleSheet(themedStyles)
+  // const error = isSubmitted && attemptCount >= 3
 
-  const error = isSubmitted && attemptCount >= 3
+  useEffect(() => {
+    if (authToken) {
+      navigation.navigate('Home')
+    }
+    setInputEmail(authEmail || 'email@mail.com')
+    setPassword('123456789')
+  }, [])
+
+  const togglePasswordVisible = () => {
+    setIsPasswordVisible(!isPasswordVisible)
+  }
 
   const login = () => {
     setIsSubmitted(true)
     setAttemptCount(attemptCount + 1)
-
+    if (!inputEmail || !password || isSubmitted) return
+    if (inputEmail && password) {
+      dispatch(setAuth({ authEmail: inputEmail, authToken: String(Date.now) }))
+      navigation.navigate('Home')
+    }
     setIsSubmitted(false)
+    setInputEmail('')
     setPassword('')
-    setEmail('')
-
-    setToken(String(Date.now()))
   }
 
   return (
     <Screen preset="auto" contentContainerStyle={styles.contentContainer} safeAreaEdges={['top', 'bottom']}>
-      <Text category="h1">Login</Text>
+      <Text variant="headlineLarge">Login</Text>
       <TextInput
-        ref={authPasswordInput}
-        secureTextEntry={!isPasswordVisible}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        onSubmitEditing={login}
-        returnKeyType="done"
-        blurOnSubmit={false}
+        value={inputEmail}
+        label="Email"
+        placeholder="Type your email"
+        onChangeText={(nextValue) => setInputEmail(nextValue)}
       />
+      <TextInput
+        value={password}
+        label="Password"
+        placeholder="Type your password"
+        left={<TextInput.Icon icon="alert-circle-outline" />}
+        right={<TextInput.Icon icon={isPasswordVisible ? 'eye' : 'eye-off'} onPress={togglePasswordVisible} />}
+        secureTextEntry={!isPasswordVisible}
+        onChangeText={(nextValue) => setPassword(nextValue)}
+      />
+      <Button onPress={login} mode="outlined">
+        Login
+      </Button>
     </Screen>
   )
 }

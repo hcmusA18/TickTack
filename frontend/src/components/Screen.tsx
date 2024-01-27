@@ -1,3 +1,4 @@
+/* eslint-disable react-native/sort-styles */
 import { useScrollToTop } from '@react-navigation/native'
 import { StatusBar, StatusBarProps } from 'expo-status-bar'
 import React, { FC, useRef, useState } from 'react'
@@ -6,15 +7,13 @@ import {
   KeyboardAvoidingViewProps,
   LayoutChangeEvent,
   Platform,
-  SafeAreaView,
   ScrollView,
   ScrollViewProps,
   StyleProp,
+  StyleSheet,
   View,
   ViewStyle
 } from 'react-native'
-import * as eva from '@eva-design/eva'
-import { useTheme, useStyleSheet, StyleService, Layout, LayoutProps } from '@ui-kitten/components'
 import { colors } from '../theme'
 import { ExtendedEdge, useSafeAreaInsetsStyle } from 'libs/utils/useSafeAreaInsetsStyle'
 
@@ -129,7 +128,7 @@ const useAutoPreset = (props: AutoScreenProps) => {
   }
 }
 
-const themedStyles = StyleService.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     height: '100%',
@@ -151,11 +150,10 @@ const themedStyles = StyleService.create({
 
 const ScreenWithoutScrolling = (props: ScreenProps) => {
   const { style, contentContainerStyle, children } = props
-  const styles = useStyleSheet(themedStyles)
   return (
-    <Layout style={[styles.outerStyle, style]}>
-      <Layout style={[styles.innerStyle, contentContainerStyle]}>{children}</Layout>
-    </Layout>
+    <View style={[styles.outerStyle, style]}>
+      <View style={[styles.innerStyle, contentContainerStyle]}>{children}</View>
+    </View>
   )
 }
 
@@ -167,7 +165,6 @@ const ScreenWithScrolling = (props: ScreenProps) => {
     ScrollViewProps,
     keyboardShouldPersistTaps = 'handled'
   } = props as ScrollScreenProps
-  const styles = useStyleSheet(themedStyles)
   const ref = useRef<ScrollView>(null)
   const { scrollEnabled, onContentSizeChange, onLayout } = useAutoPreset(props as AutoScreenProps)
 
@@ -203,7 +200,6 @@ export const Screen: FC<ScreenProps> = (props) => {
     keyboardOffset = 0,
     safeAreaEdges
   } = props
-  const styles = useStyleSheet(themedStyles)
   const containerInsets = useSafeAreaInsetsStyle(safeAreaEdges)
   return (
     <View style={[styles.container, containerInsets, { backgroundColor }]}>

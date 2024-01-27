@@ -4,13 +4,15 @@ import 'libs/utils/ignoreWarnings'
 import { initialWindowMetrics, SafeAreaProvider } from 'react-native-safe-area-context'
 import * as Linking from 'expo-linking'
 import * as storage from 'libs/utils/storage'
-import * as eva from '@eva-design/eva'
+import Config from 'configs'
 import { customFontsToLoad } from './theme'
 import { ViewStyle } from 'react-native'
 import { AppNavigator, useNavigationPersistence } from './navigators'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { ApplicationProvider } from '@ui-kitten/components'
+import { PaperProvider } from 'react-native-paper'
 import { ErrorBoundary } from 'pages/ErrorPage/ErrorBoundary'
+import { Provider } from 'react-redux'
+import { store } from 'libs/redux'
 
 export const NAVIGATION_PERSISTENCE_KEY = 'NAVIGATION_STATE'
 
@@ -52,15 +54,17 @@ const App = (props: AppProps) => {
 
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <ErrorBoundary>
+      <ErrorBoundary catchErrors={Config.catchErrors}>
         <GestureHandlerRootView style={containerStyle}>
-          <ApplicationProvider {...eva} theme={eva.light}>
-            <AppNavigator
-              linking={linking}
-              initialState={initialNavigationState}
-              onStateChange={onNavigationStateChange}
-            />
-          </ApplicationProvider>
+          <Provider store={store}>
+            <PaperProvider>
+              <AppNavigator
+                linking={linking}
+                initialState={initialNavigationState}
+                onStateChange={onNavigationStateChange}
+              />
+            </PaperProvider>
+          </Provider>
         </GestureHandlerRootView>
       </ErrorBoundary>
     </SafeAreaProvider>
