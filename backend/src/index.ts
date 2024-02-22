@@ -3,6 +3,13 @@ import cors from "cors";
 import express from "express";
 import userRouter from "./routes/user.route";
 import authMiddleware from "./middlewares/auth.middleware";
+import * as admin from "firebase-admin";
+import serviceAccount from "./serviceAccountKey.json";
+
+// Initialize Firebase Admin SDK
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+});
 
 const app = express();
 const PORT = process.env.PORT || 4000;
