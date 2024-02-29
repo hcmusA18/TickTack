@@ -7,8 +7,6 @@ import * as ImagePicker from 'expo-image-picker'
 import * as MediaLibrary from 'expo-media-library'
 import { useIsFocused } from '@react-navigation/core'
 import { Feather } from '@expo/vector-icons'
-import { set } from 'date-fns'
-import { transparent } from 'react-native-paper/lib/typescript/styles/themes/v2/colors'
 
 interface CameraPageProps extends AppStackScreenProps<'Camera'> {}
 
@@ -20,7 +18,8 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
   const [mediaPermission, setMediaPermission] = useState(false)
   const [recording, setRecording] = useState(false)
   const [recordingTime, setRecordingTime] = useState(0)
-  const [galleryItems, setgalleryItems] = useState([])
+  const [galleryItems, setGalleryItems] = useState([])
+  const [galleryItemUri, setGalleryItemUri] = useState<string | null>(null)
   const [cameraRef, setCameraRef] = useState(null)
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back)
   const [cameraFlash, setCameraFlash] = useState(Camera.Constants.FlashMode.off)
@@ -39,8 +38,8 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
 
         if (mediaPermission) {
           const assets = await MediaLibrary.getAssetsAsync({ sortBy: ['creationTime'], mediaType: ['video'] })
-          setgalleryItems(assets.assets)
-          console.log('Gallery items:', galleryItems)
+          setGalleryItems(assets.assets)
+          // console.log('Gallery items:', galleryItems)
         }
 
         const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync()
@@ -87,6 +86,14 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
     return () => clearInterval(timerId)
   }, [recording])
 
+  // Set gallery item uri
+  useEffect(() => {
+    if (galleryItems[0] !== undefined) {
+      console.log('Loaded gallery item:', galleryItems[0].uri)
+      setGalleryItemUri(galleryItems[0].uri)
+    }
+  }, [galleryItems])
+
   const recordVideo = async () => {
     try {
       if (!cameraReady) return
@@ -98,6 +105,7 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
       if (video) {
         const data = await video
         const source = data.uri
+        navigation.navigate('SavePost', { source })
       }
     } catch (error) {
       console.error('Error while recording video:', error)
@@ -125,7 +133,9 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
         quality: 1
       })
       if (!result.canceled) {
-        console.log('Image picked:', result)
+        console.log('Video picked:', result)
+        const source = result.assets[0].uri
+        navigation.navigate('SavePost', { source })
       }
     } catch (error) {
       console.error('Error while picking image:', error)
@@ -202,7 +212,7 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
             {galleryItems[0] === undefined ? (
               <></>
             ) : (
-              <Image style={styles.galleryButtonImage} source={{ uri: galleryItems[0].uri }} />
+              <Image style={styles.galleryButtonImage} source={{ uri: galleryItemUri }} />
             )}
           </TouchableOpacity>
         </View>

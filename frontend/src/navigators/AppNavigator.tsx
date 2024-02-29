@@ -26,11 +26,12 @@ import Config from 'configs'
  *   https://reactnavigation.org/docs/typescript/#organizing-types
  */
 export type AppStackParamList = {
-  Camera: undefined
   Welcome: undefined
   Login: undefined
   // 🔥 Your screens go here
   Home: undefined
+  Camera: undefined
+  SavePost: undefined
 }
 
 /**
@@ -49,11 +50,12 @@ const AppStack = () => {
       screenOptions={{
         headerShown: false
       }}>
-      <Stack.Screen name="Camera" component={Pages.CameraPage} />
       <Stack.Screen name="Welcome" component={Pages.WelcomePage} />
       <Stack.Screen name="Login" component={Pages.LoginPage} />
       {/* 🔥 Here's where your screens go */}
       <Stack.Screen name="Home" component={Pages.HomePage} />
+      <Stack.Screen name="Camera" component={Pages.CameraPage} />
+      <Stack.Screen name="SavePost" component={Pages.SavePostPage} />
     </Stack.Navigator>
   )
 }
