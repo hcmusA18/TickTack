@@ -1,12 +1,14 @@
 import React, { FC, useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import { AppStackScreenProps } from '../../navigators'
+import { AppStackScreenProps } from '../navigators'
 import { Camera } from 'expo-camera'
 import { Audio } from 'expo-av'
 import * as ImagePicker from 'expo-image-picker'
 import * as MediaLibrary from 'expo-media-library'
 import { useIsFocused } from '@react-navigation/core'
 import { Feather } from '@expo/vector-icons'
+import { set } from 'date-fns'
+import { transparent } from 'react-native-paper/lib/typescript/styles/themes/v2/colors'
 
 interface CameraPageProps extends AppStackScreenProps<'Camera'> {}
 
@@ -16,6 +18,8 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
   const [audioPermission, setAudioPermission] = useState(false)
   const [galleryPermission, setGalleryPermission] = useState(false)
   const [mediaPermission, setMediaPermission] = useState(false)
+  const [recording, setRecording] = useState(false)
+  const [recordingTime, setRecordingTime] = useState(0)
   const [galleryItems, setgalleryItems] = useState([])
   const [cameraRef, setCameraRef] = useState(null)
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back)
@@ -24,9 +28,21 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
 
   const isFoucused = useIsFocused()
 
+  // Get permissions
   useEffect(() => {
     const getPermissions = async () => {
       try {
+        // Get all permissions
+        const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync()
+        console.log('Media permission:', mediaStatus)
+        setMediaPermission(mediaStatus === 'granted')
+
+        if (mediaPermission) {
+          const assets = await MediaLibrary.getAssetsAsync({ sortBy: ['creationTime'], mediaType: ['video'] })
+          setgalleryItems(assets.assets)
+          console.log('Gallery items:', galleryItems)
+        }
+
         const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync()
         console.log('Camera permission:', cameraStatus)
         setCameraPermission(cameraStatus === 'granted')
@@ -39,10 +55,6 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
         console.log('Gallery permission:', galleryStatus)
         setGalleryPermission(galleryStatus === 'granted')
 
-        const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync()
-        console.log('Media permission:', mediaStatus)
-        setMediaPermission(mediaStatus === 'granted')
-
         if (cameraStatus === 'granted' && audioStatus === 'granted' && galleryStatus === 'granted') {
           console.log('All permissions granted')
         } else {
@@ -53,12 +65,6 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
             </View>
           )
         }
-
-        if (mediaPermission) {
-          const assets = await MediaLibrary.getAssetsAsync({ sortBy: ['creationTime'], mediaType: ['video'] })
-          setgalleryItems(assets.assets)
-          console.log('Gallery items:', galleryItems)
-        }
       } catch (error) {
         console.error('Error while requesting permissions:', error)
       }
@@ -66,9 +72,25 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
     getPermissions()
   }, [])
 
+  // Update recording time
+  useEffect(() => {
+    let timerId: NodeJS.Timeout
+
+    if (recording) {
+      timerId = setInterval(() => {
+        setRecordingTime((prevTime) => prevTime + 1)
+      }, 1000)
+    } else {
+      clearInterval(timerId)
+    }
+
+    return () => clearInterval(timerId)
+  }, [recording])
+
   const recordVideo = async () => {
     try {
       if (!cameraReady) return
+      setRecording(true)
       const video = await cameraRef.recordAsync({
         quality: Camera.Constants.VideoQuality['480p'],
         maxDuration: 20
@@ -86,6 +108,8 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
     try {
       if (!cameraReady) return
       cameraRef.stopRecording()
+      setRecording(false)
+      setRecordingTime(0)
     } catch (error) {
       console.error('Error while stopping video:', error)
     }
@@ -108,6 +132,12 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
     }
   }
 
+  const formatTime = (timeInSeconds: number): string => {
+    const minutes = Math.floor(timeInSeconds / 60)
+    const seconds = timeInSeconds % 60
+    return `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+  }
+
   return (
     <View style={styles.container}>
       {isFoucused && cameraPermission && audioPermission && galleryPermission ? (
@@ -121,6 +151,12 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
         />
       ) : (
         <Text>Permissions not granted</Text>
+      )}
+
+      {recording && (
+        <View style={styles.recordingTimeContainer}>
+          <Text style={styles.recordingTimeText}>{formatTime(recordingTime)}</Text>
+        </View>
       )}
 
       <View style={styles.sideBarContainer}>
@@ -182,7 +218,8 @@ const COLORS = {
   red: '#dc3545',
   green: '#28a745',
   recordBtnBorder: '#FF404087',
-  recordBtn: '#FF4040'
+  recordBtn: '#FF4040',
+  transparent: 'transparent'
 }
 
 const styles = StyleSheet.create({
@@ -242,5 +279,17 @@ const styles = StyleSheet.create({
   sideBarButton: {
     alignItems: 'center',
     marginBottom: 25
+  },
+  recordingTimeContainer: {
+    position: 'absolute',
+    top: 20,
+    alignSelf: 'center',
+    backgroundColor: COLORS.transparent,
+    padding: 10,
+    borderRadius: 20
+  },
+  recordingTimeText: {
+    color: COLORS.white,
+    fontSize: 20
   }
 })
