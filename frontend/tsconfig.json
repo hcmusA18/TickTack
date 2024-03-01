@@ -12,6 +12,8 @@
       "libs/*": ["./src/libs/*"],
       "pages": ["./src/pages"],
       "pages/*": ["./src/pages/*"],
+      "theme": ["./src/theme"],
+      "theme/*": ["./src/theme/*"],
       "types": ["./src/types"],
       "types/*": ["./src/types/*"],
       "configs": ["./src/libs/configs"],

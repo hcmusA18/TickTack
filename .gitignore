@@ -24,4 +24,6 @@ dist-ssr
 *.sw?
 **/bin
 
+package-lock.json
+
 serviceAccountKey.json
