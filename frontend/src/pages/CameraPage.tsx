@@ -33,31 +33,23 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
       try {
         // Get all permissions
         const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync()
-        console.log('Media permission:', mediaStatus)
         setMediaPermission(mediaStatus === 'granted')
 
         if (mediaPermission) {
           const assets = await MediaLibrary.getAssetsAsync({ sortBy: ['creationTime'], mediaType: ['video'] })
           setGalleryItems(assets.assets)
-          // console.log('Gallery items:', galleryItems)
         }
 
         const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync()
-        console.log('Camera permission:', cameraStatus)
         setCameraPermission(cameraStatus === 'granted')
 
         const { status: audioStatus } = await Audio.requestPermissionsAsync()
-        console.log('Audio permission:', audioStatus)
         setAudioPermission(audioStatus === 'granted')
 
         const { status: galleryStatus } = await ImagePicker.requestMediaLibraryPermissionsAsync()
-        console.log('Gallery permission:', galleryStatus)
         setGalleryPermission(galleryStatus === 'granted')
 
-        if (cameraStatus === 'granted' && audioStatus === 'granted' && galleryStatus === 'granted') {
-          console.log('All permissions granted')
-        } else {
-          console.log('Some permissions are not granted')
+        if (!(cameraStatus === 'granted' && audioStatus === 'granted' && galleryStatus === 'granted')) {
           return (
             <View style={styles.container}>
               <Text>Some permissions are not granted</Text>
@@ -89,7 +81,6 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
   // Set gallery item uri
   useEffect(() => {
     if (galleryItems[0] !== undefined) {
-      console.log('Loaded gallery item:', galleryItems[0].uri)
       setGalleryItemUri(galleryItems[0].uri)
     }
   }, [galleryItems])
@@ -133,7 +124,6 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
         quality: 1
       })
       if (!result.canceled) {
-        console.log('Video picked:', result)
         const source = result.assets[0].uri
         navigation.navigate('SavePost', { source })
       }
@@ -209,7 +199,7 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
 
         <View style={{ flex: 1 }}>
           <TouchableOpacity onPress={() => pickVideo()} style={styles.galleryBtn}>
-            {galleryItems[0] === undefined ? (
+            {galleryItemUri === null ? (
               <></>
             ) : (
               <Image style={styles.galleryButtonImage} source={{ uri: galleryItemUri }} />

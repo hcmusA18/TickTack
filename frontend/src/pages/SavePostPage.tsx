@@ -7,7 +7,6 @@ import { RadioButton } from 'react-native-paper'
 interface SavePostPageProps extends AppStackScreenProps<'SavePost'> {}
 
 export const SavePostPage: FC<SavePostPageProps> = (props) => {
-  //   console.log('SavePostPageProps:', props)
   const { navigation } = props
 
   const [textInput, setTextInput] = useState('')
