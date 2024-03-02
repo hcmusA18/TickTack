@@ -30,6 +30,7 @@ export type AppStackParamList = {
   Login: undefined
   // 🔥 Your screens go here
   Home: undefined
+  PersonalProfileHome: undefined
 }
 
 /**
@@ -48,6 +49,7 @@ const AppStack = () => {
       screenOptions={{
         headerShown: false
       }}>
+      <Stack.Screen name="PersonalProfileHome" component={Pages.PersonalProfileHomePage} />
       <Stack.Screen name="Welcome" component={Pages.WelcomePage} />
       <Stack.Screen name="Login" component={Pages.LoginPage} />
       {/* 🔥 Here's where your screens go */}

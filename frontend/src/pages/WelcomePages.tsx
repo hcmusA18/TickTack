@@ -29,7 +29,8 @@ export const WelcomePage: FC<WelcomePageProps> = (props) => {
   const { navigation } = props
 
   const goNext = () => {
-    navigation.navigate('Login')
+    // navigation.navigate('Login')
+    navigation.navigate('PersonalProfileHome')
   }
 
   return (
