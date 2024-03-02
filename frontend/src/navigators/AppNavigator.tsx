@@ -31,6 +31,8 @@ export type AppStackParamList = {
   // 🔥 Your screens go here
   Home: undefined
   PersonalProfileHome: undefined
+  EditProfile: undefined
+  EditProfileField: { fieldName: string; fieldValue: string }
 }
 
 /**
@@ -50,6 +52,8 @@ const AppStack = () => {
         headerShown: false
       }}>
       <Stack.Screen name="PersonalProfileHome" component={Pages.PersonalProfileHomePage} />
+      <Stack.Screen name="EditProfile" component={Pages.EditProfilePage} />
+      <Stack.Screen name="EditProfileField" component={Pages.EditProfileFieldPage} />
       <Stack.Screen name="Welcome" component={Pages.WelcomePage} />
       <Stack.Screen name="Login" component={Pages.LoginPage} />
       {/* 🔥 Here's where your screens go */}
