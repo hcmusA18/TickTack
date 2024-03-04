@@ -29,6 +29,7 @@
     "web": {
       "favicon": "./src/assets/favicon.png"
     },
-    "plugins": ["expo-font"]
+    "plugins": ["expo-font"],
+    "permissions": ["CAMERA", "AUDIO_RECORDING", "CAMERA_ROLL", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
   }
 }
