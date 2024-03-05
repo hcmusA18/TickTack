@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import { AppStackScreenProps } from '../navigators'
+import { AppStackScreenProps } from '../../../../navigators'
 import { Feather } from '@expo/vector-icons'
-import { Screen } from '../components'
+import { Screen } from '../../../../components'
 import { Divider } from 'react-native-paper'
 import { TextInput } from 'react-native-gesture-handler'
 

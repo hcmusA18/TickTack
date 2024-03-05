@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useState } from 'react'
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text } from 'react-native-paper'
-import { AppStackScreenProps } from '../navigators'
-import { Screen } from '../components'
+import { AppStackScreenProps } from '../../../../navigators'
+import { Screen } from '../../../../components'
 import { Feather } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
 

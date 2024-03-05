@@ -1,13 +1,13 @@
 import React, { FC, useEffect, useState } from 'react'
 import { View, ViewStyle, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text, Avatar } from 'react-native-paper'
-import { AppStackScreenProps } from '../navigators'
-import { Screen } from '../components'
-import { ProfileNavbar } from '../components/profile/navbar'
+import { AppStackScreenProps } from '../../../../navigators'
+import { Screen } from '../../../../components'
+import { ProfileNavbar } from './components/navbar'
 // import { ProfileHeader } from '../components/profile/header'
-import { MyVideosContent } from '../components/profile/videoContent/myVideosContent'
-import { LikedVideosContent } from '../components/profile/videoContent/likedVideosContent'
-import { SavedPostsContent } from '../components/profile/videoContent/savedPostsContent'
+import { MyVideosContent } from './components/MyVideos'
+import { LikedVideosContent } from './components/LikedVideos'
+import { SavedPostsContent } from './components/SavedPosts'
 import { Feather } from '@expo/vector-icons'
 
 interface PersonalProfileHomePageProps extends AppStackScreenProps<'PersonalProfileHome'> {}
@@ -186,11 +186,13 @@ const styles = StyleSheet.create({
   },
 
   buttonStyle: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: 'white',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
-    marginHorizontal: 5
+    // borderRadius: 5,
+    marginHorizontal: 5,
+    borderWidth: 1.5,
+    borderColor: 'lightgrey'
   },
 
   buttonText: {
