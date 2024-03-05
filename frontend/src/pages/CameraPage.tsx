@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import { AppStackScreenProps } from '../navigators'
+import { MainTabScreenProps } from '../navigators'
 import { Camera } from 'expo-camera'
 import { Audio } from 'expo-av'
 import * as ImagePicker from 'expo-image-picker'
@@ -8,7 +8,7 @@ import * as MediaLibrary from 'expo-media-library'
 import { useIsFocused } from '@react-navigation/core'
 import { Feather } from '@expo/vector-icons'
 
-interface CameraPageProps extends AppStackScreenProps<'Camera'> {}
+interface CameraPageProps extends MainTabScreenProps<'Camera'> {}
 
 export const CameraPage: FC<CameraPageProps> = (props) => {
   const { navigation } = props
