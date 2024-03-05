@@ -8,7 +8,9 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "paths": {
+      "assets": ["./src/assets"],
       "assets/*": ["./src/assets/*"],
+      "libs": ["./src/libs"],
       "libs/*": ["./src/libs/*"],
       "pages": ["./src/pages"],
       "pages/*": ["./src/pages/*"],
