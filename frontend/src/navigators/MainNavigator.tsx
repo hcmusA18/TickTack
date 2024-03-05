@@ -1,16 +1,19 @@
-import { createMaterialBottomTabNavigator, MaterialBottomTabScreenProps } from 'react-native-paper/react-navigation'
+import { createMaterialBottomTabNavigator, MaterialBottomTabScreenProps } from '@react-navigation/material-bottom-tabs'
 import { CompositeScreenProps } from '@react-navigation/native'
-import React from 'react'
-import { TextStyle, ViewStyle } from 'react-native'
+import React, { useState } from 'react'
+import { Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { colors, spacing, typography } from '../theme'
 import { AppStackParamList, AppStackScreenProps } from './AppNavigator'
 import * as Pages from '../pages'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { MaterialCommunityIcons, AntDesign, FontAwesome, Feather } from '@expo/vector-icons'
+import CameraButton from '../components/CameraButton'
 
 export type MainTabParamList = {
   Home: undefined
   Camera: undefined
+  Profile: undefined
+  Notification: undefined
+  Friend: undefined
 }
 
 export type MainTabScreenProps<T extends keyof MainTabParamList> = CompositeScreenProps<
@@ -20,34 +23,82 @@ export type MainTabScreenProps<T extends keyof MainTabParamList> = CompositeScre
 
 const Tab = createMaterialBottomTabNavigator<MainTabParamList>()
 
-export const MainNavigator = () => {
-  const insets = useSafeAreaInsets()
+const EmptyPage = () => {
   return (
-    <Tab.Navigator
-      initialRouteName="Home"
-      barStyle={{ backgroundColor: colors.background, paddingBottom: insets.bottom }}>
-      <Tab.Screen name="Home" component={Pages.HomePage} />
-      <Tab.Screen name="Camera" component={Pages.CameraPage} />
-    </Tab.Navigator>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Empty Page</Text>
+    </View>
   )
 }
 
-// Camera stack navigator
-// const CameraStack = createNativeStackNavigator()
+export const MainNavigator = () => {
+  const insets = useSafeAreaInsets()
+  const [home, setHome] = useState(true)
 
-// const CameraStackScreen = () => {
-//   const insets = useSafeAreaInsets()
+  return (
+    <Tab.Navigator
+      shifting={false}
+      barStyle={{
+        backgroundColor: home ? '#000' : '#fff'
+      }}
+      initialRouteName="Home"
+      activeColor={home ? '#fff' : '#000'}
+      theme={{
+        colors: {
+          primary: home ? '#000' : '#fff'
+        }
+      }}>
+      <Tab.Screen
+        name="Home"
+        component={Pages.HomePage}
+        listeners={{
+          focus: () => setHome(true),
+          blur: () => setHome(false)
+        }}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ color }) => <FontAwesome name="home" size={24} color={color} />
+        }}
+      />
+      <Tab.Screen
+        name="Friend"
+        component={EmptyPage}
+        options={{
+          tabBarLabel: 'Friends',
+          tabBarIcon: ({ color }) => <Feather name="users" size={24} color={color} />
+        }}
+      />
+      <Tab.Screen
+        name="Camera"
+        component={Pages.CameraPage}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault()
 
-//   return (
-//     <CameraStack.Navigator>
-//       <CameraStack.Screen name="CameraStack" component={Pages.CameraPage} options={{ headerShown: false }} />
-//       <CameraStack.Screen
-//         name="SavePost"
-//         component={Pages.SavePostPage}
-//         options={{
-//           headerShown: false
-//         }}
-//       />
-//     </CameraStack.Navigator>
-//   )
-// }
+            navigation.navigate('Camera')
+          }
+        })}
+        options={{
+          tabBarLabel: '',
+          tabBarIcon: () => <CameraButton home={home} />
+        }}
+      />
+      <Tab.Screen
+        name="Notification"
+        component={EmptyPage}
+        options={{
+          tabBarLabel: 'Notification',
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="bell-outline" size={24} color={color} />
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={EmptyPage}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color }) => <AntDesign name="user" size={24} color={color} />
+        }}
+      />
+    </Tab.Navigator>
+  )
+}
