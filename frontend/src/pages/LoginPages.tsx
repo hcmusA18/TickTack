@@ -6,9 +6,7 @@ import { Screen } from '../components'
 import { spacing } from '../theme'
 import { useAppDispatch, useAppSelector } from 'libs/redux'
 import { setAuth } from 'libs/redux/sliceAuth'
-// import { setYear } from 'date-fns'
-// import materialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-// import { EventSubscriptionVendor } from 'react-native'
+import SignupOption from '../components/SignInOption'
 
 interface LoginPageProps extends AppStackScreenProps<'Login'> {}
 
@@ -75,24 +73,16 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
   //   </Screen>
   // )
 
+  const signupOptionsData: SignupOptionProps[] = [
+    { icon: 'account-outline', text: 'Sign up' },
+    { icon: 'facebook', text: 'Continue with Facebook' },
+    { icon: 'apple', text: 'Continue with Apple' },
+    { icon: 'google', text: 'Continue with Google' },
+    { icon: 'line', text: 'Continue with Line' },
+    { icon: 'kakao-talk', text: 'Continue with KakaoTalk' }
+  ]
+
   return (
-    // <SafeAreaView style={styles.container}>
-    //   {/* Top bar */}
-    //   <View>
-    //     <Button icon="camera" mode="contained" onPress={() => console.log('Pressed')}>
-    //       Press me
-    //     </Button>
-    //     <Text>Log in to Tiktok</Text>
-    //     <Button></Button>
-    //   </View>
-
-    //   {/* Login Methods List  */}
-
-    //   {/* Policy bar */}
-
-    //   {/* Don't have account? Sign up */}
-    // </SafeAreaView>
-
     <Screen preset="fixed" safeAreaEdges={['top', 'bottom']} contentContainerStyle={styles.container}>
       <View style={styles.container}>
         {/* Top bar */}
@@ -112,47 +102,9 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
             <Text style={styles.login_text}>Sign up for Tiktok</Text>
             <Text>Create a profile, follow other accounts, make your own videos, and more.</Text>
 
-            <View>
-              <Button icon="account-outline">
-                <Text>Sign up</Text>
-              </Button>
-              <Text>Use phone or email</Text>
-            </View>
-
-            <View>
-              <Button icon="account-outline">
-                <Text>Sign up</Text>
-              </Button>
-              <Text>Continue with Facebook</Text>
-            </View>
-
-            <View>
-              <Button icon="account-outline">
-                <Text>Sign up</Text>
-              </Button>
-              <Text>Continue with Apple</Text>
-            </View>
-
-            <View>
-              <Button icon="account-outline">
-                <Text>Sign up</Text>
-              </Button>
-              <Text>Continue with Google</Text>
-            </View>
-
-            <View>
-              <Button icon="account-outline">
-                <Text>Sign up</Text>
-              </Button>
-              <Text>Continue with Line</Text>
-            </View>
-
-            <View>
-              <Button icon="account-outline">
-                <Text>Sign up</Text>
-              </Button>
-              <Text>Continue with KakaoTalk</Text>
-            </View>
+            {signupOptionsData.map((option, index) => (
+              <SignupOption key={index} icon={option.icon} text={option.text} />
+            ))}
           </ScrollView>
           {/* Policy */}
           <View>
@@ -177,10 +129,6 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
 }
 
 const styles = StyleSheet.create({
-  // contentContainer: {
-  //   paddingVertical: spacing.xxl,
-  //   paddingHorizontal: spacing.lg
-  // },
   container: {
     flex: 1
   },
