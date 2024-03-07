@@ -1,13 +1,15 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text } from 'react-native-paper'
-import { AppStackScreenProps } from '../../../../navigators'
+import { MainTabScreenProps } from 'navigators'
 import { Screen } from '../../../../components'
 import { Feather } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
 import { colors } from '../../../../theme'
 
-interface EditProfilePageProps extends AppStackScreenProps<'EditProfile'> {}
+interface EditProfilePageProps extends MainTabScreenProps<'EditProfile'> {}
+
+const avatarBackgroundColor = 'rgba(0,0,0,0.3)'
 
 const styles = StyleSheet.create({
   container: {
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: 'lightgrey',
+    backgroundColor: colors.palette.neutral500,
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center'
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
   },
 
   avatarOverlay: {
-    backgroundColor: 'rgba(0,0,0,0.3)',
+    backgroundColor: avatarBackgroundColor,
     ...StyleSheet.absoluteFillObject
   },
 
@@ -83,13 +85,14 @@ export const EditProfilePage: FC<EditProfilePageProps> = (props) => {
   const { navigation } = props
 
   const chooseImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1
     })
     if (!result.canceled) {
+      if (__DEV__) console.log('OKE')
     }
   }
 
@@ -97,7 +100,11 @@ export const EditProfilePage: FC<EditProfilePageProps> = (props) => {
     <Screen preset="fixed" safeAreaEdges={['top', 'bottom']} contentContainerStyle={styles.container}>
       {/* Navbar */}
       <View style={styles.navbarContainer}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('PersonalProfileHome')}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => {
+            navigation.navigate('Main', { screen: 'PersonalProfile' })
+          }}>
           <Feather name="chevron-left" size={26}></Feather>
         </TouchableOpacity>
 
@@ -116,18 +123,18 @@ export const EditProfilePage: FC<EditProfilePageProps> = (props) => {
 
           <View style={styles.avatarOverlay}></View>
           <Feather name="camera" size={26} color={'white'}></Feather>
-          <Text style={{ color: 'white', fontSize: 16, marginTop: 5 }}>Add</Text>
+          <Text style={{ color: colors.palette.neutral100, fontSize: 16, marginTop: 5 }}>Add</Text>
         </TouchableOpacity>
       </View>
 
-      <Text style={{ marginTop: 50, paddingHorizontal: 20, fontSize: 18, fontWeight: 'bold', color: 'grey' }}>
+      <Text style={{ marginTop: 50, paddingHorizontal: 20, fontSize: 18, fontWeight: 'bold', color: colors.text }}>
         About you
       </Text>
 
       <View style={styles.fieldsContainer}>
         <TouchableOpacity
           style={styles.fieldItemsContainer}
-          onPress={() => navigation.navigate('EditProfileField', { fieldName: 'Name', fieldValue: 'Son Tung M-TP' })}>
+          onPress={() => navigation.navigate('EditProfileDetails', { fieldName: 'Name', fieldValue: 'Son Tung M-TP' })}>
           <Text style={{ fontSize: 18 }}>Name</Text>
           <View style={styles.fieldValueContainer}>
             <Text style={{ fontSize: 18 }}>Son Tung M-TP</Text>
@@ -138,7 +145,7 @@ export const EditProfilePage: FC<EditProfilePageProps> = (props) => {
         <TouchableOpacity
           style={styles.fieldItemsContainer}
           onPress={() =>
-            navigation.navigate('EditProfileField', { fieldName: 'Username', fieldValue: '@tiger050794' })
+            navigation.navigate('EditProfileDetails', { fieldName: 'Username', fieldValue: '@tiger050794' })
           }>
           <Text style={{ fontSize: 18 }}>Username</Text>
           <View style={styles.fieldValueContainer}>

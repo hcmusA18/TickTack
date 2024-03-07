@@ -1,7 +1,7 @@
-import React, { FC, useEffect, useState } from 'react'
-import { View, ViewStyle, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { FC, useState } from 'react'
+import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text, Avatar } from 'react-native-paper'
-import { AppStackScreenProps } from '../../../../navigators'
+import { MainTabScreenProps } from 'navigators'
 import { Screen } from '../../../../components'
 import { ProfileNavbar } from './components/Navbar'
 import { colors } from '../../../../theme'
@@ -10,7 +10,7 @@ import { LikedVideosContent } from './components/LikedVideos'
 import { SavedPostsContent } from './components/SavedPosts'
 import { Feather } from '@expo/vector-icons'
 
-interface PersonalProfileHomePageProps extends AppStackScreenProps<'PersonalProfileHome'> {}
+interface PersonalProfileHomePageProps extends MainTabScreenProps<'Profile'> {}
 
 export const PersonalProfileHomePage: FC<PersonalProfileHomePageProps> = (props) => {
   const { navigation } = props
@@ -107,14 +107,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background
     // paddingTop: spacing.md, // Add padding to ensure space from top
   },
-
-  text: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: colors.text,
-    textAlign: 'center'
-  },
-
   tabBar: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -136,15 +128,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: colors.tint
   },
-
   tabIcon: {
-    color: 'lightgrey'
+    color: colors.palette.neutral500
   },
-
   activeIcon: {
     color: colors.text
   },
-
   headerContainer: {
     paddingVertical: 20,
     alignItems: 'center',
