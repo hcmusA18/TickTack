@@ -3,8 +3,8 @@ import { View, ViewStyle, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text, Avatar } from 'react-native-paper'
 import { AppStackScreenProps } from '../../../../navigators'
 import { Screen } from '../../../../components'
-import { ProfileNavbar } from './components/navbar'
-// import { ProfileHeader } from '../components/profile/header'
+import { ProfileNavbar } from './components/Navbar'
+import { colors } from '../../../../theme'
 import { MyVideosContent } from './components/MyVideos'
 import { LikedVideosContent } from './components/LikedVideos'
 import { SavedPostsContent } from './components/SavedPosts'
@@ -104,14 +104,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: 'white'
+    backgroundColor: colors.background
     // paddingTop: spacing.md, // Add padding to ensure space from top
   },
 
   text: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: 'black',
+    color: colors.text,
     textAlign: 'center'
   },
 
@@ -120,9 +120,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     width: '100%',
     // paddingVertical: 10,
-    backgroundColor: 'white',
+    backgroundColor: colors.background,
     borderBottomWidth: 1,
-    borderBottomColor: 'lightgrey'
+    borderBottomColor: colors.border
   },
 
   tabItem: {
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
 
   activeTab: {
     borderBottomWidth: 2,
-    borderBottomColor: 'black'
+    borderBottomColor: colors.tint
   },
 
   tabIcon: {
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   },
 
   activeIcon: {
-    color: 'black'
+    color: colors.text
   },
 
   headerContainer: {
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
 
   countTextContainer: {
     fontSize: 16,
-    color: 'gray'
+    color: colors.textDim
   },
 
   buttonContainer: {
@@ -186,13 +186,13 @@ const styles = StyleSheet.create({
   },
 
   buttonStyle: {
-    backgroundColor: 'white',
+    backgroundColor: colors.background,
     paddingVertical: 10,
     paddingHorizontal: 20,
     // borderRadius: 5,
     marginHorizontal: 5,
     borderWidth: 1.5,
-    borderColor: 'lightgrey'
+    borderColor: colors.border
   },
 
   buttonText: {

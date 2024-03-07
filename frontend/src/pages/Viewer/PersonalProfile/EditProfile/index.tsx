@@ -5,6 +5,7 @@ import { AppStackScreenProps } from '../../../../navigators'
 import { Screen } from '../../../../components'
 import { Feather } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
+import { colors } from '../../../../theme'
 
 interface EditProfilePageProps extends AppStackScreenProps<'EditProfile'> {}
 
@@ -13,7 +14,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     // alignItems: 'center',
-    backgroundColor: 'white'
+    backgroundColor: colors.background
     // paddingTop: spacing.md, // Add padding to ensure space from top
   },
 

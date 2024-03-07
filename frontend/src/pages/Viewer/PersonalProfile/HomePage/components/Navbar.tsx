@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { Feather } from '@expo/vector-icons'
+import { colors } from '../../../../../theme'
 
 interface ProfileNavbarProps {
   // title: string;
@@ -14,13 +15,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: 'lightgrey',
-    backgroundColor: 'white'
+    borderBottomColor: colors.border,
+    backgroundColor: colors.background
   },
   text: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'black',
+    color: colors.text,
     flex: 1,
     textAlign: 'center'
   }

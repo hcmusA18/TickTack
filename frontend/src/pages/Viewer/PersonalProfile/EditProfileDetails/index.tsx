@@ -5,6 +5,7 @@ import { Feather } from '@expo/vector-icons'
 import { Screen } from '../../../../components'
 import { Divider } from 'react-native-paper'
 import { TextInput } from 'react-native-gesture-handler'
+import { colors } from '../../../../theme'
 
 interface EditProfileFieldProps extends AppStackScreenProps<'EditProfileField'> {}
 
@@ -13,7 +14,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     // alignItems: 'center',
-    backgroundColor: 'white'
+    backgroundColor: colors.background
     // paddingTop: spacing.md, // Add padding to ensure space from top
   },
 
@@ -34,12 +35,12 @@ const styles = StyleSheet.create({
 
   fieldNameStyle: {
     fontWeight: 'bold',
-    color: 'grey',
+    color: colors.text,
     fontSize: 16
   },
 
   textInputStyle: {
-    borderColor: 'lightgray',
+    borderColor: colors.border,
     borderBottomWidth: 1,
     borderStyle: 'solid',
     paddingVertical: 5
