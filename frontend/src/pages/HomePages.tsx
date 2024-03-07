@@ -1,11 +1,11 @@
 import React, { FC } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { Screen } from '../components'
-import { AppStackScreenProps } from '../navigators'
+import { MainTabScreenProps } from '../navigators'
 import { spacing } from '../theme'
 import { Button } from 'react-native-paper'
 
-interface HomePageProps extends AppStackScreenProps<'Home'> {}
+interface HomePageProps extends MainTabScreenProps<'Home'> {}
 
 const styles = StyleSheet.create({
   container: {

@@ -4,13 +4,14 @@
  * Generally speaking, it will contain an auth flow (registration, login, forgot password)
  * and a "main" flow which the user will use once logged in.
  */
-import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native'
+import { DarkTheme, DefaultTheme, NavigationContainer, NavigatorScreenParams } from '@react-navigation/native'
 import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack'
 import React from 'react'
 import { useColorScheme } from 'react-native'
 import * as Pages from 'pages'
 import { navigationRef, useBackButtonHandler } from './navigationUtilities'
 import Config from 'configs'
+import { MainNavigator, MainTabParamList } from './MainNavigator'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -29,8 +30,7 @@ export type AppStackParamList = {
   Welcome: undefined
   Login: undefined
   // 🔥 Your screens go here
-  Home: undefined
-  Camera: undefined
+  Main: NavigatorScreenParams<MainTabParamList>
   SavePost: undefined
 }
 
@@ -53,8 +53,7 @@ const AppStack = () => {
       <Stack.Screen name="Welcome" component={Pages.WelcomePage} />
       <Stack.Screen name="Login" component={Pages.LoginPage} />
       {/* 🔥 Here's where your screens go */}
-      <Stack.Screen name="Home" component={Pages.HomePage} />
-      <Stack.Screen name="Camera" component={Pages.CameraPage} />
+      <Stack.Screen name="Main" component={MainNavigator} />
       <Stack.Screen name="SavePost" component={Pages.SavePostPage} />
     </Stack.Navigator>
   )
