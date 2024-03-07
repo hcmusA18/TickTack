@@ -32,7 +32,7 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
 
   useEffect(() => {
     if (authToken) {
-      navigation.navigate('Home')
+      navigation.navigate('Main')
     }
     setInputEmail(authEmail || 'email@mail.com')
     setPassword('123456789')
