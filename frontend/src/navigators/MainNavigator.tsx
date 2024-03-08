@@ -100,7 +100,7 @@ export const MainNavigator = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={Pages.PersonalProfileHomePage}
+        component={Pages.PersonalProfile}
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ color }) => <AntDesign name="user" size={24} color={color} />

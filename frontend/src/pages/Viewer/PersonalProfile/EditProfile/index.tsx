@@ -2,12 +2,12 @@ import React, { FC } from 'react'
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text } from 'react-native-paper'
 import { MainTabScreenProps } from 'navigators'
-import { Screen } from '../../../../components'
+import { Screen } from 'components'
 import { Feather } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
-import { colors } from '../../../../theme'
+import { colors } from 'theme'
 
-interface EditProfilePageProps extends MainTabScreenProps<'EditProfile'> {}
+interface ProfileEditorProps extends MainTabScreenProps<'EditProfile'> {}
 
 const avatarBackgroundColor = 'rgba(0,0,0,0.3)'
 
@@ -18,17 +18,6 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     backgroundColor: colors.background
     // paddingTop: spacing.md, // Add padding to ensure space from top
-  },
-
-  navbarContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-
-  backButton: {
-    paddingHorizontal: 20,
-    paddingVertical: 10
   },
 
   avatarContainer: {
@@ -58,6 +47,20 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject
   },
 
+  avatarText: {
+    color: colors.palette.neutral100,
+    fontSize: 16,
+    marginTop: 5
+  },
+  aboutContainer: {
+    marginTop: 50,
+    paddingHorizontal: 20
+  },
+  aboutTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.text
+  },
   fieldsContainer: {
     marginTop: 15,
     paddingHorizontal: 20,
@@ -78,10 +81,62 @@ const styles = StyleSheet.create({
   fieldValueContainer: {
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  fieldValue: {
+    fontSize: 18
+  },
+  fieldLabel: {
+    fontSize: 18
   }
 })
 
-export const EditProfilePage: FC<EditProfilePageProps> = (props) => {
+const AvatarSection: FC<{ chooseImage: () => void }> = ({ chooseImage }) => (
+  <View style={styles.avatarContainer}>
+    <TouchableOpacity style={styles.avatarView} onPress={chooseImage}>
+      <Image
+        style={styles.avatarImage}
+        source={{ uri: 'https://static-images.vnncdn.net/files/publish/2023/5/5/mmw-4-956.jpg' }}
+      />
+
+      <View style={styles.avatarOverlay}></View>
+      <Feather name="camera" size={26} color={'white'} />
+      <Text style={styles.avatarText}>Add</Text>
+    </TouchableOpacity>
+  </View>
+)
+
+const AboutSection: FC = () => (
+  <View style={styles.aboutContainer}>
+    <Text style={styles.aboutTitle}>About you</Text>
+  </View>
+)
+
+const FieldsSection: FC<{ navigation: ProfileEditorProps['navigation'] }> = ({ navigation }) => (
+  <View style={styles.fieldsContainer}>
+    <TouchableOpacity
+      style={styles.fieldItemsContainer}
+      onPress={() => navigation.navigate('EditProfileDetails', { fieldName: 'Name', fieldValue: 'Son Tung M-TP' })}>
+      <Text style={styles.fieldLabel}>Name</Text>
+      <FieldText value="Son Tung M-TP" />
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      style={styles.fieldItemsContainer}
+      onPress={() => navigation.navigate('EditProfileDetails', { fieldName: 'Username', fieldValue: '@tiger050794' })}>
+      <Text style={styles.fieldLabel}>Username</Text>
+      <FieldText value="@tiger050794" />
+    </TouchableOpacity>
+  </View>
+)
+
+const FieldText: FC<{ value: string }> = ({ value }) => (
+  <View style={styles.fieldValueContainer}>
+    <Text style={styles.fieldValue}>{value}</Text>
+    <Feather name="chevron-right" size={20} color={'lightgrey'} />
+  </View>
+)
+
+export const ProfileEditor: FC<ProfileEditorProps> = (props) => {
   const { navigation } = props
 
   const chooseImage = async () => {
@@ -92,68 +147,16 @@ export const EditProfilePage: FC<EditProfilePageProps> = (props) => {
       quality: 1
     })
     if (!result.canceled) {
-      if (__DEV__) console.log('OKE')
+      if (__DEV__) console.log('Image selected')
     }
   }
 
   return (
     <Screen preset="fixed" safeAreaEdges={['top', 'bottom']} contentContainerStyle={styles.container}>
-      {/* Navbar */}
-      <View style={styles.navbarContainer}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => {
-            navigation.navigate('Main', { screen: 'PersonalProfile' })
-          }}>
-          <Feather name="chevron-left" size={26}></Feather>
-        </TouchableOpacity>
-
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Edit Profile</Text>
-
-        <TouchableOpacity style={styles.backButton}>
-          <Feather name="arrow-left" size={26} color={'white'}></Feather>
-        </TouchableOpacity>
-      </View>
-      {/* Navbar */}
-      <View style={styles.avatarContainer}>
-        <TouchableOpacity style={styles.avatarView} onPress={() => chooseImage()}>
-          <Image
-            style={styles.avatarImage}
-            source={{ uri: 'https://static-images.vnncdn.net/files/publish/2023/5/5/mmw-4-956.jpg' }}></Image>
-
-          <View style={styles.avatarOverlay}></View>
-          <Feather name="camera" size={26} color={'white'}></Feather>
-          <Text style={{ color: colors.palette.neutral100, fontSize: 16, marginTop: 5 }}>Add</Text>
-        </TouchableOpacity>
-      </View>
-
-      <Text style={{ marginTop: 50, paddingHorizontal: 20, fontSize: 18, fontWeight: 'bold', color: colors.text }}>
-        About you
-      </Text>
-
-      <View style={styles.fieldsContainer}>
-        <TouchableOpacity
-          style={styles.fieldItemsContainer}
-          onPress={() => navigation.navigate('EditProfileDetails', { fieldName: 'Name', fieldValue: 'Son Tung M-TP' })}>
-          <Text style={{ fontSize: 18 }}>Name</Text>
-          <View style={styles.fieldValueContainer}>
-            <Text style={{ fontSize: 18 }}>Son Tung M-TP</Text>
-            <Feather name="chevron-right" size={20} color={'lightgrey'}></Feather>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.fieldItemsContainer}
-          onPress={() =>
-            navigation.navigate('EditProfileDetails', { fieldName: 'Username', fieldValue: '@tiger050794' })
-          }>
-          <Text style={{ fontSize: 18 }}>Username</Text>
-          <View style={styles.fieldValueContainer}>
-            <Text style={{ fontSize: 18 }}>@tiger050794</Text>
-            <Feather name="chevron-right" size={20} color={'lightgrey'}></Feather>
-          </View>
-        </TouchableOpacity>
-      </View>
+      {/* <NavBar navigation={navigation} /> */}
+      <AvatarSection chooseImage={chooseImage} />
+      <AboutSection />
+      <FieldsSection navigation={navigation} />
     </Screen>
   )
 }

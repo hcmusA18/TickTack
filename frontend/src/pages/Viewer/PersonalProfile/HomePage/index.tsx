@@ -2,19 +2,47 @@ import React, { FC, useState } from 'react'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text, Avatar } from 'react-native-paper'
 import { MainTabScreenProps } from 'navigators'
-import { Screen } from '../../../../components'
+import { Screen } from 'components'
 import { ProfileNavbar } from './components/Navbar'
-import { colors } from '../../../../theme'
+import { colors } from 'theme'
 import { MyVideosContent } from './components/MyVideos'
 import { LikedVideosContent } from './components/LikedVideos'
 import { SavedPostsContent } from './components/SavedPosts'
 import { Feather } from '@expo/vector-icons'
 
-interface PersonalProfileHomePageProps extends MainTabScreenProps<'Profile'> {}
+type TabType = 'MyVideos' | 'LikedVideos' | 'SavedPosts'
 
-export const PersonalProfileHomePage: FC<PersonalProfileHomePageProps> = (props) => {
+interface PersonalProfileProps extends MainTabScreenProps<'Profile'> {}
+
+const CountItem = ({ label, count }: { label: string; count: string }) => (
+  <View style={styles.countItemContainer}>
+    <Text style={styles.countNumberContainer}>{count}</Text>
+    <Text style={styles.countTextContainer}>{label}</Text>
+  </View>
+)
+
+const TabItem = ({
+  tabName,
+  iconName,
+  activeTab,
+  setActiveTab
+}: {
+  tabName: TabType
+  iconName: keyof typeof Feather.glyphMap
+  activeTab: TabType
+  setActiveTab: (tab: TabType) => void
+}) => {
+  const isActive = activeTab === tabName
+  return (
+    <TouchableOpacity style={[styles.tabItem, isActive && styles.activeTab]} onPress={() => setActiveTab(tabName)}>
+      <Feather name={iconName} size={20} style={[styles.tabIcon, isActive && styles.activeIcon]}></Feather>
+    </TouchableOpacity>
+  )
+}
+
+export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
   const { navigation } = props
-  const [activeTab, setActiveTab] = useState('MyVideos')
+  const [activeTab, setActiveTab] = useState<TabType>('MyVideos')
 
   const renderContent = () => {
     switch (activeTab) {
@@ -38,20 +66,9 @@ export const PersonalProfileHomePage: FC<PersonalProfileHomePageProps> = (props)
         <Avatar.Icon size={100} icon={'account'} />
         <Text style={styles.username}>@tiger050794</Text>
         <View style={styles.countContainer}>
-          <View style={styles.countItemContainer}>
-            <Text style={styles.countNumberContainer}>0</Text>
-            <Text style={styles.countTextContainer}>Following</Text>
-          </View>
-
-          <View style={styles.countItemContainer}>
-            <Text style={styles.countNumberContainer}>4,9M</Text>
-            <Text style={styles.countTextContainer}>Followers</Text>
-          </View>
-
-          <View style={styles.countItemContainer}>
-            <Text style={styles.countNumberContainer}>44,7M</Text>
-            <Text style={styles.countTextContainer}>Likes</Text>
-          </View>
+          <CountItem label="Following" count="0" />
+          <CountItem label="Followers" count="4.9M" />
+          <CountItem label="Likes" count="44.7M" />
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('EditProfile')}>
@@ -67,30 +84,9 @@ export const PersonalProfileHomePage: FC<PersonalProfileHomePageProps> = (props)
 
       {/* Tab Bar */}
       <View style={styles.tabBar}>
-        <TouchableOpacity
-          style={[styles.tabItem, activeTab === 'MyVideos' && styles.activeTab]}
-          onPress={() => setActiveTab('MyVideos')}>
-          <Feather
-            name="menu"
-            size={20}
-            style={activeTab === 'MyVideos' ? styles.activeIcon : styles.tabIcon}></Feather>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tabItem, activeTab === 'LikedVideos' && styles.activeTab]}
-          onPress={() => setActiveTab('LikedVideos')}>
-          <Feather
-            name="heart"
-            size={20}
-            style={activeTab === 'LikedVideos' ? styles.activeIcon : styles.tabIcon}></Feather>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tabItem, activeTab === 'SavedPosts' && styles.activeTab]}
-          onPress={() => setActiveTab('SavedPosts')}>
-          <Feather
-            name="pocket"
-            size={20}
-            style={activeTab === 'SavedPosts' ? styles.activeIcon : styles.tabIcon}></Feather>
-        </TouchableOpacity>
+        <TabItem tabName="MyVideos" iconName="video" activeTab={activeTab} setActiveTab={setActiveTab} />
+        <TabItem tabName="LikedVideos" iconName="heart" activeTab={activeTab} setActiveTab={setActiveTab} />
+        <TabItem tabName="SavedPosts" iconName="bookmark" activeTab={activeTab} setActiveTab={setActiveTab} />
       </View>
 
       {renderContent()}

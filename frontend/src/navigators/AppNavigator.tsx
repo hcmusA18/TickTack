@@ -7,7 +7,7 @@
 import { DarkTheme, DefaultTheme, NavigationContainer, NavigatorScreenParams } from '@react-navigation/native'
 import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack'
 import React from 'react'
-import { useColorScheme } from 'react-native'
+import { TouchableOpacity, useColorScheme } from 'react-native'
 import * as Pages from 'pages'
 import { navigationRef, useBackButtonHandler } from './navigationUtilities'
 import Config from 'configs'
@@ -48,20 +48,59 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false
-      }}>
+    <Stack.Navigator>
       {/* <Stack.Screen name="PersonalProfileHome" component={Pages.PersonalProfileHomePage} />
       <Stack.Screen name="EditProfile" component={Pages.EditProfilePage} />
       <Stack.Screen name="EditProfileField" component={Pages.EditProfileFieldPage} /> */}
-      <Stack.Screen name="Welcome" component={Pages.WelcomePage} />
-      <Stack.Screen name="Login" component={Pages.LoginPage} />
+      <Stack.Screen
+        name="Welcome"
+        component={Pages.WelcomePage}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={Pages.LoginPage}
+        options={{
+          headerShown: false
+        }}
+      />
       {/* 🔥 Here's where your screens go */}
-      <Stack.Screen name="Main" component={MainNavigator} />
-      <Stack.Screen name="SavePost" component={Pages.SavePostPage} />
-      <Stack.Screen name="EditProfile" component={Pages.EditProfilePage} />
-      <Stack.Screen name="EditProfileDetails" component={Pages.EditProfileFieldPage} />
+      <Stack.Screen
+        name="Main"
+        component={MainNavigator}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="SavePost"
+        component={Pages.SavePostPage}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={Pages.ProfileEditor}
+        options={{
+          title: 'Edit Profile',
+          headerShadowVisible: false,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18
+          },
+          headerTitleAlign: 'center'
+        }}
+      />
+      <Stack.Screen
+        name="EditProfileDetails"
+        component={Pages.FieldEditor}
+        options={{
+          headerShown: false
+        }}
+      />
     </Stack.Navigator>
   )
 }

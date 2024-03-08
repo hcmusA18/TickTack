@@ -1,13 +1,12 @@
 import React, { FC, useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import { AppStackScreenProps } from '../../../../navigators'
-import { Feather } from '@expo/vector-icons'
+import { AppStackScreenProps } from 'navigators'
 import { Screen } from '../../../../components'
 import { Divider } from 'react-native-paper'
 import { TextInput } from 'react-native-gesture-handler'
 import { colors } from '../../../../theme'
 
-interface EditProfileFieldProps extends AppStackScreenProps<'EditProfileField'> {}
+interface FieldEditorProps extends AppStackScreenProps<'EditProfileDetails'> {}
 
 const styles = StyleSheet.create({
   container: {
@@ -25,6 +24,7 @@ const styles = StyleSheet.create({
   },
 
   backContainer: {
+    color: colors.palette.neutral100,
     paddingHorizontal: 20,
     paddingVertical: 10
   },
@@ -46,8 +46,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5
   }
 })
+const saveColor = 'red'
 
-export const EditProfileFieldPage: FC<EditProfileFieldProps> = ({ route, navigation }) => {
+export const FieldEditor: FC<FieldEditorProps> = ({ route, navigation }) => {
   // const { navigation } = props;
   const { fieldName, fieldValue } = route.params ?? { fieldName: 'Username', fieldValue: '' }
 
@@ -70,7 +71,7 @@ export const EditProfileFieldPage: FC<EditProfileFieldProps> = ({ route, navigat
         <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{fieldName}</Text>
 
         <TouchableOpacity style={styles.backContainer} onPress={() => onSave()}>
-          <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'red' }}>Save</Text>
+          <Text style={{ fontSize: 18, fontWeight: 'bold', color: saveColor }}>Save</Text>
         </TouchableOpacity>
       </View>
       {/* Navbar */}

@@ -19,7 +19,9 @@
       "theme": ["./src/theme"],
       "theme/*": ["./src/theme/*"],
       "navigators": ["./src/navigators"],
-      "navigators/*": ["./src/navigators/*"]
+      "navigators/*": ["./src/navigators/*"],
+      "components": ["./src/components"],
+      "components/*": ["./src/components/*"]
     }
   },
   "include": ["src"],
