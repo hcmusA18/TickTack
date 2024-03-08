@@ -1,5 +1,7 @@
 // TODO: write documentation for colors and palette in own markdown file and add links from here
 
+import { rgbaColor } from 'react-native-reanimated/lib/typescript/reanimated2/Colors'
+
 const palette = {
   neutral100: '#FFFFFF',
   neutral200: '#F4F2F1',
@@ -49,13 +51,17 @@ export const colors = {
    */
   transparent: 'rgba(0, 0, 0, 0)',
   /**
+   * The default color of white.
+   */
+  white: palette.neutral100,
+  /**
    * The default text color in many components.
    */
   text: palette.neutral800,
   /**
    * Secondary text information.
    */
-  textDim: palette.neutral600,
+  textDim: 'rgba(255, 255, 255, 0.6)',
   /**
    * The default color of the screen background.
    */
