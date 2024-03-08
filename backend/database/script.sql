@@ -31,7 +31,7 @@ CREATE TABLE videos (
     duration INTEGER,
     music_id TEXT REFERENCES musics(music_id),
     hashtags TEXT[],
-    privacy TEXT,
+    is_private BOOLEAN,
     view_count INTEGER
 );
 
