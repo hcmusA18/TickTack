@@ -1,27 +1,29 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Dimensions, FlatList, View } from 'react-native'
 import { PostSingle } from './Post'
 import { colors } from 'theme'
 import { VideoBottom } from './VideoBottom'
 import { ActionButtons } from './ActionButtons'
 
+const videos = [
+  'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+  'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+  'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+  'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+  'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'
+]
 export const Feed = () => {
-  const array = Array.from({ length: 10 }, (_, i) => i + 1)
-  const mediaRefs = useRef([])
-  const flatListRef = useRef(null)
-  const onViewableItemsChanged = useRef(({ changed }) => {
-    changed.forEach((item) => {
-      const cell = mediaRefs.current[item.key]
-      if (cell) {
-        console.log('onViewableItemsChanged', item, item.isViewable)
-        if (item.isViewable) {
-          cell.play()
-        } else {
-          cell.stop()
-        }
-      }
-    })
-  })
+  const [currentViewableItemIndex, setCurrentViewableItemIndex] = useState<number>(0)
+  const viewabilityConfig = {
+    itemVisiblePercentThreshold: 50
+  }
+  const onViewableItemsChanged = ({ viewableItems }) => {
+    if (viewableItems.length > 0) {
+      setCurrentViewableItemIndex(viewableItems[0].index)
+    }
+  }
+
+  const viewabilityConfigCallbackPairs = useRef([{ viewabilityConfig, onViewableItemsChanged }])
 
   const renderItem = ({ item, index }) => {
     return (
@@ -30,7 +32,7 @@ export const Feed = () => {
           { flex: 1, height: Dimensions.get('window').height, position: 'relative' },
           { backgroundColor: colors.background }
         ]}>
-        <PostSingle ref={(ref) => (mediaRefs.current[index] = ref)} />
+        <PostSingle item={item} shouldPlay={index === currentViewableItemIndex} />
         <VideoBottom username={'username'} videoPost={'videoPost'} hashtags={['hashtag1', 'hashtag2']} />
         <ActionButtons
           loveCount={100}
@@ -46,21 +48,11 @@ export const Feed = () => {
   return (
     <View style={{ position: 'relative' }}>
       <FlatList
-        ref={flatListRef}
-        data={array}
-        windowSize={4}
-        initialNumToRender={1}
-        maxToRenderPerBatch={2}
-        removeClippedSubviews
-        viewabilityConfig={{
-          itemVisiblePercentThreshold: 50
-        }}
-        snapToAlignment={'start'}
+        data={videos}
         renderItem={renderItem}
         keyExtractor={(item) => item}
         pagingEnabled
-        decelerationRate={'normal'}
-        onViewableItemsChanged={onViewableItemsChanged.current}
+        viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
       />
     </View>
   )

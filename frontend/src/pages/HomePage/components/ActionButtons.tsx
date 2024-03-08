@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
     zIndex: 100,
     flexDirection: 'column',
     justifyContent: 'space-between',
-    margin: 14,
     padding: 10,
     gap: 25
   },
@@ -102,7 +101,7 @@ export const ActionButtons: FC<ActionButtonsProps> = ({
           style={{
             position: 'absolute',
             bottom: -8,
-            right: 14,
+            right: 10,
             backgroundColor: colors.palette.primary500,
             borderRadius: 25,
             padding: 5
