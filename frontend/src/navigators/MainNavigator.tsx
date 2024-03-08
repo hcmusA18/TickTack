@@ -37,7 +37,7 @@ export const MainNavigator = () => {
   // const insets = useSafeAreaInsets()
   const [home, setHome] = useState(true)
 
-  const navigatorColor = home ? colors.palette.neutral100 : colors.palette.neutral900
+  const navigatorColor = home ? colors.palette.neutral900 : colors.palette.neutral100
 
   return (
     <Tab.Navigator

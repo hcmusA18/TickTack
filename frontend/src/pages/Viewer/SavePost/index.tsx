@@ -1,11 +1,11 @@
 import { View, Text, TouchableOpacity, TextInput, Image, Modal, StyleSheet } from 'react-native'
 import { Feather, AntDesign } from '@expo/vector-icons'
-import { MainTabScreenProps } from 'navigators'
+import { AppStackScreenProps } from 'navigators'
 import React, { FC, useState, useRef } from 'react'
 import { RadioButton } from 'react-native-paper'
 import { colors } from 'theme'
 
-interface SavePostPageProps extends MainTabScreenProps<'SavePost'> {}
+interface SavePostPageProps extends AppStackScreenProps<'SavePost'> {}
 
 export const SavePostPage: FC<SavePostPageProps> = (props) => {
   const { navigation } = props

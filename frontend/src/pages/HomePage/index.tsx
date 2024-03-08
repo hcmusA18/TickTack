@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { Screen } from '../../components'
-import { AppStackScreenProps } from '../../navigators'
+import { MainTabScreenProps } from '../../navigators'
 import { Topbar, Feed } from './components'
 
-interface HomePageProps extends AppStackScreenProps<'Home'> {}
+interface HomePageProps extends MainTabScreenProps<'Home'> {}
 
 const styles = StyleSheet.create({
   container: {

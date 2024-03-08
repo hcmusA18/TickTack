@@ -31,7 +31,7 @@ const CameraButton: React.FC<Props> = ({ home }) => {
   return (
     <View style={[styles.container, { backgroundColor: home ? colors.palette.neutral100 : colors.palette.neutral900 }]}>
       <TouchableOpacity activeOpacity={1}>
-        <FontAwesome5 name="plus" size={18} color={home ? colors.palette.neutral100 : colors.palette.neutral900} />
+        <FontAwesome5 name="plus" size={18} color={home ? colors.palette.neutral900 : colors.palette.neutral100} />
       </TouchableOpacity>
     </View>
   )
