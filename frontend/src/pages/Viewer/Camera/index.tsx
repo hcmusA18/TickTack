@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import { MainTabScreenProps } from '../navigators'
-import { Camera } from 'expo-camera'
+import { MainTabScreenProps } from 'navigators'
+import { Camera, CameraType, FlashMode } from 'expo-camera'
 import { Audio } from 'expo-av'
 import * as ImagePicker from 'expo-image-picker'
 import * as MediaLibrary from 'expo-media-library'
@@ -21,8 +21,8 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
   const [galleryItems, setGalleryItems] = useState([])
   const [galleryItemUri, setGalleryItemUri] = useState<string | null>(null)
   const [cameraRef, setCameraRef] = useState(null)
-  const [cameraType, setCameraType] = useState(Camera.Constants.Type.back)
-  const [cameraFlash, setCameraFlash] = useState(Camera.Constants.FlashMode.off)
+  const [cameraType, setCameraType] = useState(CameraType.back)
+  const [cameraFlash, setCameraFlash] = useState(FlashMode.off)
   const [cameraReady, setCameraReady] = useState(false)
 
   const isFoucused = useIsFocused()
@@ -95,7 +95,7 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
       })
       if (video) {
         const data = await video
-        const source = data.uri
+        const source = data.uri ?? ('' as string)
         navigation.navigate('SavePost', { source })
       }
     } catch (error) {
@@ -124,7 +124,7 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
         quality: 1
       })
       if (!result.canceled) {
-        const source = result.assets[0].uri
+        const source = result.assets[0].uri ?? ''
         navigation.navigate('SavePost', { source })
       }
     } catch (error) {
@@ -162,24 +162,14 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
       <View style={styles.sideBarContainer}>
         <TouchableOpacity
           style={styles.sideBarButton}
-          onPress={() =>
-            setCameraType(
-              cameraType === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back
-            )
-          }>
+          onPress={() => setCameraType(cameraType === CameraType.back ? CameraType.front : CameraType.back)}>
           <Feather name="refresh-ccw" size={24} color={'white'} />
           <Text style={styles.iconText}>Flip</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.sideBarButton}
-          onPress={() =>
-            setCameraFlash(
-              cameraFlash === Camera.Constants.FlashMode.off
-                ? Camera.Constants.FlashMode.torch
-                : Camera.Constants.FlashMode.off
-            )
-          }>
+          onPress={() => setCameraFlash(cameraFlash === FlashMode.off ? FlashMode.torch : FlashMode.off)}>
           <Feather name="zap" size={24} color={'white'} />
           <Text style={styles.iconText}>Flash</Text>
         </TouchableOpacity>

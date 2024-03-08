@@ -2,11 +2,12 @@ import { createMaterialBottomTabNavigator, MaterialBottomTabScreenProps } from '
 import { CompositeScreenProps } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+// import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { AppStackParamList, AppStackScreenProps } from './AppNavigator'
 import * as Pages from '../pages'
 import { MaterialCommunityIcons, AntDesign, FontAwesome, Feather } from '@expo/vector-icons'
 import CameraButton from '../components/CameraButton'
+import { colors } from 'theme'
 
 export type MainTabParamList = {
   Home: undefined
@@ -14,6 +15,7 @@ export type MainTabParamList = {
   Profile: undefined
   Notification: undefined
   Friend: undefined
+  PersonalProfile: undefined
 }
 
 export type MainTabScreenProps<T extends keyof MainTabParamList> = CompositeScreenProps<
@@ -32,22 +34,25 @@ const EmptyPage = () => {
 }
 
 export const MainNavigator = () => {
-  const insets = useSafeAreaInsets()
+  // const insets = useSafeAreaInsets()
   const [home, setHome] = useState(true)
+
+  const navigatorColor = home ? colors.palette.neutral100 : colors.palette.neutral900
 
   return (
     <Tab.Navigator
       shifting={false}
       barStyle={{
-        backgroundColor: home ? '#000' : '#fff'
+        backgroundColor: navigatorColor
       }}
       initialRouteName="Home"
-      activeColor={home ? '#fff' : '#000'}
+      activeColor={navigatorColor}
       theme={{
         colors: {
-          primary: home ? '#000' : '#fff'
+          primary: navigatorColor
         }
-      }}>
+      }}
+      labeled={false}>
       <Tab.Screen
         name="Home"
         component={Pages.HomePage}
@@ -74,7 +79,6 @@ export const MainNavigator = () => {
         listeners={({ navigation }) => ({
           tabPress: (e) => {
             e.preventDefault()
-
             navigation.navigate('Camera')
           }
         })}
@@ -93,7 +97,7 @@ export const MainNavigator = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={EmptyPage}
+        component={Pages.PersonalProfile}
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ color }) => <AntDesign name="user" size={24} color={color} />

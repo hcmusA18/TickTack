@@ -1,8 +1,9 @@
-import { View, Text, TouchableOpacity, TextInput, Image, Modal } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, Image, Modal, StyleSheet } from 'react-native'
 import { Feather, AntDesign } from '@expo/vector-icons'
-import { MainTabScreenProps } from '../navigators'
+import { MainTabScreenProps } from 'navigators'
 import React, { FC, useState, useRef } from 'react'
 import { RadioButton } from 'react-native-paper'
+import { colors } from 'theme'
 
 interface SavePostPageProps extends MainTabScreenProps<'SavePost'> {}
 
@@ -12,7 +13,7 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
   const [textInput, setTextInput] = useState('')
   const textInputRef = useRef<TextInput>(null)
   const [privacy, setPrivacy] = useState('private')
-  const [privacyButton, setPrivacyButton] = useState(false)
+  // const [privacyButton, setPrivacyButton] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
 
   const addHashTag = () => {
@@ -41,7 +42,7 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
 
           <TouchableOpacity style={styles.hashtagButton} onPress={addHashTag}>
             <Feather name="hash" size={13} color="black" />
-            <Text style={{ color: 'black', fontSize: 12, fontWeight: 'bold' }}>Hashtags</Text>
+            <Text style={{ color: colors.palette.neutral900, fontSize: 12, fontWeight: 'bold' }}>Hashtags</Text>
           </TouchableOpacity>
         </View>
         <Image style={styles.mediaPreview} source={{ uri: props.route?.params?.source }} />
@@ -99,17 +100,20 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
   )
 }
 
-const styles = {
+const postBackgroundColor = 'ff4040'
+const translucentBackgroundColor = 'rgba(0, 0, 0, 0.5)'
+const saveBackgroundColor = 'rgba(0, 0, 0, 0.1)'
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 30,
-    backgroundColor: 'white'
+    backgroundColor: colors.palette.neutral100
   },
-  uploadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
+  // uploadingContainer: {
+  //   flex: 1,
+  //   alignItems: 'center',
+  //   justifyContent: 'center'
+  // },
   spacer: {
     flex: 1
   },
@@ -118,7 +122,7 @@ const styles = {
     flexDirection: 'row',
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: 'lightgray',
+    borderColor: colors.palette.neutral300,
     paddingVertical: 10
   },
   rightFormContainer: {
@@ -136,26 +140,26 @@ const styles = {
   },
   mediaPreview: {
     aspectRatio: 9 / 16,
-    backgroundColor: 'black',
+    backgroundColor: colors.palette.neutral900,
     width: 80
   },
   hashtagButton: {
-    backgroundColor: '#DFDEDE',
+    backgroundColor: colors.background,
     alignItems: 'center',
-    borderColor: 'lightgray',
+    borderColor: colors.palette.neutral300,
     borderWidth: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     borderRadius: 4,
     paddingHorizontal: 10,
     paddingVertical: 5,
-    alignSelf: 'flex-start',
-    height: 'fit-content'
+    alignSelf: 'flex-start'
+    // height: 'fit-content'
   },
   cancelButton: {
     alignItems: 'center',
     flex: 1,
-    borderColor: 'lightgray',
+    borderColor: colors.palette.neutral300,
     borderWidth: 1,
     flexDirection: 'row',
     paddingVertical: 10,
@@ -167,7 +171,7 @@ const styles = {
   postButton: {
     alignItems: 'center',
     flex: 1,
-    backgroundColor: '#ff4040',
+    backgroundColor: postBackgroundColor,
     flexDirection: 'row',
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -177,18 +181,18 @@ const styles = {
   },
   cancelButtonText: {
     marginLeft: 5,
-    color: 'black',
+    color: colors.palette.neutral900,
     fontWeight: 'bold',
     fontSize: 16
   },
   postButtonText: {
     marginLeft: 5,
-    color: 'white',
+    color: colors.palette.neutral100,
     fontWeight: 'bold',
     fontSize: 16
   },
   modalViewContainer: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    backgroundColor: translucentBackgroundColor
   },
   settingContainer: {
     flex: 1
@@ -202,10 +206,10 @@ const styles = {
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    backgroundColor: translucentBackgroundColor
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: colors.palette.neutral100,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 20
@@ -213,8 +217,8 @@ const styles = {
   saveButton: {
     alignItems: 'center',
     marginTop: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    backgroundColor: saveBackgroundColor,
     paddingVertical: 10,
     borderRadius: 10
   }
-}
+})

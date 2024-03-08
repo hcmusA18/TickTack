@@ -31,7 +31,9 @@ export type AppStackParamList = {
   Login: undefined
   // 🔥 Your screens go here
   Main: NavigatorScreenParams<MainTabParamList>
-  SavePost: undefined
+  SavePost: { source: string }
+  ProfileEditor: undefined
+  FieldEditor: { fieldName: string; fieldValue: string }
 }
 
 /**
@@ -46,15 +48,59 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false
-      }}>
-      <Stack.Screen name="Welcome" component={Pages.WelcomePage} />
-      <Stack.Screen name="Login" component={Pages.LoginPage} />
+    <Stack.Navigator>
+      {/* <Stack.Screen name="PersonalProfileHome" component={Pages.PersonalProfileHomePage} />
+      <Stack.Screen name="EditProfile" component={Pages.EditProfilePage} />
+      <Stack.Screen name="EditProfileField" component={Pages.EditProfileFieldPage} /> */}
+      <Stack.Screen
+        name="Welcome"
+        component={Pages.WelcomePage}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={Pages.LoginPage}
+        options={{
+          headerShown: false
+        }}
+      />
       {/* 🔥 Here's where your screens go */}
-      <Stack.Screen name="Main" component={MainNavigator} />
-      <Stack.Screen name="SavePost" component={Pages.SavePostPage} />
+      <Stack.Screen
+        name="Main"
+        component={MainNavigator}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="SavePost"
+        component={Pages.SavePostPage}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="ProfileEditor"
+        component={Pages.ProfileEditor}
+        options={{
+          title: 'Edit Profile',
+          headerShadowVisible: false,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18
+          },
+          headerTitleAlign: 'center'
+        }}
+      />
+      <Stack.Screen
+        name="FieldEditor"
+        component={Pages.FieldEditor}
+        options={{
+          headerShown: false
+        }}
+      />
     </Stack.Navigator>
   )
 }
