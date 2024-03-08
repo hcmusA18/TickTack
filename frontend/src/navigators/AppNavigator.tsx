@@ -7,7 +7,7 @@
 import { DarkTheme, DefaultTheme, NavigationContainer, NavigatorScreenParams } from '@react-navigation/native'
 import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack'
 import React from 'react'
-import { TouchableOpacity, useColorScheme } from 'react-native'
+import { useColorScheme } from 'react-native'
 import * as Pages from 'pages'
 import { navigationRef, useBackButtonHandler } from './navigationUtilities'
 import Config from 'configs'
@@ -32,8 +32,8 @@ export type AppStackParamList = {
   // 🔥 Your screens go here
   Main: NavigatorScreenParams<MainTabParamList>
   SavePost: { source: string }
-  EditProfile: undefined
-  EditProfileDetails: { fieldName: string; fieldValue: string }
+  ProfileEditor: undefined
+  FieldEditor: { fieldName: string; fieldValue: string }
 }
 
 /**
@@ -82,7 +82,7 @@ const AppStack = () => {
         }}
       />
       <Stack.Screen
-        name="EditProfile"
+        name="ProfileEditor"
         component={Pages.ProfileEditor}
         options={{
           title: 'Edit Profile',
@@ -95,7 +95,7 @@ const AppStack = () => {
         }}
       />
       <Stack.Screen
-        name="EditProfileDetails"
+        name="FieldEditor"
         component={Pages.FieldEditor}
         options={{
           headerShown: false

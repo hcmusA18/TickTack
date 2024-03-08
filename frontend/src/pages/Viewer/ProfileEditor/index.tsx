@@ -1,13 +1,13 @@
 import React, { FC } from 'react'
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text } from 'react-native-paper'
-import { MainTabScreenProps } from 'navigators'
+import { AppStackScreenProps } from 'navigators'
 import { Screen } from 'components'
 import { Feather } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
 import { colors } from 'theme'
 
-interface ProfileEditorProps extends MainTabScreenProps<'EditProfile'> {}
+interface ProfileEditorProps extends AppStackScreenProps<'ProfileEditor'> {}
 
 const avatarBackgroundColor = 'rgba(0,0,0,0.3)'
 
@@ -115,14 +115,14 @@ const FieldsSection: FC<{ navigation: ProfileEditorProps['navigation'] }> = ({ n
   <View style={styles.fieldsContainer}>
     <TouchableOpacity
       style={styles.fieldItemsContainer}
-      onPress={() => navigation.navigate('EditProfileDetails', { fieldName: 'Name', fieldValue: 'Son Tung M-TP' })}>
+      onPress={() => navigation.navigate('FieldEditor', { fieldName: 'Name', fieldValue: 'Son Tung M-TP' })}>
       <Text style={styles.fieldLabel}>Name</Text>
       <FieldText value="Son Tung M-TP" />
     </TouchableOpacity>
 
     <TouchableOpacity
       style={styles.fieldItemsContainer}
-      onPress={() => navigation.navigate('EditProfileDetails', { fieldName: 'Username', fieldValue: '@tiger050794' })}>
+      onPress={() => navigation.navigate('FieldEditor', { fieldName: 'Username', fieldValue: '@tiger050794' })}>
       <Text style={styles.fieldLabel}>Username</Text>
       <FieldText value="@tiger050794" />
     </TouchableOpacity>

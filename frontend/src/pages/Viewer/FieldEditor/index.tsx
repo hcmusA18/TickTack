@@ -1,12 +1,12 @@
 import React, { FC, useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { AppStackScreenProps } from 'navigators'
-import { Screen } from '../../../../components'
+import { Screen } from 'components'
 import { Divider } from 'react-native-paper'
 import { TextInput } from 'react-native-gesture-handler'
-import { colors } from '../../../../theme'
+import { colors } from 'theme'
 
-interface FieldEditorProps extends AppStackScreenProps<'EditProfileDetails'> {}
+interface FieldEditorProps extends AppStackScreenProps<'FieldEditor'> {}
 
 const styles = StyleSheet.create({
   container: {
@@ -56,15 +56,15 @@ export const FieldEditor: FC<FieldEditorProps> = ({ route, navigation }) => {
 
   const onSave = () => {
     // Save the new value
-    console.log('Saving the new value: ', value)
-    navigation.navigate('EditProfile')
+    if (__DEV__) console.log('Saving the new value: ', value)
+    navigation.navigate('ProfileEditor')
   }
 
   return (
     <Screen preset="fixed" safeAreaEdges={['top', 'bottom']} contentContainerStyle={styles.container}>
       {/* Navbar */}
       <View style={styles.navbarContainer}>
-        <TouchableOpacity style={styles.backContainer} onPress={() => navigation.navigate('EditProfile')}>
+        <TouchableOpacity style={styles.backContainer} onPress={() => navigation.navigate('ProfileEditor')}>
           <Text style={{ fontSize: 18 }}>Cancel</Text>
         </TouchableOpacity>
 

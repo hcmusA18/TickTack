@@ -12,12 +12,9 @@ import { colors } from 'theme'
 export type MainTabParamList = {
   Home: undefined
   Camera: undefined
-  SavePost: { source: string }
   Profile: undefined
   Notification: undefined
   Friend: undefined
-  EditProfile: undefined
-  EditProfileDetails: { fieldName: string; fieldValue: string }
   PersonalProfile: undefined
 }
 
