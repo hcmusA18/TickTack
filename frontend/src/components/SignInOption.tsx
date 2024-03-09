@@ -13,7 +13,6 @@ const SignupOption: FC<SignupOptionProps> = ({ icon, text }) => {
       <Button icon={icon}>
         <Text>{text}</Text>
       </Button>
-      <Text>{text === 'Sign up' ? 'Use phone or email' : text}</Text>
     </View>
   )
 }

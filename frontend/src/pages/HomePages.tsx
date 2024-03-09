@@ -1,11 +1,14 @@
-import React, { FC } from 'react'
+import React, { FC, useRef } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { Screen } from '../components'
 import { AppStackScreenProps } from '../navigators'
 import { spacing } from '../theme'
 import { Button } from 'react-native-paper'
+import BottomSheet from '@gorhom/bottom-sheet'
 
-interface HomePageProps extends AppStackScreenProps<'Home'> {}
+interface HomePageProps extends AppStackScreenProps<'Home'> {
+  sheetRef?: React.MutableRefObject<BottomSheet | null>
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -27,6 +30,7 @@ const styles = StyleSheet.create({
 
 export const HomePage: FC<HomePageProps> = (props) => {
   const { navigation } = props
+  const sheetRef = useRef<BottomSheet | null>(null)
 
   return (
     <Screen preset="fixed" safeAreaEdges={['top', 'bottom']} contentContainerStyle={styles.container}>
@@ -37,6 +41,7 @@ export const HomePage: FC<HomePageProps> = (props) => {
         mode="contained"
         onPress={() => {
           navigation.navigate('Login')
+          sheetRef.current?.expand?.()
         }}>
         Logout
       </Button>
