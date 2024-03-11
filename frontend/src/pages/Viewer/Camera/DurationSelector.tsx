@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Animated } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native'
 import { colors } from 'theme'
 
 const DurationSelector = ({ durationOptions, selectedDuration, onDurationSelect }) => {
@@ -9,8 +9,6 @@ const DurationSelector = ({ durationOptions, selectedDuration, onDurationSelect 
   // };
 
   const scrollViewRef = useRef(null)
-
-  // if selectedDuration changes, modify the x value of the scrollX to let the selectedDuration be in horizontal center
   const [scrollX] = useState(new Animated.Value(0))
 
   useEffect(() => {

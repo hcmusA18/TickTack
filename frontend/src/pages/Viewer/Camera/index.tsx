@@ -1,14 +1,15 @@
 import React, { FC, useEffect, useState, useRef } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Image, PanResponder, Animated } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image, PanResponder, Dimensions } from 'react-native'
 import { MainTabScreenProps } from 'navigators'
 import { Camera, CameraType, FlashMode } from 'expo-camera'
 import { Audio } from 'expo-av'
 import * as ImagePicker from 'expo-image-picker'
 import * as MediaLibrary from 'expo-media-library'
 import { useIsFocused } from '@react-navigation/core'
-import { Feather } from '@expo/vector-icons'
+import { Feather, AntDesign } from '@expo/vector-icons'
 import { colors } from 'theme'
 import DurationSelector from './DurationSelector'
+import ProgressCircle from './RecordingButton'
 
 interface CameraPageProps extends MainTabScreenProps<'Camera'> {}
 
@@ -26,13 +27,12 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
   const [cameraType, setCameraType] = useState(CameraType.back)
   const [cameraFlash, setCameraFlash] = useState(FlashMode.off)
   const [cameraReady, setCameraReady] = useState(false)
+  const [selectedDuration, setSelectedDuration] = useState(15)
 
-  const [selectedDuration, setSelectedDuration] = useState(15) // Initialize the selected duration state
-
-  const durationOptions = [15, 30, 45] // Define your duration options
+  const durationOptions = [15, 30, 45]
 
   const handleDurationSelect = (duration) => {
-    setSelectedDuration(duration) // Update the selected duration state
+    setSelectedDuration(duration)
   }
 
   const isFoucused = useIsFocused()
@@ -41,7 +41,6 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
   useEffect(() => {
     const getPermissions = async () => {
       try {
-        // Get all permissions
         const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync()
         setMediaPermission(mediaStatus === 'granted')
 
@@ -99,9 +98,17 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
     try {
       if (!cameraReady) return
       setRecording(true)
+
+      setTimeout(
+        () => {
+          stopVideo()
+        },
+        selectedDuration * 1000 + 500
+      )
+
       const video = await cameraRef.recordAsync({
         quality: Camera.Constants.VideoQuality['480p'],
-        maxDuration: 20
+        maxDuration: selectedDuration
       })
       if (video) {
         const data = await video
@@ -148,30 +155,8 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
     return `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
   }
 
-  // swipe the screen to change the duration
-  const pan = useRef(new Animated.ValueXY()).current
-
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onPanResponderMove: (evt, gestureState) => {
-        // Check if the gesture is horizontal
-        if (Math.abs(gestureState.dx) > Math.abs(gestureState.dy)) {
-          // Move the pan position horizontally
-          pan.setValue({ x: gestureState.dx, y: 0 })
-        }
-      },
-      onPanResponderRelease: (evt, gestureState) => {
-        console.log('onPanResponderRelease', gestureState.dx)
-        if (gestureState.dx > 50) {
-          console.log('Swipe to the right detected')
-        }
-      }
-    })
-  ).current
-
   return (
-    <View style={styles.container} {...panResponder.panHandlers}>
+    <View style={styles.container}>
       {isFoucused && cameraPermission && audioPermission && galleryPermission ? (
         <>
           <View style={styles.overlay} />
@@ -195,56 +180,74 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
       )}
 
       <View style={styles.rightSideBarContainer}>
-        <TouchableOpacity
-          style={styles.sideBarButton}
-          onPress={() => setCameraType(cameraType === CameraType.back ? CameraType.front : CameraType.back)}>
-          <Feather name="refresh-ccw" size={24} color={'white'} />
-          <Text style={styles.iconText}>Flip</Text>
-        </TouchableOpacity>
+        {!recording ? (
+          <>
+            <TouchableOpacity
+              style={styles.sideBarButton}
+              onPress={() => setCameraType(cameraType === CameraType.back ? CameraType.front : CameraType.back)}>
+              <Feather name="refresh-ccw" size={24} color={'white'} />
+              <Text style={styles.iconText}>Flip</Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.sideBarButton}
-          onPress={() => setCameraFlash(cameraFlash === FlashMode.off ? FlashMode.torch : FlashMode.off)}>
-          <Feather name={cameraFlash === FlashMode.off ? 'zap-off' : 'zap'} size={24} color={'white'} />
-          <Text style={styles.iconText}>Flash</Text>
-        </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.sideBarButton}
+              onPress={() => setCameraFlash(cameraFlash === FlashMode.off ? FlashMode.torch : FlashMode.off)}>
+              <Feather name={cameraFlash === FlashMode.off ? 'zap-off' : 'zap'} size={24} color={'white'} />
+              <Text style={styles.iconText}>Flash</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <></>
+        )}
       </View>
 
       <View style={styles.leftSideBarContainer}>
-        <TouchableOpacity style={styles.sideBarButton} onPress={() => navigation.goBack()}>
-          <Feather name="x" size={30} color={'white'} />
-        </TouchableOpacity>
+        {!recording ? (
+          <TouchableOpacity style={styles.sideBarButton} onPress={() => navigation.goBack()}>
+            <Feather name="x" size={30} color={'white'} />
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
       </View>
 
       {/* Duration selector */}
       <View style={styles.durationSelectorContainer}>
-        <DurationSelector
-          durationOptions={durationOptions}
-          selectedDuration={selectedDuration}
-          onDurationSelect={handleDurationSelect}
-        />
+        {!recording ? (
+          <DurationSelector
+            durationOptions={durationOptions}
+            selectedDuration={selectedDuration}
+            onDurationSelect={handleDurationSelect}
+          />
+        ) : (
+          <></>
+        )}
       </View>
 
       <View style={styles.bottomContainer}>
         <View style={{ flex: 1 }}></View>
-
         <View style={styles.recordBtnContainer}>
-          <TouchableOpacity
-            style={styles.recordBtn}
-            disabled={!cameraReady}
-            onLongPress={() => recordVideo()}
-            onPressOut={() => stopVideo()}
-          />
+          {recording ? (
+            <ProgressCircle duration={selectedDuration * 1000} />
+          ) : (
+            <TouchableOpacity style={styles.recordBtn} disabled={!cameraReady} onPress={() => recordVideo()} />
+          )}
         </View>
 
         <View style={{ flex: 1 }}>
-          <TouchableOpacity onPress={() => pickVideo()} style={styles.galleryBtn}>
-            {galleryItemUri === null ? (
-              <></>
-            ) : (
-              <Image style={styles.galleryButtonImage} source={{ uri: galleryItemUri }} />
-            )}
-          </TouchableOpacity>
+          {!recording ? (
+            <TouchableOpacity onPress={() => pickVideo()} style={styles.galleryBtn}>
+              {galleryItemUri === null ? (
+                <></>
+              ) : (
+                <Image style={styles.galleryButtonImage} source={{ uri: galleryItemUri }} />
+              )}
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity>
+              <AntDesign name="checkcircle" size={30} color={COLORS.recordBtn} onPress={() => stopVideo()} />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>
@@ -342,7 +345,7 @@ const styles = StyleSheet.create({
   },
   recordingTimeContainer: {
     position: 'absolute',
-    top: 20,
+    top: 30,
     alignSelf: 'center',
     backgroundColor: COLORS.transparent,
     padding: 10,
