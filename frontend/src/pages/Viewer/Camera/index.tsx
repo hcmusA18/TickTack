@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import React, { FC, useEffect, useState, useRef } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, Image, PanResponder, Animated } from 'react-native'
 import { MainTabScreenProps } from 'navigators'
 import { Camera, CameraType, FlashMode } from 'expo-camera'
 import { Audio } from 'expo-av'
@@ -7,6 +7,8 @@ import * as ImagePicker from 'expo-image-picker'
 import * as MediaLibrary from 'expo-media-library'
 import { useIsFocused } from '@react-navigation/core'
 import { Feather } from '@expo/vector-icons'
+import { colors } from 'theme'
+import DurationSelector from './DurationSelector'
 
 interface CameraPageProps extends MainTabScreenProps<'Camera'> {}
 
@@ -24,6 +26,14 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
   const [cameraType, setCameraType] = useState(CameraType.back)
   const [cameraFlash, setCameraFlash] = useState(FlashMode.off)
   const [cameraReady, setCameraReady] = useState(false)
+
+  const [selectedDuration, setSelectedDuration] = useState(15) // Initialize the selected duration state
+
+  const durationOptions = [15, 30, 45] // Define your duration options
+
+  const handleDurationSelect = (duration) => {
+    setSelectedDuration(duration) // Update the selected duration state
+  }
 
   const isFoucused = useIsFocused()
 
@@ -138,17 +148,42 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
     return `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
   }
 
+  // swipe the screen to change the duration
+  const pan = useRef(new Animated.ValueXY()).current
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {
+        // Check if the gesture is horizontal
+        if (Math.abs(gestureState.dx) > Math.abs(gestureState.dy)) {
+          // Move the pan position horizontally
+          pan.setValue({ x: gestureState.dx, y: 0 })
+        }
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        console.log('onPanResponderRelease', gestureState.dx)
+        if (gestureState.dx > 50) {
+          console.log('Swipe to the right detected')
+        }
+      }
+    })
+  ).current
+
   return (
-    <View style={styles.container}>
+    <View style={styles.container} {...panResponder.panHandlers}>
       {isFoucused && cameraPermission && audioPermission && galleryPermission ? (
-        <Camera
-          style={styles.camera}
-          ref={(ref) => setCameraRef(ref)}
-          ratio={'16:9'}
-          type={cameraType}
-          flashMode={cameraFlash}
-          onCameraReady={() => setCameraReady(true)}
-        />
+        <>
+          <View style={styles.overlay} />
+          <Camera
+            style={styles.camera}
+            ref={(ref) => setCameraRef(ref)}
+            ratio={'16:9'}
+            type={cameraType}
+            flashMode={cameraFlash}
+            onCameraReady={() => setCameraReady(true)}
+          />
+        </>
       ) : (
         <Text>Permissions not granted</Text>
       )}
@@ -159,7 +194,7 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
         </View>
       )}
 
-      <View style={styles.sideBarContainer}>
+      <View style={styles.rightSideBarContainer}>
         <TouchableOpacity
           style={styles.sideBarButton}
           onPress={() => setCameraType(cameraType === CameraType.back ? CameraType.front : CameraType.back)}>
@@ -170,9 +205,24 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
         <TouchableOpacity
           style={styles.sideBarButton}
           onPress={() => setCameraFlash(cameraFlash === FlashMode.off ? FlashMode.torch : FlashMode.off)}>
-          <Feather name="zap" size={24} color={'white'} />
+          <Feather name={cameraFlash === FlashMode.off ? 'zap-off' : 'zap'} size={24} color={'white'} />
           <Text style={styles.iconText}>Flash</Text>
         </TouchableOpacity>
+      </View>
+
+      <View style={styles.leftSideBarContainer}>
+        <TouchableOpacity style={styles.sideBarButton} onPress={() => navigation.goBack()}>
+          <Feather name="x" size={30} color={'white'} />
+        </TouchableOpacity>
+      </View>
+
+      {/* Duration selector */}
+      <View style={styles.durationSelectorContainer}>
+        <DurationSelector
+          durationOptions={durationOptions}
+          selectedDuration={selectedDuration}
+          onDurationSelect={handleDurationSelect}
+        />
       </View>
 
       <View style={styles.bottomContainer}>
@@ -207,7 +257,7 @@ const COLORS = {
   blue: '#007bff',
   red: '#dc3545',
   green: '#28a745',
-  recordBtnBorder: '#FF404087',
+  recordBtnBorder: colors.white,
   recordBtn: '#FF4040',
   transparent: 'transparent'
 }
@@ -216,14 +266,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingTop: 40,
+    paddingBottom: 40
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: colors.palette.neutral900,
+    zIndex: -100
   },
   bottomContainer: {
     position: 'absolute',
     bottom: 0,
     flexDirection: 'row',
-    marginBottom: 30,
+    marginBottom: 50,
     alignItems: 'center'
+  },
+  durationSelectorContainer: {
+    position: 'absolute',
+    bottom: 140
   },
   camera: {
     flex: 1,
@@ -232,10 +293,13 @@ const styles = StyleSheet.create({
   },
   recordBtnContainer: {
     flex: 1,
-    marginHorizontal: 30
+    marginHorizontal: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column'
   },
   recordBtn: {
-    borderWidth: 8,
+    borderWidth: 4,
     borderColor: COLORS.recordBtnBorder,
     backgroundColor: COLORS.recordBtn,
     borderRadius: 100,
@@ -255,9 +319,15 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50
   },
-  sideBarContainer: {
-    bottom: 150,
+  rightSideBarContainer: {
+    top: 60,
     right: 0,
+    marginHorizontal: 20,
+    position: 'absolute'
+  },
+  leftSideBarContainer: {
+    top: 60,
+    left: 0,
     marginHorizontal: 20,
     position: 'absolute'
   },
