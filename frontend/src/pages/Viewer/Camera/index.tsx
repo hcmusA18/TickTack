@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState, useRef } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Image, PanResponder, Dimensions } from 'react-native'
+import React, { FC, useEffect, useState } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { MainTabScreenProps } from 'navigators'
 import { Camera, CameraType, FlashMode } from 'expo-camera'
 import { Audio } from 'expo-av'
@@ -70,7 +70,7 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
       }
     }
     getPermissions()
-  }, [])
+  })
 
   // Update recording time
   useEffect(() => {
@@ -113,7 +113,7 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
       if (video) {
         const data = await video
         const source = data.uri ?? ('' as string)
-        navigation.navigate('SavePost', { source })
+        navigation.navigate('VideoPreviewer', { source })
       }
     } catch (error) {
       console.error('Error while recording video:', error)
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
   },
   camera: {
     flex: 1,
-    backgroundColor: COLORS.black,
+    backgroundColor: colors.palette.neutral900,
     aspectRatio: 9 / 16
   },
   recordBtnContainer: {
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
   },
   galleryBtn: {
     borderWidth: 2,
-    borderColor: COLORS.white,
+    borderColor: colors.white,
     borderRadius: 10,
     overflow: 'hidden',
     height: 50,
@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
     position: 'absolute'
   },
   iconText: {
-    color: COLORS.white,
+    color: colors.white,
     fontSize: 12,
     marginTop: 5
   },
@@ -347,12 +347,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 30,
     alignSelf: 'center',
-    backgroundColor: COLORS.transparent,
+    backgroundColor: colors.transparent,
     padding: 10,
     borderRadius: 20
   },
   recordingTimeText: {
-    color: COLORS.white,
+    color: colors.white,
     fontSize: 20
   }
 })

@@ -35,7 +35,7 @@ const ProgressCircle = ({ duration }) => {
 
   useEffect(() => {
     strokeOffset.value = 0
-  }, [])
+  })
 
   return (
     <View

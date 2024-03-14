@@ -100,7 +100,7 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
   )
 }
 
-const postBackgroundColor = 'ff4040'
+const postBackgroundColor = '#ff4040'
 const translucentBackgroundColor = 'rgba(0, 0, 0, 0.5)'
 const saveBackgroundColor = 'rgba(0, 0, 0, 0.1)'
 const styles = StyleSheet.create({

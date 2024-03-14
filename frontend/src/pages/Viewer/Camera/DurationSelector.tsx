@@ -12,7 +12,6 @@ const DurationSelector = ({ durationOptions, selectedDuration, onDurationSelect 
   const [scrollX] = useState(new Animated.Value(0))
 
   useEffect(() => {
-    console.log(selectedDuration)
     const durationIndex = durationOptions.indexOf(selectedDuration)
     const scrollPosition = durationIndex * 80 // Assuming each duration option has a width of 80
 
