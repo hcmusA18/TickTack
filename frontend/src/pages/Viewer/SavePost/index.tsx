@@ -26,6 +26,8 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
     // setModalVisible(false)
   }
 
+  const videoSrc = props.route?.params?.source
+
   return (
     <View style={styles.container}>
       <View style={styles.formContainer}>
@@ -45,15 +47,31 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
             <Text style={{ color: colors.palette.neutral900, fontSize: 12, fontWeight: 'bold' }}>Hashtags</Text>
           </TouchableOpacity>
         </View>
-        <Image style={styles.mediaPreview} source={{ uri: props.route?.params?.source }} />
+        <TouchableOpacity onPress={() => navigation.navigate('VideoPreviewer', { source: videoSrc })}>
+          <Image style={styles.mediaPreview} source={{ uri: videoSrc }} />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.settingContainer}>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
           <View style={styles.privacyContainer}>
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-              <Feather name="lock" size={24} />
-              <Text style={{ marginLeft: 10 }}>Privacy</Text>
+              {privacy === 'public' ? (
+                <>
+                  <Feather name="globe" size={24} />
+                  <Text style={{ marginLeft: 10 }}>Everyone can see your post</Text>
+                </>
+              ) : privacy === 'friends' ? (
+                <>
+                  <Feather name="users" size={24} />
+                  <Text style={{ marginLeft: 10 }}>Friends can see your post</Text>
+                </>
+              ) : (
+                <>
+                  <Feather name="lock" size={24} />
+                  <Text style={{ marginLeft: 10 }}>Only you can see your post</Text>
+                </>
+              )}
             </View>
             <AntDesign name="right" size={24} color="black" />
           </View>
@@ -63,7 +81,7 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
       <View style={styles.spacer} />
 
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.cancelButton}>
+        <TouchableOpacity onPress={() => navigation.navigate('Camera')} style={styles.cancelButton}>
           <Feather name="x" size={24} color="black" />
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </TouchableOpacity>
@@ -80,19 +98,36 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(false)
-        }}
-        style={styles.modalViewContainer}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={{ fontSize: 17, marginBottom: 10, fontWeight: 'bold' }}>Who can see your post?</Text>
-            <RadioButton.Group onValueChange={handlePrivacyChange} value={privacy}>
-              <RadioButton.Item label="Public" value="public" />
-              <RadioButton.Item label="Private" value="private" />
-              <RadioButton.Item label="Friends" value="friends" />
-            </RadioButton.Group>
-            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.saveButton}>
-              <Text>Save</Text>
-            </TouchableOpacity>
+        }}>
+        <View style={styles.modalViewContainer}>
+          <View style={styles.modalContainer}>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: 20,
+                paddingBottom: 10,
+                paddingTop: 0
+              }}>
+              <View></View>
+              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Privacy settings</Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Feather name="x" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.modalContent}>
+              <Text style={{ fontSize: 17, marginBottom: 10, fontWeight: 'bold' }}>Who can see your post?</Text>
+              <RadioButton.Group onValueChange={handlePrivacyChange} value={privacy}>
+                <RadioButton.Item label="Everyone" value="public" color={postBackgroundColor} />
+                <RadioButton.Item label="Friends" value="friends" color={postBackgroundColor} />
+                <RadioButton.Item label="Only you" value="private" color={postBackgroundColor} />
+              </RadioButton.Group>
+              {/* <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.saveButton}>
+                <Text style={{ color: colors.palette.neutral100 }}>Save</Text>
+              </TouchableOpacity> */}
+            </View>
           </View>
         </View>
       </Modal>
@@ -102,7 +137,6 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
 
 const postBackgroundColor = '#ff4040'
 const translucentBackgroundColor = 'rgba(0, 0, 0, 0.5)'
-const saveBackgroundColor = 'rgba(0, 0, 0, 0.1)'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -154,7 +188,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     alignSelf: 'flex-start'
-    // height: 'fit-content'
   },
   cancelButton: {
     alignItems: 'center',
@@ -191,9 +224,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16
   },
-  modalViewContainer: {
-    backgroundColor: translucentBackgroundColor
-  },
   settingContainer: {
     flex: 1
   },
@@ -203,22 +233,30 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 20
   },
-  modalContainer: {
+  modalViewContainer: {
     flex: 1,
     justifyContent: 'flex-end',
     backgroundColor: translucentBackgroundColor
   },
-  modalContent: {
-    backgroundColor: colors.palette.neutral100,
+  modalContainer: {
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    backgroundColor: colors.palette.neutral200,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    padding: 20
+    height: '35%',
+    padding: 10
   },
-  saveButton: {
-    alignItems: 'center',
-    marginTop: 10,
-    backgroundColor: saveBackgroundColor,
-    paddingVertical: 10,
-    borderRadius: 10
+  modalContent: {
+    backgroundColor: colors.palette.neutral100,
+    borderRadius: 10,
+    padding: 20
   }
+  // saveButton: {
+  //   alignItems: 'center',
+  //   marginTop: 10,
+  //   backgroundColor: postBackgroundColor,
+  //   paddingVertical: 10,
+  //   borderRadius: 10
+  // }
 })

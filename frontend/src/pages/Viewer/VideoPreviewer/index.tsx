@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { Video } from 'expo-av'
 import { Feather, MaterialIcons } from '@expo/vector-icons'
@@ -9,12 +9,24 @@ interface VideoPreviewerProps extends AppStackScreenProps<'VideoPreviewer'> {}
 
 export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
   const { navigation } = props
+  const videoRef = useRef(null)
+
+  useEffect(() => {
+    videoRef.current?.playAsync()
+  })
+
+  const handleNext = () => {
+    // destroy the video previewer
+    videoRef.current?.pauseAsync()
+    navigation.navigate('SavePost', { source: props.route?.params?.source })
+  }
 
   return (
     <View style={styles.container}>
       <Video
         source={{ uri: props.route?.params?.source }}
         rate={1.0}
+        ref={videoRef}
         volume={1.0}
         isMuted={false}
         resizeMode="cover"
@@ -24,18 +36,13 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
       />
 
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.cancelButton}>
+        <TouchableOpacity onPress={() => navigation.navigate('Camera')} style={styles.cancelButton}>
           <Feather name="x" size={24} color="black" />
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.postButton}>
-          <MaterialIcons
-            name="navigate-next"
-            size={24}
-            color="white"
-            onPress={() => navigation.navigate('SavePost', { source: props.route?.params?.source })}
-          />
+          <MaterialIcons name="navigate-next" size={24} color="white" onPress={handleNext} />
           <Text style={styles.postButtonText}>Next</Text>
         </TouchableOpacity>
       </View>

@@ -142,7 +142,7 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
       })
       if (!result.canceled) {
         const source = result.assets[0].uri ?? ''
-        navigation.navigate('SavePost', { source })
+        navigation.navigate('VideoPreviewer', { source })
       }
     } catch (error) {
       console.error('Error while picking image:', error)
