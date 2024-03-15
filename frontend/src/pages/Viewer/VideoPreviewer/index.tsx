@@ -23,6 +23,17 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.addSoundContainer}>
+        <TouchableOpacity
+          style={{ flexDirection: 'row', alignItems: 'center', width: '70%', justifyContent: 'space-evenly' }}>
+          <Feather name="music" size={15} color={colors.white} />
+          <Text style={{ color: colors.white, fontSize: 15 }}>Add sound</Text>
+        </TouchableOpacity>
+        <View style={styles.separator} />
+        <TouchableOpacity>
+          <Feather name="x" size={18} color={colors.white} />
+        </TouchableOpacity>
+      </View>
       <Video
         source={{ uri: props.route?.params?.source }}
         rate={1.0}
@@ -64,6 +75,24 @@ const styles = StyleSheet.create({
   video: {
     width: '100%',
     height: '85%'
+  },
+  addSoundContainer: {
+    backgroundColor: colors.palette.overlay50,
+    position: 'absolute',
+    top: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    marginTop: 40,
+    zIndex: 1000,
+    width: '40%',
+    height: 35,
+    borderRadius: 8
+  },
+  separator: {
+    width: 1,
+    height: 15,
+    backgroundColor: colors.palette.neutral300
   },
   buttonsContainer: {
     flexDirection: 'row',
