@@ -1,8 +1,7 @@
 import React, { FC, useMemo, useRef } from 'react'
 import { StyleSheet, View, ScrollView } from 'react-native'
-import { Text, Button } from 'react-native-paper'
+import { Text, Button, Icon, IconButton } from 'react-native-paper'
 import { AppStackScreenProps } from '../navigators'
-import { spacing } from '../theme'
 import SignupOption, { SignupOptionProps } from '../components/SignInOption'
 import BottomSheet from '@gorhom/bottom-sheet'
 
@@ -23,8 +22,6 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
 
   const snapPoints = useMemo(() => ['25%', '90%'], [])
 
-  // const snapPoints = useMemo(() => ["25%", "50%", "90%"], []);
-
   // callbacks
   const handleSheetChange = (index) => {
     console.log(index)
@@ -37,46 +34,52 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
     }
   }
 
+  const getTopBarIcon = (btnName: string, btnSize: number, onPressFunc) => {
+    return <IconButton size={btnSize} icon={btnName} onPress={onPressFunc} />
+  }
+
   return (
     <BottomSheet ref={sheetRef} index={1} snapPoints={snapPoints} onChange={handleSheetChange}>
-      {/* Top bar */}
-      <View style={styles.topBar}>
-        <Button icon="help-circle-outline" onPress={() => console.log('Help Button Pressed')}>
-          <Text style={styles.buttonText}>Help</Text>
-        </Button>
-        <Text style={styles.buttonText}>Log in to Tiktok</Text>
-        <Button icon="close" onPress={() => console.log('Cancel Button Pressed')}>
-          <Text style={styles.buttonText}>Close</Text>
-        </Button>
-      </View>
-
-      <View>
-        {/* Content */}
-        <ScrollView>
-          <Text style={styles.login_text}>Sign up for Tiktok</Text>
-          <Text style={styles.login_describe}>
-            Create a profile, follow other accounts, make your own videos, and more.
-          </Text>
-
-          {signupOptionsData.map((option, index) => (
-            <SignupOption key={index} icon={option.icon} text={option.text} />
-          ))}
-        </ScrollView>
-        {/* Policy */}
-        <View>
-          <Text style={styles.policy_text}>
-            By continuing with an account located in Vietnam, you agree to out Terms of Service and acknowledge that you
-            have read our Privacy Policy
-          </Text>
+      <View style={styles.contentContainer}>
+        {/* Top bar */}
+        <View style={styles.topBar}>
+          {getTopBarIcon('help-circle-outline', 30, () => console.log('Help Button Pressed'))}
+          <Text style={styles.topBar_title}>Log in to Tiktok</Text>
+          {getTopBarIcon('close', 30, () => console.log('Cancel Button Pressed'))}
         </View>
-        {/* Bottom bar */}
         <View>
+          {/* Content */}
+          <ScrollView>
+            <Text style={styles.login_text}>Sign up for Tiktok</Text>
+            <Text style={styles.login_describe}>
+              Create a profile, follow other accounts, make your own videos, and more.
+            </Text>
+
+            {signupOptionsData.map((option, index) => (
+              <SignupOption
+                key={index}
+                icon={option.icon}
+                text={option.text}
+                onPress={() => {
+                  console.log(option.text)
+                }}
+              />
+            ))}
+          </ScrollView>
+          {/* Policy */}
           <View>
-            <Text>Don't have an account?</Text>
-            <Button>
-              <Text>Sign up</Text>
-            </Button>
+            <Text style={styles.policy_text}>
+              By continuing with an account located in Vietnam, you agree to out Terms of Service and acknowledge that
+              you have read our Privacy Policy
+            </Text>
           </View>
+        </View>
+        {/* Bottom bar - Positioned absolutely to the bottom */}
+        <View style={styles.bottomBar}>
+          <Text style={styles.bottomBar_text}>Don"t have an account?</Text>
+          <Button mode="text" onPress={() => console.log('Sign Up Button Pressed')}>
+            <Text>Sign up</Text>
+          </Button>
         </View>
       </View>
     </BottomSheet>
@@ -88,28 +91,47 @@ const styles = StyleSheet.create({
   //   flex: 1
   // },
   topBar: {
-    height: spacing.xxxl, // Adjust height as needed
-    flexDirection: 'row',
-    justifyContent: 'space-between', // Center elements horizontally
-    alignItems: 'center' // Center elements vertically
+    flexDirection: 'row', // Aligns children in a row
+    justifyContent: 'space-between', // Distributes children evenly with space between them
+    alignItems: 'center', // Aligns children vertically in the center
+    padding: 10 // Add padding around the edges if needed
   },
-  buttonText: {
-    marginLeft: 10 // Adjust spacing between icon and text as needed
+  topBar_title: {
+    flex: 1, // Takes up all available space
+    textAlign: 'center', // Centers the text horizontally
+    fontSize: 16
   },
   login_text: {
     fontSize: 24,
-    textAlign: 'center', // This will center the text horizontally
-    marginVertical: 20 // This adds vertical space above and below the text
+    textAlign: 'left', // This will center the text horizontally
+    marginVertical: 10 // This adds vertical space above and below the text
     // You may need to adjust marginVertical as per your design needs
   },
   login_describe: {
-    fontSize: 12,
+    fontSize: 16,
     textAlign: 'center',
-    marginVertical: 10
+    marginVertical: 10,
+    marginHorizontal: 40
   },
   policy_text: {
     fontSize: 12,
     textAlign: 'center',
     marginVertical: 10
+  },
+  bottomBar: {
+    position: 'absolute', // This positions the view out of the normal flow and places it relative to its first positioned (not static) ancestor
+    bottom: 0, // This positions the view at the bottom of its container
+    width: '100%', // This makes the view stretch across the screen
+    backgroundColor: 'white', // Optional, for better visibility
+    padding: 30, // Adjust the padding as needed
+    borderTopWidth: 1, // Optional, to add a line at the top of the bottom bar
+    borderColor: 'grey', // Color for the border line
+    alignItems: 'center' // Center the content horizontally
+  },
+  bottomBar_text: {
+    marginBottom: 10 // Space between text and button
+  },
+  contentContainer: {
+    flex: 1
   }
 })

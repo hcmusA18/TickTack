@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginVertical: 5,
-    width: 300, // Set the width to 100px
+    width: 250, // Set the width to 100px
     alignSelf: 'center' // This will center the button in its parent container
   },
   icon: {
@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
-    textAlign: 'center'
+    textAlign: 'center',
+    maxWidth: 200
   },
   container: {
     flex: 1,
