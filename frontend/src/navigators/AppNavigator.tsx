@@ -34,6 +34,7 @@ export type AppStackParamList = {
   SavePost: { source: string }
   ProfileEditor: undefined
   FieldEditor: { fieldName: string; fieldValue: string }
+  UserProfile: undefined
 }
 
 /**
@@ -97,6 +98,13 @@ const AppStack = () => {
       <Stack.Screen
         name="FieldEditor"
         component={Pages.FieldEditor}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="UserProfile"
+        component={Pages.UserProfilePage} // Use the imported component
         options={{
           headerShown: false
         }}

@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text, Avatar } from 'react-native-paper'
-import { MainTabScreenProps } from 'navigators'
+import { AppStackScreenProps } from 'navigators'
 import { Screen } from 'components'
 import { ProfileNavbar } from './components/Navbar'
 import { colors } from 'theme'
@@ -10,9 +10,11 @@ import { LikedVideosContent } from './components/LikedVideos'
 import { SavedPostsContent } from './components/SavedPosts'
 import { Feather } from '@expo/vector-icons'
 
-type TabType = 'MyVideos' | 'LikedVideos' | 'SavedPosts'
+interface UserProfilePageProps extends AppStackScreenProps<'UserProfile'> {}
 
-interface PersonalProfileProps extends MainTabScreenProps<'Profile'> {}
+type TabType = 'MyVideos' | 'LikedVideos'
+
+const followButtonColor = '#ED1254'
 
 const CountItem = ({ label, count }: { label: string; count: string }) => (
   <View style={styles.countItemContainer}>
@@ -40,9 +42,20 @@ const TabItem = ({
   )
 }
 
-export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
+export const UserProfilePage: FC<UserProfilePageProps> = (props) => {
   const { navigation } = props
   const [activeTab, setActiveTab] = useState<TabType>('MyVideos')
+  const [isFollowed, setIsFollowed] = useState(false)
+
+  const toggleFollow = () => {
+    setIsFollowed(!isFollowed) // Toggle the follow state
+    // TODO: Send a request to the server to update the follow status
+    // update the followr count
+  }
+
+  const followButtonStyle = isFollowed ? styles.followedButtonStyle : styles.followButtonStyle
+  const followButtonTextStyle = isFollowed ? styles.followedButtonText : styles.followButtonText
+  const followButtonContent = isFollowed ? 'Following' : 'Follow'
 
   const renderContent = () => {
     switch (activeTab) {
@@ -50,8 +63,6 @@ export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
         return <MyVideosContent />
       case 'LikedVideos':
         return <LikedVideosContent />
-      case 'SavedPosts':
-        return <SavedPostsContent />
       default:
         return null
     }
@@ -64,29 +75,34 @@ export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
       {/* Profile Header */}
       <View style={styles.headerContainer}>
         <Avatar.Icon size={100} icon={'account'} />
-        <Text style={styles.username}>@tiger050794</Text>
+        <Text style={styles.username}>@giathinnnn</Text>
         <View style={styles.countContainer}>
           <CountItem label="Following" count="0" />
           <CountItem label="Followers" count="4.9M" />
           <CountItem label="Likes" count="44.7M" />
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('ProfileEditor')}>
-            <Text style={styles.buttonText}>Edit Profile</Text>
+          <TouchableOpacity style={followButtonStyle} onPress={toggleFollow}>
+            <Text style={followButtonTextStyle}>{followButtonContent}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('UserProfile')}>
-            <Text style={styles.buttonText}>Share Profile</Text>
+          <TouchableOpacity style={styles.buttonStyle}>
+            <Feather name="chevron-down" size={20}></Feather>
           </TouchableOpacity>
         </View>
       </View>
       {/* Profile Header */}
 
+      {/* Bio section */}
+      <View style={styles.bioContainer}>
+        <Text style={styles.bioText}>I'm Gia Thinh, 21 years old. This is my tiktok account, please follow me!</Text>
+      </View>
+      {/* Bio section */}
+
       {/* Tab Bar */}
       <View style={styles.tabBar}>
         <TabItem tabName="MyVideos" iconName="video" activeTab={activeTab} setActiveTab={setActiveTab} />
         <TabItem tabName="LikedVideos" iconName="heart" activeTab={activeTab} setActiveTab={setActiveTab} />
-        <TabItem tabName="SavedPosts" iconName="bookmark" activeTab={activeTab} setActiveTab={setActiveTab} />
       </View>
 
       {renderContent()}
@@ -173,14 +189,45 @@ const styles = StyleSheet.create({
   buttonStyle: {
     backgroundColor: colors.background,
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     // borderRadius: 5,
     marginHorizontal: 5,
     borderWidth: 1.5,
     borderColor: colors.border
   },
 
-  buttonText: {
-    fontSize: 18
+  followButtonStyle: {
+    backgroundColor: followButtonColor,
+    paddingVertical: 10,
+    paddingHorizontal: 50,
+    borderRadius: 2,
+    marginHorizontal: 5
+  },
+  followedButtonStyle: {
+    backgroundColor: colors.background,
+    paddingVertical: 10,
+    paddingHorizontal: 50,
+    borderRadius: 2,
+    marginHorizontal: 5,
+    borderWidth: 1.5,
+    borderColor: colors.border
+  },
+  followButtonText: {
+    fontSize: 18,
+    color: colors.white
+  },
+  followedButtonText: {
+    fontSize: 18,
+    color: colors.text
+  },
+  bioContainer: {
+    paddingHorizontal: 50,
+    alignItems: 'center',
+    marginBottom: 20
+  },
+  bioText: {
+    fontSize: 16,
+    color: colors.text,
+    textAlign: 'center'
   }
 })

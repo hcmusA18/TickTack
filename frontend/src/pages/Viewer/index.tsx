@@ -5,3 +5,5 @@ export * from './SavePost'
 export * from './PersonalProfile'
 export * from './ProfileEditor'
 export * from './FieldEditor'
+// User Profile section
+export * from './UserProfile'
