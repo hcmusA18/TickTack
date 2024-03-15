@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { View, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import { Text, Avatar } from 'react-native-paper'
 import { AppStackScreenProps } from 'navigators'
 import { Screen } from 'components'
@@ -8,13 +8,12 @@ import { colors } from 'theme'
 import { MyVideosContent } from './components/MyVideos'
 import { LikedVideosContent } from './components/LikedVideos'
 import { SavedPostsContent } from './components/SavedPosts'
+import { SuggestedAccount } from './components/SuggestedAccount'
 import { Feather } from '@expo/vector-icons'
 
 interface UserProfilePageProps extends AppStackScreenProps<'UserProfile'> {}
 
 type TabType = 'MyVideos' | 'LikedVideos'
-
-const followButtonColor = '#ED1254'
 
 const CountItem = ({ label, count }: { label: string; count: string }) => (
   <View style={styles.countItemContainer}>
@@ -70,48 +69,57 @@ export const UserProfilePage: FC<UserProfilePageProps> = (props) => {
 
   return (
     <Screen preset="fixed" safeAreaEdges={['top', 'bottom']} contentContainerStyle={styles.container}>
-      <ProfileNavbar />
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
+        <ProfileNavbar />
 
-      {/* Profile Header */}
-      <View style={styles.headerContainer}>
-        <Avatar.Icon size={100} icon={'account'} />
-        <Text style={styles.username}>@giathinnnn</Text>
-        <View style={styles.countContainer}>
-          <CountItem label="Following" count="0" />
-          <CountItem label="Followers" count="4.9M" />
-          <CountItem label="Likes" count="44.7M" />
+        {/* Profile Header */}
+        <View style={styles.headerContainer}>
+          <Avatar.Icon size={100} icon={'account'} />
+          <Text style={styles.username}>@giathinnnn</Text>
+          <View style={styles.countContainer}>
+            <CountItem label="Following" count="0" />
+            <CountItem label="Followers" count="4.9M" />
+            <CountItem label="Likes" count="44.7M" />
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={followButtonStyle} onPress={toggleFollow}>
+              <Text style={followButtonTextStyle}>{followButtonContent}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.buttonStyle}>
+              <Feather name="chevron-down" size={20}></Feather>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={followButtonStyle} onPress={toggleFollow}>
-            <Text style={followButtonTextStyle}>{followButtonContent}</Text>
-          </TouchableOpacity>
+        {/* Profile Header */}
 
-          <TouchableOpacity style={styles.buttonStyle}>
-            <Feather name="chevron-down" size={20}></Feather>
-          </TouchableOpacity>
+        {/* Bio section */}
+        <View style={styles.bioContainer}>
+          <Text style={styles.bioText}>I'm Gia Thinh, 21 years old. This is my tiktok account, please follow me!</Text>
         </View>
-      </View>
-      {/* Profile Header */}
+        {/* Bio section */}
 
-      {/* Bio section */}
-      <View style={styles.bioContainer}>
-        <Text style={styles.bioText}>I'm Gia Thinh, 21 years old. This is my tiktok account, please follow me!</Text>
-      </View>
-      {/* Bio section */}
+        {/* Suggested account section */}
+        <SuggestedAccount />
+        {/* Suggested account section */}
 
-      {/* Tab Bar */}
-      <View style={styles.tabBar}>
-        <TabItem tabName="MyVideos" iconName="video" activeTab={activeTab} setActiveTab={setActiveTab} />
-        <TabItem tabName="LikedVideos" iconName="heart" activeTab={activeTab} setActiveTab={setActiveTab} />
-      </View>
+        {/* Tab Bar */}
+        <View style={styles.tabBar}>
+          <TabItem tabName="MyVideos" iconName="video" activeTab={activeTab} setActiveTab={setActiveTab} />
+          <TabItem tabName="LikedVideos" iconName="heart" activeTab={activeTab} setActiveTab={setActiveTab} />
+        </View>
 
-      {renderContent()}
-      {/* Tab bar */}
+        {renderContent()}
+        {/* Tab bar */}
+      </ScrollView>
     </Screen>
   )
 }
 
 const styles = StyleSheet.create({
+  scrollViewContent: {
+    backgroundColor: colors.background
+  },
   container: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -197,7 +205,7 @@ const styles = StyleSheet.create({
   },
 
   followButtonStyle: {
-    backgroundColor: followButtonColor,
+    backgroundColor: colors.followButton,
     paddingVertical: 10,
     paddingHorizontal: 50,
     borderRadius: 2,

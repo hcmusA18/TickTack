@@ -36,7 +36,9 @@ const palette = {
   angry500: '#C03403',
 
   overlay20: 'rgba(25, 16, 21, 0.2)',
-  overlay50: 'rgba(25, 16, 21, 0.5)'
+  overlay50: 'rgba(25, 16, 21, 0.5)',
+
+  button: '#ED1254'
 } as const
 
 export const colors = {
@@ -62,6 +64,7 @@ export const colors = {
    * Secondary text information.
    */
   textDim: 'rgba(255, 255, 255, 0.6)',
+  textGray: 'rgba(25, 16, 21, 0.6)',
   /**
    * The default color of the screen background.
    */
@@ -86,5 +89,7 @@ export const colors = {
    * Error Background.
    *
    */
-  errorBackground: palette.angry100
+  errorBackground: palette.angry100,
+
+  followButton: palette.button
 }
