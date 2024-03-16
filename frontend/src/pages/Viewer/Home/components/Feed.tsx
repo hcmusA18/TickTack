@@ -1,9 +1,10 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { Dimensions, FlatList, View } from 'react-native'
 import { PostSingle } from './Post'
 import { colors } from 'theme'
 import { Post } from 'libs/types'
 import useMaterialNavbarHeight from 'libs/hooks/useMaterialNavbarHeight'
+import { useIsFocused } from '@react-navigation/native'
 
 const posts: Post[] = [
   {
@@ -51,6 +52,7 @@ interface FeedProps {
 }
 
 export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
+  const screenIsFocused = useIsFocused()
   const [currentViewableItemIndex, setCurrentViewableItemIndex] = useState<number>(0)
   const viewabilityConfig = {
     itemVisiblePercentThreshold: 50
@@ -60,6 +62,11 @@ export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
       setCurrentViewableItemIndex(viewableItems[0].index)
     }
   }
+  useEffect(() => {
+    if (!screenIsFocused) {
+      setCurrentViewableItemIndex(-1)
+    }
+  }, [screenIsFocused])
 
   // useEffect(() => {
   //   if (profile && creator) {
