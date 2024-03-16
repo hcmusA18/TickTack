@@ -2,24 +2,19 @@ import React, { useState, useRef, useEffect } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native'
 import { colors } from 'theme'
 
-const DurationSelector = ({ durationOptions, selectedDuration, onDurationSelect }) => {
-  // const handleSwipe = (event) => {
-  //   const offsetX = event.nativeEvent.contentOffset.x;
-  //   Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }])(event);
-  // };
-
+export const DurationSelector = ({ durationOptions, selectedDuration, onDurationSelect }) => {
   const scrollViewRef = useRef(null)
   const [scrollX] = useState(new Animated.Value(0))
 
-  useEffect(() => {
-    const durationIndex = durationOptions.indexOf(selectedDuration)
-    const scrollPosition = durationIndex * 80 // Assuming each duration option has a width of 80
+  // useEffect(() => {
+  //   const durationIndex = durationOptions.indexOf(selectedDuration)
+  //   const scrollPosition = durationIndex * 80
 
-    scrollViewRef.current.scrollTo({
-      x: scrollPosition,
-      animated: true
-    })
-  }, [selectedDuration])
+  //   scrollViewRef.current.scrollTo({
+  //     x: scrollPosition,
+  //     animated: true
+  //   })
+  // }, [selectedDuration])
 
   return (
     <View style={styles.container}>
@@ -37,7 +32,11 @@ const DurationSelector = ({ durationOptions, selectedDuration, onDurationSelect 
             key={index}
             style={[styles.durationOption, duration === selectedDuration && styles.selectedDurationOption]}
             onPress={() => onDurationSelect(duration)}>
-            <Text>{`${duration}s`}</Text>
+            {duration === selectedDuration ? (
+              <Text>{`${duration}s`}</Text>
+            ) : (
+              <Text style={{ color: colors.palette.neutral400 }}>{`${duration}s`}</Text>
+            )}
           </TouchableOpacity>
         ))}
       </Animated.ScrollView>
@@ -59,7 +58,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   durationOption: {
-    paddingHorizontal: 6,
+    paddingHorizontal: 9,
     paddingVertical: 5,
     borderRadius: 20,
     marginHorizontal: 5,
@@ -72,5 +71,3 @@ const styles = StyleSheet.create({
     backgroundColor: colors.palette.neutral400
   }
 })
-
-export default DurationSelector

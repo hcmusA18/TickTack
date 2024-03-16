@@ -13,7 +13,6 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
   const [textInput, setTextInput] = useState('')
   const textInputRef = useRef<TextInput>(null)
   const [privacy, setPrivacy] = useState('private')
-  // const [privacyButton, setPrivacyButton] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
 
   const addHashTag = () => {
@@ -136,18 +135,12 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
 }
 
 const postBackgroundColor = '#ff4040'
-const translucentBackgroundColor = 'rgba(0, 0, 0, 0.5)'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 30,
     backgroundColor: colors.palette.neutral100
   },
-  // uploadingContainer: {
-  //   flex: 1,
-  //   alignItems: 'center',
-  //   justifyContent: 'center'
-  // },
   spacer: {
     flex: 1
   },
@@ -209,8 +202,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     justifyContent: 'center',
-    borderRadius: 4,
-    marginRight: 10
+    borderRadius: 4
   },
   cancelButtonText: {
     marginLeft: 5,
@@ -236,7 +228,7 @@ const styles = StyleSheet.create({
   modalViewContainer: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: translucentBackgroundColor
+    backgroundColor: colors.palette.overlay20
   },
   modalContainer: {
     flexDirection: 'column',

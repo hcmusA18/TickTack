@@ -14,7 +14,7 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle)
 const radius = 45
 const circumference = radius * Math.PI * 2
 
-const ProgressCircle = ({ duration }) => {
+export const ProgressCircle = ({ duration }) => {
   const strokeOffset = useSharedValue(circumference)
 
   const percentage = useDerivedValue(() => {
@@ -59,5 +59,3 @@ const ProgressCircle = ({ duration }) => {
     </View>
   )
 }
-
-export default ProgressCircle

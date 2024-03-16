@@ -8,8 +8,7 @@ import * as MediaLibrary from 'expo-media-library'
 import { useIsFocused } from '@react-navigation/core'
 import { Feather, AntDesign } from '@expo/vector-icons'
 import { colors } from 'theme'
-import DurationSelector from './DurationSelector'
-import ProgressCircle from './RecordingButton'
+import * as Components from './components'
 
 interface CameraPageProps extends MainTabScreenProps<'Camera'> {}
 
@@ -29,7 +28,7 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
   const [cameraReady, setCameraReady] = useState(false)
   const [selectedDuration, setSelectedDuration] = useState(15)
 
-  const durationOptions = [15, 30, 45]
+  const durationOptions = [15, 30, 60]
 
   const handleDurationSelect = (duration) => {
     setSelectedDuration(duration)
@@ -170,7 +169,17 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
           />
         </>
       ) : (
-        <Text>Permissions not granted</Text>
+        <View
+          style={{
+            backgroundColor: colors.palette.neutral900,
+            height: '100%',
+            width: '100%',
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+          <Text style={{ color: colors.palette.neutral100 }}>Waiting for Camera</Text>
+        </View>
       )}
 
       {recording && (
@@ -214,7 +223,7 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
       {/* Duration selector */}
       <View style={styles.durationSelectorContainer}>
         {!recording ? (
-          <DurationSelector
+          <Components.DurationSelector
             durationOptions={durationOptions}
             selectedDuration={selectedDuration}
             onDurationSelect={handleDurationSelect}
@@ -228,7 +237,7 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
         <View style={{ flex: 1 }}></View>
         <View style={styles.recordBtnContainer}>
           {recording ? (
-            <ProgressCircle duration={selectedDuration * 1000} />
+            <Components.ProgressCircle duration={selectedDuration * 1000} />
           ) : (
             <TouchableOpacity style={styles.recordBtn} disabled={!cameraReady} onPress={() => recordVideo()} />
           )}
