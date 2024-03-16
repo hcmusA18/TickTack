@@ -56,6 +56,7 @@ export const colors = {
    * The default color of white.
    */
   white: palette.neutral100,
+  black: '#000000',
   /**
    * The default text color in many components.
    */

@@ -35,6 +35,7 @@ export type AppStackParamList = {
   ProfileEditor: undefined
   FieldEditor: { fieldName: string; fieldValue: string }
   UserProfile: undefined
+  SuggestedAccounts: undefined
 }
 
 /**
@@ -105,6 +106,13 @@ const AppStack = () => {
       <Stack.Screen
         name="UserProfile"
         component={Pages.UserProfilePage} // Use the imported component
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="SuggestedAccounts"
+        component={Pages.SuggestedAccounts} // Use the imported component
         options={{
           headerShown: false
         }}

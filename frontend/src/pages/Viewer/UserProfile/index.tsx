@@ -69,9 +69,8 @@ export const UserProfilePage: FC<UserProfilePageProps> = (props) => {
 
   return (
     <Screen preset="fixed" safeAreaEdges={['top', 'bottom']} contentContainerStyle={styles.container}>
+      <ProfileNavbar />
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
-        <ProfileNavbar />
-
         {/* Profile Header */}
         <View style={styles.headerContainer}>
           <Avatar.Icon size={100} icon={'account'} />
@@ -100,7 +99,8 @@ export const UserProfilePage: FC<UserProfilePageProps> = (props) => {
         {/* Bio section */}
 
         {/* Suggested account section */}
-        <SuggestedAccount />
+        <SuggestedAccount navigation={navigation} />
+        {/* <SuggestedAccount navigation={navigation} /> */}
         {/* Suggested account section */}
 
         {/* Tab Bar */}

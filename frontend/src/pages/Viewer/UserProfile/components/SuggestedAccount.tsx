@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export const SuggestedAccount = (props: any) => {
+export const SuggestedAccount = ({ navigation }: { navigation: any }) => {
   return (
     <View style={styles.container}>
       {/* Head Container */}
@@ -44,7 +44,7 @@ export const SuggestedAccount = (props: any) => {
           <Feather name={'info'} size={16}></Feather>
         </View>
 
-        <TouchableOpacity style={styles.rightContainer}>
+        <TouchableOpacity style={styles.rightContainer} onPress={() => navigation.navigate('SuggestedAccounts')}>
           <Text style={styles.text}>View all</Text>
           <Feather name={'chevron-right'} size={18}></Feather>
         </TouchableOpacity>
