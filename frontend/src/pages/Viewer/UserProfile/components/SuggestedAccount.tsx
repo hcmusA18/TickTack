@@ -12,11 +12,11 @@ const styles = StyleSheet.create({
     // backgroundColor: colors.palette.neutral600
   },
   headContainer: {
-    paddingHorizontal: 15,
+    // paddingHorizontal: 10,
     backgroundColor: colors.background,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%'
+    justifyContent: 'space-between'
+    // width: '100%'
     // alignItems: "center"
   },
   leftContainer: {

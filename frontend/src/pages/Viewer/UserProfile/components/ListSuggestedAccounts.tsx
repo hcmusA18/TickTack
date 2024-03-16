@@ -4,7 +4,7 @@ import { Text, Button } from 'react-native-paper'
 import { colors } from 'theme'
 import { Feather } from '@expo/vector-icons'
 
-const backgroundItemColor = '#F0F0F0'
+const backgroundItemColor = '#e9e9e9'
 
 const styles = StyleSheet.create({
   container: {
@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   accountItem: {
-    // backgroundColor: backgroundItemColor,
-    backgroundColor: colors.white,
+    backgroundColor: backgroundItemColor,
+    // backgroundColor: colors.white,
     // borderRadius: 10,
     padding: 10,
     marginRight: 10,

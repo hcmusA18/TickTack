@@ -45,16 +45,28 @@ export const UserProfilePage: FC<UserProfilePageProps> = (props) => {
   const { navigation } = props
   const [activeTab, setActiveTab] = useState<TabType>('MyVideos')
   const [isFollowed, setIsFollowed] = useState(false)
+  const [showSuggestedAccount, setShowSuggestedAccount] = useState(false)
+
+  // setShowSuggestedAccount(false);
 
   const toggleFollow = () => {
     setIsFollowed(!isFollowed) // Toggle the follow state
+
+    if (!isFollowed) setShowSuggestedAccount(true) // Show suggested account if the user is followed
+
     // TODO: Send a request to the server to update the follow status
     // update the followr count
+  }
+
+  const toggleSuggestedAccount = () => {
+    setShowSuggestedAccount(!showSuggestedAccount) // Toggle the visibility of SuggestedAccount
+    // console.log(showSuggestedAccount);
   }
 
   const followButtonStyle = isFollowed ? styles.followedButtonStyle : styles.followButtonStyle
   const followButtonTextStyle = isFollowed ? styles.followedButtonText : styles.followButtonText
   const followButtonContent = isFollowed ? 'Following' : 'Follow'
+  const chevronIcon = showSuggestedAccount ? 'chevron-up' : 'chevron-down'
 
   const renderContent = () => {
     switch (activeTab) {
@@ -85,8 +97,8 @@ export const UserProfilePage: FC<UserProfilePageProps> = (props) => {
               <Text style={followButtonTextStyle}>{followButtonContent}</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.buttonStyle}>
-              <Feather name="chevron-down" size={20}></Feather>
+            <TouchableOpacity style={styles.buttonStyle} onPress={toggleSuggestedAccount}>
+              <Feather name={chevronIcon} size={20}></Feather>
             </TouchableOpacity>
           </View>
         </View>
@@ -99,8 +111,7 @@ export const UserProfilePage: FC<UserProfilePageProps> = (props) => {
         {/* Bio section */}
 
         {/* Suggested account section */}
-        <SuggestedAccount navigation={navigation} />
-        {/* <SuggestedAccount navigation={navigation} /> */}
+        {showSuggestedAccount && <SuggestedAccount navigation={navigation} />}
         {/* Suggested account section */}
 
         {/* Tab Bar */}
@@ -124,7 +135,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: colors.background
+    backgroundColor: colors.background,
+    paddingHorizontal: 10
     // paddingTop: spacing.md, // Add padding to ensure space from top
   },
   tabBar: {
@@ -146,7 +158,7 @@ const styles = StyleSheet.create({
 
   activeTab: {
     borderBottomWidth: 2,
-    borderBottomColor: colors.tint
+    borderBottomColor: colors.black
   },
   tabIcon: {
     color: colors.palette.neutral500
@@ -209,7 +221,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 50,
     borderRadius: 2,
-    marginHorizontal: 5
+    borderWidth: 1.5,
+    marginHorizontal: 5,
+    borderColor: colors.followButton
   },
   followedButtonStyle: {
     backgroundColor: colors.background,
