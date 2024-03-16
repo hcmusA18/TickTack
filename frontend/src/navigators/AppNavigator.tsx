@@ -50,9 +50,6 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 const AppStack = () => {
   return (
     <Stack.Navigator>
-      {/* <Stack.Screen name="PersonalProfileHome" component={Pages.PersonalProfileHomePage} />
-      <Stack.Screen name="EditProfile" component={Pages.EditProfilePage} />
-      <Stack.Screen name="EditProfileField" component={Pages.EditProfileFieldPage} /> */}
       <Stack.Screen
         name="Welcome"
         component={Pages.WelcomePage}
