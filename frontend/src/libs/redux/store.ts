@@ -4,19 +4,13 @@ import { rootReducer } from './reducer'
 
 export const store = configureStore({
   reducer: rootReducer
-  // preloadedState: {
-  //   auth: {
-  //     authToken: await storage.loadString('AUTH_TOKEN'),
-  //     authEmail: await storage.loadString('AUTH_EMAIL'),
-  //   },
-  // },
 })
 
 // Save auth state to storage when it changes
 store.subscribe(() => {
   const { auth } = store.getState()
-  storage.saveString('AUTH_TOKEN', auth.authToken)
-  storage.saveString('AUTH_EMAIL', auth.authEmail)
+  storage.saveString('AUTH_TOKEN', auth.authToken ?? '')
+  storage.saveString('AUTH_EMAIL', auth.authEmail ?? '')
 })
 
 // Export the store type

@@ -10,7 +10,7 @@ import CameraButton from '../components/CameraButton'
 import { colors } from 'theme'
 
 export type MainTabParamList = {
-  Home: undefined
+  Home: { creator: string | null; profile: boolean }
   Camera: undefined
   Profile: undefined
   Notification: undefined
@@ -56,6 +56,7 @@ export const MainNavigator = () => {
       <Tab.Screen
         name="Home"
         component={Pages.HomePage}
+        initialParams={{ profile: false }}
         listeners={{
           focus: () => setHome(true),
           blur: () => setHome(false)
