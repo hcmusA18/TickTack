@@ -63,3 +63,29 @@
 ## How to use Jest to make unit tests
 
 1. Create a new file in the **src** folder
+
+## PostgreSql Database Instructions
+
+1. Create a .env file in the backend folder with the following content:
+
+```bash
+DB_USER=postgres
+DB_HOST=localhost
+DB_NAME=ticktack
+DB_PORT=5432
+DB_PASS=your-password-here
+```
+
+2. As we use python to insert data into the database, you need to install the following packages:
+
+```bash
+pip install psycopg2
+pip install json
+pip install python-dotenv
+pip install pathlib
+pip install numpy
+```
+
+3. Open pgAdmin and create a new database named "ticktack"
+4. Run the sql script in the backend/src/database folder to create the tables
+5. Run the python script in the backend/src/database folder to insert the data into the tables
