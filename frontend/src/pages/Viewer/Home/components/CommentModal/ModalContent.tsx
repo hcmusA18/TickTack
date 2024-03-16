@@ -36,11 +36,11 @@ const styles = StyleSheet.create({
 export const ModalContent = ({ post }: { post: Post }) => {
   const [comment, setComment] = useState('')
   const [commentList, setCommentList] = useState<Comment[]>([
-    { comment: 'a', creator: 'usr2', id: '1' },
-    { comment: 'b', creator: 'usr2', id: '2' },
-    { comment: 'c', creator: 'usr2', id: '3' },
-    { comment: 'd', creator: 'usr2', id: '4' },
-    { comment: 'e', creator: 'usr2', id: '5' }
+    { comment: 'a', creator: 'usr2', id: '1', time: Math.floor((Date.now() - 100000000) / 1000).toString() },
+    { comment: 'b', creator: 'usr2', id: '2', time: Math.floor((Date.now() - 200000000) / 1000).toString() },
+    { comment: 'c', creator: 'usr2', id: '3', time: Math.floor((Date.now() - 110000000) / 1000).toString() },
+    { comment: 'd', creator: 'usr2', id: '4', time: Math.floor((Date.now() - 120000000) / 1000).toString() },
+    { comment: 'e', creator: 'usr2', id: '5', time: Math.floor(Date.now() / 1000).toString() }
   ])
   const currentUser = null
 
@@ -53,10 +53,10 @@ export const ModalContent = ({ post }: { post: Post }) => {
       {
         id: (commentList.length + 1).toString(),
         creator: post.creator,
-        comment
+        comment,
+        time: Math.floor(Date.now() / 1000).toString()
       }
     ])
-    console.log(commentList)
   }
 
   const renderItem = ({ item }: { item: Comment }) => {

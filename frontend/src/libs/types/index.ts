@@ -15,6 +15,7 @@ export interface Comment {
   id: string
   creator: string
   comment: string
+  time: string
 }
 
 export interface User {
