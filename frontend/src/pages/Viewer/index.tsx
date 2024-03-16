@@ -7,3 +7,4 @@ export * from './ProfileEditor'
 export * from './FieldEditor'
 // Home Feed section
 export * from './Home'
+export * from './VideoPreviewer'

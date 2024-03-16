@@ -1,6 +1,6 @@
 import { createMaterialBottomTabNavigator, MaterialBottomTabScreenProps } from '@react-navigation/material-bottom-tabs'
-import { CompositeScreenProps } from '@react-navigation/native'
-import React, { useState } from 'react'
+import { CompositeScreenProps, getFocusedRouteNameFromRoute } from '@react-navigation/native'
+import React, { useState, useEffect } from 'react'
 import { Text, View } from 'react-native'
 // import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { AppStackParamList, AppStackScreenProps } from './AppNavigator'
@@ -33,17 +33,24 @@ const EmptyPage = () => {
   )
 }
 
-export const MainNavigator = () => {
+export const MainNavigator = ({ route }) => {
   // const insets = useSafeAreaInsets()
   const [home, setHome] = useState(true)
+  const [isCameraActive, setIsCameraActive] = useState(false)
 
   const navigatorColor = home ? colors.palette.neutral900 : colors.palette.neutral100
+
+  useEffect(() => {
+    const routeName = getFocusedRouteNameFromRoute(route)
+    setIsCameraActive(routeName === 'Camera')
+  }, [route])
 
   return (
     <Tab.Navigator
       shifting={false}
       barStyle={{
-        backgroundColor: navigatorColor
+        backgroundColor: navigatorColor,
+        display: isCameraActive ? 'none' : 'flex'
       }}
       initialRouteName="Home"
       activeColor={navigatorColor}

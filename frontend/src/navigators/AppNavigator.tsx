@@ -34,6 +34,7 @@ export type AppStackParamList = {
   SavePost: { source: string }
   ProfileEditor: undefined
   FieldEditor: { fieldName: string; fieldValue: string }
+  VideoPreviewer: { source: string }
 }
 
 /**
@@ -94,6 +95,13 @@ const AppStack = () => {
       <Stack.Screen
         name="FieldEditor"
         component={Pages.FieldEditor}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="VideoPreviewer"
+        component={Pages.VideoPreviewer}
         options={{
           headerShown: false
         }}
