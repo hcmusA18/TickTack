@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, StyleSheet, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome' // Make sure you have this library installed and properly linked
+import { colors } from '../pages/SignUpPage/MyColors'
 
 export interface SignupOptionProps {
   icon: string
@@ -21,27 +22,25 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#000',
+    borderWidth: 1,
+    borderColor: colors.palette.grey300,
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginVertical: 5,
-    width: 250, // Set the width to 100px
-    alignSelf: 'center' // This will center the button in its parent container
+    width: '90%', // Set the width to 100px
+    alignSelf: 'center', // This will center the button in its parent container
+    justifyContent: 'center'
   },
   icon: {
-    marginRight: 10
+    marginRight: 10,
+    // Ensure that the icon stays on the left:
+    position: 'absolute',
+    left: 20 // This should be equal to your paddingHorizontal value
   },
   text: {
-    flex: 1,
     textAlign: 'center',
-    maxWidth: 200
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10 // Padding to ensure content doesn't touch the edges of the screen
+    maxWidth: 200,
+    fontWeight: 'bold'
   }
 })
 

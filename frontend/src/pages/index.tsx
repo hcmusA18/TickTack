@@ -1,3 +1,3 @@
 export * from './WelcomePages'
-export * from './LoginPages'
+export * from './SignUpPage/LoginPages'
 export * from './HomePages'
