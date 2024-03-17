@@ -30,6 +30,7 @@ export type AppStackParamList = {
   Login: undefined
   // 🔥 Your screens go here
   Home: undefined
+  LoginByMail: undefined
 }
 
 /**
@@ -52,6 +53,7 @@ const AppStack = () => {
       <Stack.Screen name="Login" component={Pages.LoginPage} />
       {/* 🔥 Here's where your screens go */}
       <Stack.Screen name="Home" component={Pages.HomePage} />
+      <Stack.Screen name="LoginByMail" component={Pages.LoginByMail} />
     </Stack.Navigator>
   )
 }

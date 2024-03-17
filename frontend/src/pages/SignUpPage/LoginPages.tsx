@@ -1,17 +1,20 @@
 import React, { FC, useMemo, useRef } from 'react'
-import { StyleSheet, View, ScrollView, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, ScrollView, Text } from 'react-native'
 import { Button, IconButton } from 'react-native-paper'
 import BottomSheet from '@gorhom/bottom-sheet'
 import SignupOption, { SignupOptionProps } from '../../components/SignInOption'
 import { colors } from './MyColors'
+import { AppStackScreenProps } from '../../navigators'
+import { TopBar } from '../../components/LoginTopBar'
 
 interface LoginPageProps extends AppStackScreenProps<'Login'> {}
 
-export const LoginPage: FC<LoginPageProps> = ({ navigation }) => {
+export const LoginPage: FC<LoginPageProps> = (props) => {
+  const { navigation } = props
   const sheetRef = useRef<BottomSheet>(null)
 
   const signupOptionsData: SignupOptionProps[] = [
-    { icon: 'user', text: 'Log in' },
+    { icon: 'user', text: 'Log in by mail' },
     { icon: 'facebook', text: 'Continue with Facebook' },
     { icon: 'apple', text: 'Continue with Apple' },
     { icon: 'google', text: 'Continue with Google' }
@@ -44,11 +47,13 @@ export const LoginPage: FC<LoginPageProps> = ({ navigation }) => {
     <BottomSheet ref={sheetRef} index={1} snapPoints={snapPoints} onChange={handleSheetChange}>
       <View style={styles.contentContainer}>
         {/* Top bar */}
-        <View style={styles.topBar}>
-          <IconButton icon="help-circle-outline" size={28} onPress={() => console.log('Help Button Pressed')} />
-          {/* <Text style={styles.topBar_title}>Log in to TikTok</Text> */}
-          <IconButton icon="close" size={28} onPress={() => console.log('Cancel Button Pressed')} />
-        </View>
+        <TopBar
+          firstIcon="help-circle-outline"
+          secondIcon="close"
+          textContent="Log in to TikTok"
+          onFirstIconPress={() => console.log('Help Button Pressed')}
+          onSecondIconPress={() => console.log('Cancel Button Pressed')}
+        />
         {/* Body content */}
         <ScrollView style={styles.scrollView}>
           <View style={styles.optionTextContainer}>
@@ -60,7 +65,9 @@ export const LoginPage: FC<LoginPageProps> = ({ navigation }) => {
               icon={option.icon}
               text={option.text}
               onPress={() => {
-                console.log(option.text)
+                if (option.text === 'Log in by mail') {
+                  navigation.navigate('LoginByMail')
+                }
               }}
             />
           ))}
