@@ -52,7 +52,10 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
           secondIcon="close"
           textContent="Log in to TikTok"
           onFirstIconPress={() => console.log('Help Button Pressed')}
-          onSecondIconPress={() => console.log('Cancel Button Pressed')}
+          onSecondIconPress={() => {
+            sheetRef.current?.close?.()
+            navigation.navigate('Home')
+          }}
         />
         {/* Body content */}
         <ScrollView style={styles.scrollView}>

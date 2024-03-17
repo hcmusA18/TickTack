@@ -35,20 +35,39 @@ export const LoginByMail: FC<LoginByMailProps> = (props) => {
   }
 
   const actionLogin = () => {
+    console.log(isValid)
     if (isValid) {
       navigation.navigate('Home')
     }
   }
 
+  const getTopBarText = (activeTab: string) => {
+    if (activeTab == 'phone') {
+      return (
+        <TopBar
+          firstIcon="chevron-left"
+          secondIcon="help-circle-outline"
+          textContent="Using phone number"
+          onFirstIconPress={() => navigation.goBack()}
+          onSecondIconPress={() => console.log('Help Button Pressed')}
+        />
+      )
+    } else {
+      return (
+        <TopBar
+          firstIcon="chevron-left"
+          secondIcon="help-circle-outline"
+          textContent="Using email"
+          onFirstIconPress={() => navigation.goBack()}
+          onSecondIconPress={() => console.log('Help Button Pressed')}
+        />
+      )
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      <TopBar
-        firstIcon="chevron-left"
-        secondIcon="help-circle-outline"
-        textContent="Log in to TikTok"
-        onFirstIconPress={() => navigation.goBack()}
-        onSecondIconPress={() => console.log('Help Button Pressed')}
-      />
+      {getTopBarText(activeTab)}
       <View style={styles.tabContainer}>
         <View style={styles.tab}>
           <TouchableOpacity
@@ -90,10 +109,8 @@ export const LoginByMail: FC<LoginByMailProps> = (props) => {
           By continuing, you agree to TikTok’s <Text style={styles.linkText}>Terms of Service</Text> and confirm that
           you have read TikTok’s <Text style={styles.linkText}>Privacy Policy</Text>.
         </Text>
-        <TouchableOpacity style={styles.nextButton}>
-          <Text style={styles.nextButtonText} onPress={actionLogin}>
-            Next
-          </Text>
+        <TouchableOpacity style={styles.nextButton} onPress={actionLogin}>
+          <Text style={styles.nextButtonText}>Next</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
