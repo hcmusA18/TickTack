@@ -1,15 +1,15 @@
 import React, { FC } from 'react'
 import { Text, StyleSheet, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome' // Make sure you have this library installed and properly linked
-import { colors } from '../pages/SignUpPage/MyColors'
+import { colors } from './MyColors'
 
-export interface SignupOptionProps {
+export interface AuthenOptionProps {
   icon: string
   text: string
   onPress: () => void
 }
 
-const SignupOption: FC<SignupOptionProps> = ({ icon, text, onPress }) => {
+const AuthenOption: FC<AuthenOptionProps> = ({ icon, text, onPress }) => {
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
       <Icon name={icon} size={20} color="#000" style={styles.icon} />
@@ -44,4 +44,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default SignupOption
+export default AuthenOption

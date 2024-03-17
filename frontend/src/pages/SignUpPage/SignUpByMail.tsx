@@ -3,12 +3,12 @@ import { StyleSheet, View, TextInput, Text, TouchableOpacity, ScrollView } from 
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AppStackScreenProps } from '../../navigators'
 import { TopBar } from '../../components/LoginTopBar'
-import { colors } from './MyColors'
+import { colors } from '../../components/MyColors'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
-interface LoginByMailProps extends AppStackScreenProps<'LoginByMail'> {}
+interface SignUpByMailProps extends AppStackScreenProps<'SignUpByMail'> {}
 
-export const LoginByMail: FC<LoginByMailProps> = (props) => {
+export const SignUpByMail: FC<SignUpByMailProps> = (props) => {
   const navigation = props.navigation
   const [email, setEmail] = useState('')
   const [isSubscribed, setIsSubscribed] = useState(false)
@@ -36,7 +36,7 @@ export const LoginByMail: FC<LoginByMailProps> = (props) => {
 
   const actionLogin = () => {
     console.log(isValid)
-    if (isValid) {
+    if (isValid && email !== '') {
       navigation.navigate('Home')
     }
   }
@@ -228,4 +228,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default LoginByMail
+export default SignUpByMail

@@ -8,9 +8,9 @@ import { AppStackScreenProps } from '../../navigators'
 import { TopBar } from '../../components/LoginTopBar'
 import { useFocusEffect } from '@react-navigation/native'
 
-interface SignUpPageProps extends AppStackScreenProps<'SignUp'> {}
+interface LoginPageProps extends AppStackScreenProps<'Login'> {}
 
-export const SignUpPage: FC<SignUpPageProps> = (props) => {
+export const LoginPage: FC<LoginPageProps> = (props) => {
   const { navigation } = props
 
   const sheetRef = useRef<BottomSheet>(null)
@@ -36,8 +36,8 @@ export const SignUpPage: FC<SignUpPageProps> = (props) => {
     }, [])
   )
 
-  const signUpOptionsData: AuthenOptionProps[] = [
-    { icon: 'user', text: 'Sign up by phone or email', onPress: () => navigation.navigate('SignUpByMail') },
+  const LogInOptionsData: AuthenOptionProps[] = [
+    { icon: 'user', text: 'Log in by phone or email', onPress: () => navigation.navigate('SignUpByMail') },
     { icon: 'facebook', text: 'Continue with Facebook', onPress: () => console.log('Continue with Facebook') },
     { icon: 'apple', text: 'Continue with Apple', onPress: () => console.log('Continue with Apple') },
     { icon: 'google', text: 'Continue with Google', onPress: () => console.log('Continue with Google') }
@@ -71,7 +71,7 @@ export const SignUpPage: FC<SignUpPageProps> = (props) => {
         <TopBar
           firstIcon="help-circle-outline"
           secondIcon="close"
-          textContent="Sign up to TikTok"
+          textContent="Log in to TikTok"
           onFirstIconPress={() => console.log('Help Button Pressed')}
           onSecondIconPress={() => {
             sheetRef.current?.close?.()
@@ -81,18 +81,16 @@ export const SignUpPage: FC<SignUpPageProps> = (props) => {
         {/* Body content */}
         <ScrollView style={styles.scrollView}>
           <View style={styles.optionTextContainer}>
-            <Text style={styles.headerText}>Sign up{'\n'}for TikTok</Text>
+            <Text style={styles.headerText}>Login{'\n'}to TikTok</Text>
           </View>
-          {signUpOptionsData.map((option, index) => (
+          {LogInOptionsData.map((option, index) => (
             <SignupOption
               key={index}
               icon={option.icon}
               text={option.text}
               onPress={() => {
-                if (option.text === 'Sign Up by phone or email') {
-                  navigation.navigate('SignUpByMail')
-                } else {
-                  option.onPress()
+                if (option.text === 'Log in by phone or email') {
+                  navigation.navigate('LoginByMail')
                 }
               }}
             />
@@ -119,8 +117,13 @@ export const SignUpPage: FC<SignUpPageProps> = (props) => {
         {/* Bottom bar */}
         <View style={styles.bottomBar}>
           <Text style={styles.bottomBar_text}>Don't have an account?</Text>
-          <Button mode="text" onPress={() => navigation.navigate('Login')} uppercase={false}>
-            <Text style={styles.bottomBarButtonText}>Log in</Text>
+          <Button
+            mode="text"
+            onPress={() => {
+              navigation.navigate('SignUp')
+            }}
+            uppercase={false}>
+            <Text style={styles.bottomBarButtonText}>Sign Up</Text>
           </Button>
         </View>
       </View>
@@ -139,7 +142,7 @@ const styles = StyleSheet.create({
   //   fontSize: 16,
   // },
   scrollView: {
-    paddingHorizontal: 16
+    paddingHorizontal: '5%'
   },
   optionTextContainer: {
     width: '90%',
@@ -185,4 +188,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default SignUpPage
+export default LoginPage
