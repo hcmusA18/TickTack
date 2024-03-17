@@ -1,26 +1,47 @@
-import React, { FC, useMemo, useRef } from 'react'
+import React, { FC, useMemo, useRef, useCallback } from 'react'
 import { StyleSheet, View, ScrollView, Text } from 'react-native'
-import { Button, IconButton } from 'react-native-paper'
+import { Button } from 'react-native-paper'
 import BottomSheet from '@gorhom/bottom-sheet'
 import SignupOption, { SignupOptionProps } from '../../components/SignInOption'
 import { colors } from './MyColors'
 import { AppStackScreenProps } from '../../navigators'
 import { TopBar } from '../../components/LoginTopBar'
+import { useFocusEffect } from '@react-navigation/native'
 
-interface LoginPageProps extends AppStackScreenProps<'Login'> {}
+interface SignUpPageProps extends AppStackScreenProps<'Login'> {}
 
-export const LoginPage: FC<LoginPageProps> = (props) => {
+export const LoginPage: FC<SignUpPageProps> = (props) => {
   const { navigation } = props
+
   const sheetRef = useRef<BottomSheet>(null)
 
+  const snapPoints = useMemo(() => ['25%', '90%'], [])
+
+  // Use useFocusEffect to handle the bottom sheet expansion
+  useFocusEffect(
+    useCallback(() => {
+      // This function is called when the screen comes into focus
+      // You can adjust the index based on your snapPoints
+      const expandBottomSheet = () => {
+        if (sheetRef.current) {
+          sheetRef.current.expand() // Or any other index you prefer
+        }
+      }
+
+      expandBottomSheet()
+
+      return () => {
+        // Optional: Any cleanup logic goes here
+      }
+    }, [])
+  )
+
   const signupOptionsData: SignupOptionProps[] = [
-    { icon: 'user', text: 'Log in by mail' },
+    { icon: 'user', text: 'Log in by phone or email' },
     { icon: 'facebook', text: 'Continue with Facebook' },
     { icon: 'apple', text: 'Continue with Apple' },
     { icon: 'google', text: 'Continue with Google' }
   ]
-
-  const snapPoints = useMemo(() => ['25%', '90%'], [])
 
   const handleSheetChange = (index: number) => {
     console.log(index)
@@ -68,7 +89,7 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
               icon={option.icon}
               text={option.text}
               onPress={() => {
-                if (option.text === 'Log in by mail') {
+                if (option.text === 'Log in by phone or email') {
                   navigation.navigate('LoginByMail')
                 }
               }}
@@ -109,11 +130,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     justifyContent: 'space-between' // Ensures that the bottomBar sticks to the bottom
-  },
-  topBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
   },
   // topBar_title: {
   //   flex: 1,

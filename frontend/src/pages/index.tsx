@@ -1,4 +1,4 @@
 export * from './WelcomePages'
-export * from './SignUpPage/LoginPages'
+export * from './SignUpPage/SignUpPage'
 export * from './HomePages'
 export * from './SignUpPage/LoginByMail'
