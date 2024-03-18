@@ -47,7 +47,10 @@ export const UserProfilePage: FC<UserProfilePageProps> = (props) => {
   const [isFollowed, setIsFollowed] = useState(false)
   const [showSuggestedAccount, setShowSuggestedAccount] = useState(false)
 
-  // setShowSuggestedAccount(false);
+  const followButtonStyle = isFollowed ? styles.followedButtonStyle : styles.followButtonStyle
+  const followButtonTextStyle = isFollowed ? styles.followedButtonText : styles.followButtonText
+  const followButtonContent = isFollowed ? 'Following' : 'Follow'
+  const chevronIcon = showSuggestedAccount ? 'chevron-up' : 'chevron-down'
 
   const toggleFollow = () => {
     setIsFollowed(!isFollowed) // Toggle the follow state
@@ -62,11 +65,6 @@ export const UserProfilePage: FC<UserProfilePageProps> = (props) => {
     setShowSuggestedAccount(!showSuggestedAccount) // Toggle the visibility of SuggestedAccount
     // console.log(showSuggestedAccount);
   }
-
-  const followButtonStyle = isFollowed ? styles.followedButtonStyle : styles.followButtonStyle
-  const followButtonTextStyle = isFollowed ? styles.followedButtonText : styles.followButtonText
-  const followButtonContent = isFollowed ? 'Following' : 'Follow'
-  const chevronIcon = showSuggestedAccount ? 'chevron-up' : 'chevron-down'
 
   const renderContent = () => {
     switch (activeTab) {

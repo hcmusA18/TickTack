@@ -34,6 +34,29 @@ const styles = StyleSheet.create({
   }
 })
 
+const accounts = [
+  {
+    avatar: 'https://source.unsplash.com/random',
+    name: 'Tran Gia Thinh',
+    followers: '23'
+  },
+  {
+    avatar: 'https://source.unsplash.com/random',
+    name: 'Tran Gia Thinh',
+    followers: '45'
+  },
+  {
+    avatar: 'https://source.unsplash.com/random',
+    name: 'Tran Gia Thinh',
+    followers: '77K'
+  },
+  {
+    avatar: 'https://source.unsplash.com/random',
+    name: 'Tran Gia Thinh',
+    followers: '23M'
+  }
+]
+
 export const SuggestedAccount = ({ navigation }: { navigation: any }) => {
   return (
     <View style={styles.container}>
@@ -52,30 +75,7 @@ export const SuggestedAccount = ({ navigation }: { navigation: any }) => {
       {/* Head Container */}
 
       {/* Suggested Accounts */}
-      <HorizontalScrollable
-        accounts={[
-          {
-            avatar: 'https://source.unsplash.com/random',
-            name: 'Tran Gia Thinh',
-            followers: '23'
-          },
-          {
-            avatar: 'https://source.unsplash.com/random',
-            name: 'Tran Gia Thinh',
-            followers: '45'
-          },
-          {
-            avatar: 'https://source.unsplash.com/random',
-            name: 'Tran Gia Thinh',
-            followers: '77K'
-          },
-          {
-            avatar: 'https://source.unsplash.com/random',
-            name: 'Tran Gia Thinh',
-            followers: '23M'
-          }
-        ]}
-      />
+      <HorizontalScrollable accounts={accounts} />
       {/* Suggested Accounts */}
     </View>
   )

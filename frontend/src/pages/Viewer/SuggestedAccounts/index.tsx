@@ -6,7 +6,7 @@ import { Screen } from 'components'
 import { colors } from 'theme'
 import { Feather } from '@expo/vector-icons'
 import { Navbar } from './components/Navbar'
-import { ListAccoutns } from './components/ListAccoutns'
+import { ListAccounts } from './components/ListAccounts'
 
 interface SuggestedAccounsProps extends AppStackScreenProps<'SuggestedAccounts'> {}
 
@@ -44,7 +44,7 @@ export const SuggestedAccounts: FC<SuggestedAccounsProps> = (props) => {
             followers: '23M'
           })
         }
-        return <ListAccoutns accounts={followingAccounts} />
+        return <ListAccounts accounts={followingAccounts} />
       case 'Followers':
         const followerAccounts = []
         for (let i = 0; i < 10; i++) {
@@ -54,7 +54,7 @@ export const SuggestedAccounts: FC<SuggestedAccounsProps> = (props) => {
             followers: '88M'
           })
         }
-        return <ListAccoutns accounts={followerAccounts} />
+        return <ListAccounts accounts={followerAccounts} />
       default:
         return null
     }

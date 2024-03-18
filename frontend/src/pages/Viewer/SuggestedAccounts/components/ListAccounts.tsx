@@ -40,7 +40,7 @@ const AccountItem = ({ avatar, name, followers }) => {
   )
 }
 
-export const ListAccoutns = ({ accounts }) => {
+export const ListAccounts = ({ accounts }) => {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
