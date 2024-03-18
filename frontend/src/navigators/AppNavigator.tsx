@@ -110,10 +110,34 @@ const AppStack = () => {
           headerShown: false
         }}
       />
-      <Stack.Screen name="SignUpByMail" component={Pages.SignUpByMail} />
-      <Stack.Screen name="SignUp" component={Pages.SignUpPage} />
-      <Stack.Screen name="LoginByMail" component={Pages.LoginByMail} />
-      <Stack.Screen name="PassWordInput" component={Pages.PassWordInput} />
+      <Stack.Screen
+        name="SignUpByMail"
+        component={Pages.SignUpByMail}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={Pages.SignUpPage}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="LoginByMail"
+        component={Pages.LoginByMail}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="PassWordInput"
+        component={Pages.PassWordInput}
+        options={{
+          headerShown: false
+        }}
+      />
     </Stack.Navigator>
   )
 }

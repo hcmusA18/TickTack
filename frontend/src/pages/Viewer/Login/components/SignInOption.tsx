@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { Text, StyleSheet, TouchableOpacity } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome' // Make sure you have this library installed and properly linked
+import Icon from 'react-native-vector-icons/FontAwesome'
 import { colors } from './MyColors'
 
 export interface AuthenOptionProps {

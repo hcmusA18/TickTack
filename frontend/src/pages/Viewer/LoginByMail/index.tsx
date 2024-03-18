@@ -1,14 +1,14 @@
 import React, { FC, useState } from 'react'
 import { StyleSheet, View, TextInput, Text, TouchableOpacity, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { AppStackScreenProps } from '../../navigators'
-import { TopBar } from '../../components/LoginTopBar'
-import { colors } from '../../components/MyColors'
+import { AppStackScreenProps } from 'navigators'
+import { TopBar } from '../Login/components/LoginTopBar'
+import { colors } from '../Login/components/MyColors'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
-interface SignUpByMailProps extends AppStackScreenProps<'SignUpByMail'> {}
+interface LoginByMailProps extends AppStackScreenProps<'LoginByMail'> {}
 
-export const SignUpByMail: FC<SignUpByMailProps> = (props) => {
+export const LoginByMail: FC<LoginByMailProps> = (props) => {
   const navigation = props.navigation
   const [email, setEmail] = useState('')
   const [isSubscribed, setIsSubscribed] = useState(false)
@@ -35,14 +35,15 @@ export const SignUpByMail: FC<SignUpByMailProps> = (props) => {
   }
 
   const actionLogin = () => {
-    console.log(isValid)
-    if (isValid && email !== '') {
-      navigation.navigate('Home')
+    if (isValid === true && email !== '') {
+      console.log('Email is valid')
+      return navigation.navigate('PassWordInput')
     }
+    console.error('Email is invalid')
   }
 
   const getTopBarText = (activeTab: string) => {
-    if (activeTab == 'phone') {
+    if (activeTab === 'phone') {
       return (
         <TopBar
           firstIcon="chevron-left"
@@ -57,7 +58,7 @@ export const SignUpByMail: FC<SignUpByMailProps> = (props) => {
         <TopBar
           firstIcon="chevron-left"
           secondIcon="help-circle-outline"
-          textContent="Using email"
+          textContent="Using Username/Email"
           onFirstIconPress={() => navigation.goBack()}
           onSecondIconPress={() => console.log('Help Button Pressed')}
         />
@@ -78,7 +79,7 @@ export const SignUpByMail: FC<SignUpByMailProps> = (props) => {
           <TouchableOpacity
             style={[styles.tabButton, activeTab === 'email' && styles.activeTabButton]}
             onPress={() => handleTabPress('email')}>
-            <Text style={[styles.tabText, activeTab === 'email' && styles.activeTabText]}>Email</Text>
+            <Text style={[styles.tabText, activeTab === 'email' && styles.activeTabText]}>Username/Email</Text>
           </TouchableOpacity>
         </View>
         <View style={[styles.indicator, { left: activeTab === 'phone' ? 0 : '50%' }]} />
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.palette.pjWhite
   },
   scrollView: {
-    paddingHorizontal: 16,
+    paddingHorizontal: '5%',
     paddingTop: 24
   },
   input: {
@@ -228,4 +229,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default SignUpByMail
+export default LoginByMail

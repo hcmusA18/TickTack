@@ -2,10 +2,10 @@ import React, { FC, useMemo, useRef, useCallback } from 'react'
 import { StyleSheet, View, ScrollView, Text } from 'react-native'
 import { Button } from 'react-native-paper'
 import BottomSheet from '@gorhom/bottom-sheet'
-import SignupOption, { AuthenOptionProps } from '../../components/SignInOption'
-import { colors } from '../../components/MyColors'
-import { AppStackScreenProps } from '../../navigators'
-import { TopBar } from '../../components/LoginTopBar'
+import SignupOption, { AuthenOptionProps } from './components/SignInOption'
+import { colors } from './components/MyColors'
+import { AppStackScreenProps } from 'navigators'
+import { TopBar } from './components/LoginTopBar'
 import { useFocusEffect } from '@react-navigation/native'
 
 interface LoginPageProps extends AppStackScreenProps<'Login'> {}
@@ -75,7 +75,7 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
           onFirstIconPress={() => console.log('Help Button Pressed')}
           onSecondIconPress={() => {
             sheetRef.current?.close?.()
-            navigation.navigate('Home')
+            navigation.navigate('Welcome')
           }}
         />
         {/* Body content */}

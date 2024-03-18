@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react'
 import { StyleSheet, View, TextInput, Text, TouchableOpacity, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { AppStackScreenProps } from '../../navigators'
-import { TopBar } from '../../components/LoginTopBar'
-import { colors } from '../../components/MyColors'
+import { AppStackScreenProps } from 'navigators'
+import { TopBar } from '../Login/components/LoginTopBar'
+import { colors } from '../Login/components/MyColors'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 interface PassWordInputProps extends AppStackScreenProps<'PassWordInput'> {}

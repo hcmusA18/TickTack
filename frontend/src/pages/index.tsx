@@ -1,5 +1,4 @@
 export * from './WelcomePages'
-export * from './LoginPages'
 export * from './Viewer'
 // export * from './SignUpPage/SignUpPage'
 // export * from './HomePages'
