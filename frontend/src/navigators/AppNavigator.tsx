@@ -35,6 +35,10 @@ export type AppStackParamList = {
   ProfileEditor: undefined
   FieldEditor: { fieldName: string; fieldValue: string }
   VideoPreviewer: { source: string }
+  SignUpByMail: undefined
+  SignUp: undefined
+  LoginByMail: undefined
+  PassWordInput: undefined
 }
 
 /**
@@ -106,6 +110,10 @@ const AppStack = () => {
           headerShown: false
         }}
       />
+      <Stack.Screen name="SignUpByMail" component={Pages.SignUpByMail} />
+      <Stack.Screen name="SignUp" component={Pages.SignUpPage} />
+      <Stack.Screen name="LoginByMail" component={Pages.LoginByMail} />
+      <Stack.Screen name="PassWordInput" component={Pages.PassWordInput} />
     </Stack.Navigator>
   )
 }
