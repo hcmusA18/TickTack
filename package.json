@@ -8,7 +8,7 @@
     "lint:be": "cd backend && npm run lint",
     "lint": "npm run lint:fe && npm run lint:be",
     "pretty:fe": "cd frontend && npm run pretty",
-    "pretty:be": "cd backend && npm run pretty && cd src && npm run pretty:fix",
+    "pretty:be": "cd backend/src && npm run pretty:fix && cd .. && npm run pretty",
     "pretty": "npm run pretty:fe && npm run pretty:be",
     "test:fe": "cd frontend && npm run test",
     "test:be": "cd backend && npm run test",
