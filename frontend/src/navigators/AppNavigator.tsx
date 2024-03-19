@@ -35,6 +35,7 @@ export type AppStackParamList = {
   ProfileEditor: undefined
   FieldEditor: { fieldName: string; fieldValue: string }
   VideoPreviewer: { source: string }
+  Search: undefined
 }
 
 /**
@@ -102,6 +103,13 @@ const AppStack = () => {
       <Stack.Screen
         name="VideoPreviewer"
         component={Pages.VideoPreviewer}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="Search"
+        component={Pages.SearchPage}
         options={{
           headerShown: false
         }}

@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export const HomePage: FC<HomePageProps> = ({ route }) => {
+export const HomePage: FC<HomePageProps> = ({ navigation, route }) => {
   const [currentTab, setCurrentTab] = useState<string>('For You')
 
   const { creator, profile } = route.params
@@ -23,7 +23,7 @@ export const HomePage: FC<HomePageProps> = ({ route }) => {
   }
   return (
     <Screen preset="fixed" safeAreaEdges={['top', 'bottom']} contentContainerStyle={styles.container}>
-      <Topbar currentTab={currentTab} changeTab={changeTab} />
+      <Topbar currentTab={currentTab} changeTab={changeTab} navigation={navigation} />
       <Feed creator={creator} profile={profile} currentTab={currentTab} />
     </Screen>
   )
