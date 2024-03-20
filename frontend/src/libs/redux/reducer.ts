@@ -1,8 +1,10 @@
 import { combineReducers } from '@reduxjs/toolkit'
 import { AuthReducer } from './sliceAuth'
-import { CommentModalReducer } from './sliceCommentModal'
+import { ModalReducer } from './sliceModal'
+import { SoundSelectReducer } from './sliceSoundSelect'
 
 export const rootReducer = combineReducers({
   auth: AuthReducer,
-  commentModal: CommentModalReducer
+  modal: ModalReducer,
+  soundSelect: SoundSelectReducer
 })

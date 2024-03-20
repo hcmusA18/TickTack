@@ -1,20 +1,22 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { ResizeMode, Video } from 'expo-av'
 import { Feather, MaterialIcons } from '@expo/vector-icons'
 import { AppStackScreenProps } from 'navigators'
 import { colors } from 'theme'
-import { MusicModalNative } from './components/MusicModalNative'
-import { MusicModalGorhom } from './components/MusicModalGorhom'
+import { useAppDispatch, useAppSelector } from 'libs/redux'
+import { ModalType } from 'libs/types'
+import { openModal } from 'libs/redux/sliceModal'
+import { clearSound } from 'libs/redux/sliceSoundSelect'
+import DATA from './SoundRawData'
 
 interface VideoPreviewerProps extends AppStackScreenProps<'VideoPreviewer'> {}
 
 export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
   const { navigation } = props
+  const dispatch = useAppDispatch()
+  const sound = useAppSelector((state) => state.soundSelect.sound)
   const videoRef = useRef(null)
-
-  const [sound, setSound] = useState('First Item')
-  const [modalVisible, setModalVisible] = useState(false)
 
   useEffect(() => {
     videoRef.current?.playAsync()
@@ -26,13 +28,21 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
     navigation.navigate('SavePost', { source: props.route?.params?.source })
   }
 
+  const handleOpenSoundModal = () => {
+    console.log('open sound modal')
+    dispatch(openModal({ isOpen: true, data: DATA, modalType: ModalType.MUSIC_SELECT }))
+  }
+  const handleClearSoundSelect = () => {
+    dispatch(clearSound())
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.addSoundContainer}>
         {sound === null ? (
           <TouchableOpacity
             style={{ flexDirection: 'row', alignItems: 'center', width: '80%', justifyContent: 'space-evenly' }}
-            onPress={() => setModalVisible(true)}>
+            onPress={handleOpenSoundModal}>
             <Feather name="music" size={15} color={colors.white} />
             <Text style={{ color: colors.white, fontSize: 15 }}>Add sound</Text>
           </TouchableOpacity>
@@ -40,17 +50,17 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
           <>
             <TouchableOpacity
               style={{ flexDirection: 'row', alignItems: 'center', width: '70%', justifyContent: 'space-evenly' }}
-              onPress={() => setModalVisible(true)}>
+              onPress={handleOpenSoundModal}>
               <Feather name="music" size={15} color={colors.white} />
               <Text
                 style={{ color: colors.white, fontSize: 15, width: 85, marginLeft: 8 }}
                 numberOfLines={1}
                 ellipsizeMode="tail">
-                {sound}
+                {sound || 'Add sound'}
               </Text>
             </TouchableOpacity>
             <View style={styles.separator} />
-            <TouchableOpacity onPress={() => setSound(null)}>
+            <TouchableOpacity onPress={handleClearSoundSelect}>
               <Feather name="x" size={20} color={colors.white} />
             </TouchableOpacity>
           </>
@@ -80,7 +90,7 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
         </TouchableOpacity>
       </View>
 
-      <MusicModalGorhom visible={modalVisible} setVisible={setModalVisible} sound={sound} setSound={setSound} />
+      {/* <MusicModalGorhom visible={modalVisible} setVisible={setModalVisible} sound={sound} setSound={setSound} /> */}
     </View>
   )
 }
