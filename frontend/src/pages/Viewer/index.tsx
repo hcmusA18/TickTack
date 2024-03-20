@@ -5,6 +5,9 @@ export * from './SavePost'
 export * from './PersonalProfile'
 export * from './ProfileEditor'
 export * from './FieldEditor'
+// User Profile section
+export * from './UserProfile'
+export * from './SuggestedAccounts'
 // Home Feed section
 export * from './Home'
 export * from './VideoPreviewer'

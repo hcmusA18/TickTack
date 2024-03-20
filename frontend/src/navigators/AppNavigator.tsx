@@ -34,6 +34,8 @@ export type AppStackParamList = {
   SavePost: { source: string }
   ProfileEditor: undefined
   FieldEditor: { fieldName: string; fieldValue: string }
+  UserProfile: undefined
+  SuggestedAccounts: undefined
   VideoPreviewer: { source: string }
   SignUpByMail: undefined
   SignUp: undefined
@@ -104,8 +106,22 @@ const AppStack = () => {
         }}
       />
       <Stack.Screen
+        name="UserProfile"
+        component={Pages.UserProfilePage} // Use the imported component
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
         name="VideoPreviewer"
         component={Pages.VideoPreviewer}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="SuggestedAccounts"
+        component={Pages.SuggestedAccounts} // Use the imported component
         options={{
           headerShown: false
         }}
