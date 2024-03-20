@@ -88,7 +88,7 @@ export const AccountItem = ({ avatar, name, followers, isHorizontal }) => {
   const followButtonTextStyle = isFollowed ? styles.followedButtonText : styles.followButtonText
   const followButtonContent = isFollowed ? 'Following' : 'Follow'
 
-  if (isHorizontal) {
+  const HorizontalAccountItem = () => {
     return (
       <View style={[styles.accountItem, { marginRight: 10, width: 150 }]}>
         <Image source={{ uri: avatar }} style={{ width: 100, height: 100, borderRadius: 100, marginBottom: 5 }} />
@@ -99,7 +99,9 @@ export const AccountItem = ({ avatar, name, followers, isHorizontal }) => {
         </TouchableOpacity>
       </View>
     )
-  } else {
+  }
+
+  const VerticalAccountItem = () => {
     return (
       <View style={[styles.accountItem, { flexDirection: 'row', justifyContent: 'space-between' }]}>
         <View style={styles.leftContainer}>
@@ -120,4 +122,6 @@ export const AccountItem = ({ avatar, name, followers, isHorizontal }) => {
       </View>
     )
   }
+
+  return isHorizontal ? <HorizontalAccountItem /> : <VerticalAccountItem />
 }

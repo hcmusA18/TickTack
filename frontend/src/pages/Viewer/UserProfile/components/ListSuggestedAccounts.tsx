@@ -5,8 +5,6 @@ import { colors } from 'theme'
 import { Feather } from '@expo/vector-icons'
 import { AccountItem } from 'components/AccountItem'
 
-const backgroundItemColor = '#e9e9e9'
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background
