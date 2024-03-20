@@ -1,11 +1,11 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { ResizeMode, Video } from 'expo-av'
 import { Feather, MaterialIcons } from '@expo/vector-icons'
 import { AppStackScreenProps } from 'navigators'
 import { colors } from 'theme'
-import { Item } from './components/SoundItem'
-import DATA from './SoundRawData'
+import { MusicModalNative } from './components/MusicModalNative'
+import { MusicModalGorhom } from './components/MusicModalGorhom'
 
 interface VideoPreviewerProps extends AppStackScreenProps<'VideoPreviewer'> {}
 
@@ -69,7 +69,7 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
       />
 
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Camera')} style={styles.cancelButton}>
+        <TouchableOpacity onPress={() => navigation.navigate('Main', { screen: 'Camera' })} style={styles.cancelButton}>
           <Feather name="x" size={24} color="black" />
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </TouchableOpacity>
@@ -80,46 +80,7 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
         </TouchableOpacity>
       </View>
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        style={{ height: '50%', backgroundColor: colors.palette.neutral900 }}
-        onRequestClose={() => {
-          setModalVisible(false)
-        }}>
-        <View style={styles.modalViewContainer}>
-          <View style={styles.modalContainer}>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: 20,
-                paddingBottom: 10,
-                paddingTop: 0
-              }}>
-              <View></View>
-              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Select your favorite sound</Text>
-              <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <Feather name="x" size={24} color="black" />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.modalContent}>
-              <FlatList
-                data={DATA}
-                renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => setSound(item.name)}>
-                    <Item item={item} sound={sound} setSound={setSound} />
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item) => item.id}
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>
+      <MusicModalGorhom visible={modalVisible} setVisible={setModalVisible} sound={sound} setSound={setSound} />
     </View>
   )
 }
@@ -199,25 +160,5 @@ const styles = StyleSheet.create({
     color: colors.palette.neutral100,
     fontWeight: 'bold',
     fontSize: 16
-  },
-  modalViewContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: colors.palette.overlay20
-  },
-  modalContainer: {
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    backgroundColor: colors.palette.neutral200,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    height: '50%',
-    padding: 10
-  },
-  modalContent: {
-    backgroundColor: colors.palette.neutral100,
-    borderRadius: 10,
-    padding: 20,
-    height: '90%'
   }
 })
