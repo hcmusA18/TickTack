@@ -13,6 +13,7 @@ import { Provider } from 'react-redux'
 import { store } from 'libs/redux'
 import { useFonts } from 'expo-font'
 import { customFontsToLoad } from 'theme'
+import Modal from 'components/BottomModal'
 
 export const NAVIGATION_PERSISTENCE_KEY = 'NAVIGATION_STATE'
 
@@ -68,6 +69,7 @@ const App = (props: AppProps) => {
                 initialState={initialNavigationState}
                 onStateChange={onNavigationStateChange}
               />
+              <Modal />
             </PaperProvider>
           </Provider>
         </GestureHandlerRootView>

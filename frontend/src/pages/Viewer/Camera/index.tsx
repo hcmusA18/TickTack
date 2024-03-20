@@ -6,7 +6,9 @@ import { Audio } from 'expo-av'
 import * as ImagePicker from 'expo-image-picker'
 import * as MediaLibrary from 'expo-media-library'
 import { useIsFocused } from '@react-navigation/core'
-import { Feather } from '@expo/vector-icons'
+import { Feather, AntDesign } from '@expo/vector-icons'
+import { colors } from 'theme'
+import * as Components from './components'
 
 interface CameraPageProps extends MainTabScreenProps<'Camera'> {}
 
@@ -24,6 +26,13 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
   const [cameraType, setCameraType] = useState(CameraType.back)
   const [cameraFlash, setCameraFlash] = useState(FlashMode.off)
   const [cameraReady, setCameraReady] = useState(false)
+  const [selectedDuration, setSelectedDuration] = useState(15)
+
+  const durationOptions = [15, 30, 60]
+
+  const handleDurationSelect = (duration) => {
+    setSelectedDuration(duration)
+  }
 
   const isFoucused = useIsFocused()
 
@@ -31,7 +40,6 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
   useEffect(() => {
     const getPermissions = async () => {
       try {
-        // Get all permissions
         const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync()
         setMediaPermission(mediaStatus === 'granted')
 
@@ -61,7 +69,7 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
       }
     }
     getPermissions()
-  }, [])
+  })
 
   // Update recording time
   useEffect(() => {
@@ -89,14 +97,22 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
     try {
       if (!cameraReady) return
       setRecording(true)
+
+      setTimeout(
+        () => {
+          stopVideo()
+        },
+        selectedDuration * 1000 + 500
+      )
+
       const video = await cameraRef.recordAsync({
         quality: Camera.Constants.VideoQuality['480p'],
-        maxDuration: 20
+        maxDuration: selectedDuration
       })
       if (video) {
         const data = await video
         const source = data.uri ?? ('' as string)
-        navigation.navigate('SavePost', { source })
+        navigation.navigate('VideoPreviewer', { source })
       }
     } catch (error) {
       console.error('Error while recording video:', error)
@@ -125,7 +141,7 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
       })
       if (!result.canceled) {
         const source = result.assets[0].uri ?? ''
-        navigation.navigate('SavePost', { source })
+        navigation.navigate('VideoPreviewer', { source })
       }
     } catch (error) {
       console.error('Error while picking image:', error)
@@ -141,16 +157,29 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
   return (
     <View style={styles.container}>
       {isFoucused && cameraPermission && audioPermission && galleryPermission ? (
-        <Camera
-          style={styles.camera}
-          ref={(ref) => setCameraRef(ref)}
-          ratio={'16:9'}
-          type={cameraType}
-          flashMode={cameraFlash}
-          onCameraReady={() => setCameraReady(true)}
-        />
+        <>
+          <View style={styles.overlay} />
+          <Camera
+            style={styles.camera}
+            ref={(ref) => setCameraRef(ref)}
+            ratio={'16:9'}
+            type={cameraType}
+            flashMode={cameraFlash}
+            onCameraReady={() => setCameraReady(true)}
+          />
+        </>
       ) : (
-        <Text>Permissions not granted</Text>
+        <View
+          style={{
+            backgroundColor: colors.palette.neutral900,
+            height: '100%',
+            width: '100%',
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+          <Text style={{ color: colors.palette.neutral100 }}>Waiting for Camera</Text>
+        </View>
       )}
 
       {recording && (
@@ -159,42 +188,75 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
         </View>
       )}
 
-      <View style={styles.sideBarContainer}>
-        <TouchableOpacity
-          style={styles.sideBarButton}
-          onPress={() => setCameraType(cameraType === CameraType.back ? CameraType.front : CameraType.back)}>
-          <Feather name="refresh-ccw" size={24} color={'white'} />
-          <Text style={styles.iconText}>Flip</Text>
-        </TouchableOpacity>
+      <View style={styles.rightSideBarContainer}>
+        {!recording ? (
+          <>
+            <TouchableOpacity
+              style={styles.sideBarButton}
+              onPress={() => setCameraType(cameraType === CameraType.back ? CameraType.front : CameraType.back)}>
+              <Feather name="refresh-ccw" size={24} color={'white'} />
+              <Text style={styles.iconText}>Flip</Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.sideBarButton}
-          onPress={() => setCameraFlash(cameraFlash === FlashMode.off ? FlashMode.torch : FlashMode.off)}>
-          <Feather name="zap" size={24} color={'white'} />
-          <Text style={styles.iconText}>Flash</Text>
-        </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.sideBarButton}
+              onPress={() => setCameraFlash(cameraFlash === FlashMode.off ? FlashMode.torch : FlashMode.off)}>
+              <Feather name={cameraFlash === FlashMode.off ? 'zap-off' : 'zap'} size={24} color={'white'} />
+              <Text style={styles.iconText}>Flash</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <></>
+        )}
+      </View>
+
+      <View style={styles.leftSideBarContainer}>
+        {!recording ? (
+          <TouchableOpacity style={styles.sideBarButton} onPress={() => navigation.goBack()}>
+            <Feather name="x" size={30} color={'white'} />
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
+      </View>
+
+      {/* Duration selector */}
+      <View style={styles.durationSelectorContainer}>
+        {!recording ? (
+          <Components.DurationSelector
+            durationOptions={durationOptions}
+            selectedDuration={selectedDuration}
+            onDurationSelect={handleDurationSelect}
+          />
+        ) : (
+          <></>
+        )}
       </View>
 
       <View style={styles.bottomContainer}>
         <View style={{ flex: 1 }}></View>
-
         <View style={styles.recordBtnContainer}>
-          <TouchableOpacity
-            style={styles.recordBtn}
-            disabled={!cameraReady}
-            onLongPress={() => recordVideo()}
-            onPressOut={() => stopVideo()}
-          />
+          {recording ? (
+            <Components.ProgressCircle duration={selectedDuration * 1000} />
+          ) : (
+            <TouchableOpacity style={styles.recordBtn} disabled={!cameraReady} onPress={() => recordVideo()} />
+          )}
         </View>
 
         <View style={{ flex: 1 }}>
-          <TouchableOpacity onPress={() => pickVideo()} style={styles.galleryBtn}>
-            {galleryItemUri === null ? (
-              <></>
-            ) : (
-              <Image style={styles.galleryButtonImage} source={{ uri: galleryItemUri }} />
-            )}
-          </TouchableOpacity>
+          {!recording ? (
+            <TouchableOpacity onPress={() => pickVideo()} style={styles.galleryBtn}>
+              {galleryItemUri === null ? (
+                <></>
+              ) : (
+                <Image style={styles.galleryButtonImage} source={{ uri: galleryItemUri }} />
+              )}
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity>
+              <AntDesign name="checkcircle" size={30} color={COLORS.recordBtn} onPress={() => stopVideo()} />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>
@@ -207,7 +269,7 @@ const COLORS = {
   blue: '#007bff',
   red: '#dc3545',
   green: '#28a745',
-  recordBtnBorder: '#FF404087',
+  recordBtnBorder: colors.white,
   recordBtn: '#FF4040',
   transparent: 'transparent'
 }
@@ -216,26 +278,40 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingTop: 40,
+    paddingBottom: 40
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: colors.palette.neutral900,
+    zIndex: -100
   },
   bottomContainer: {
     position: 'absolute',
     bottom: 0,
     flexDirection: 'row',
-    marginBottom: 30,
+    marginBottom: 50,
     alignItems: 'center'
+  },
+  durationSelectorContainer: {
+    position: 'absolute',
+    bottom: 140
   },
   camera: {
     flex: 1,
-    backgroundColor: COLORS.black,
+    backgroundColor: colors.palette.neutral900,
     aspectRatio: 9 / 16
   },
   recordBtnContainer: {
     flex: 1,
-    marginHorizontal: 30
+    marginHorizontal: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column'
   },
   recordBtn: {
-    borderWidth: 8,
+    borderWidth: 4,
     borderColor: COLORS.recordBtnBorder,
     backgroundColor: COLORS.recordBtn,
     borderRadius: 100,
@@ -245,7 +321,7 @@ const styles = StyleSheet.create({
   },
   galleryBtn: {
     borderWidth: 2,
-    borderColor: COLORS.white,
+    borderColor: colors.white,
     borderRadius: 10,
     overflow: 'hidden',
     height: 50,
@@ -255,14 +331,20 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50
   },
-  sideBarContainer: {
-    bottom: 150,
+  rightSideBarContainer: {
+    top: 60,
     right: 0,
     marginHorizontal: 20,
     position: 'absolute'
   },
+  leftSideBarContainer: {
+    top: 60,
+    left: 0,
+    marginHorizontal: 20,
+    position: 'absolute'
+  },
   iconText: {
-    color: COLORS.white,
+    color: colors.white,
     fontSize: 12,
     marginTop: 5
   },
@@ -272,14 +354,14 @@ const styles = StyleSheet.create({
   },
   recordingTimeContainer: {
     position: 'absolute',
-    top: 20,
+    top: 30,
     alignSelf: 'center',
-    backgroundColor: COLORS.transparent,
+    backgroundColor: colors.transparent,
     padding: 10,
     borderRadius: 20
   },
   recordingTimeText: {
-    color: COLORS.white,
+    color: colors.white,
     fontSize: 20
   }
 })
