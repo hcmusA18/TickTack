@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { AppStackScreenProps } from 'navigators'
 import { colors } from 'theme'
 import InterestButton from './components/InterestButton'
+import InterestGroup from './components/InterestGroup'
 
 interface OnboardingPageProps extends AppStackScreenProps<'OnboardingPage'> {}
 
@@ -36,24 +37,6 @@ export const OnboardingPage: FC<OnboardingPageProps> = (props) => {
     // navigation.navigate('Main')
   }
 
-  const [selectedInterests, setSelectedInterests] = useState({})
-
-  // Handle selecting/deselecting interests
-  const toggleInterest = (category, interest) => {
-    setSelectedInterests((prevSelections) => {
-      const updatedSelections = { ...prevSelections }
-      updatedSelections[category] = updatedSelections[category] || []
-
-      if (updatedSelections[category].includes(interest)) {
-        updatedSelections[category] = updatedSelections[category].filter((i) => i !== interest)
-      } else {
-        updatedSelections[category].push(interest)
-      }
-
-      return updatedSelections
-    })
-  }
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
@@ -64,19 +47,7 @@ export const OnboardingPage: FC<OnboardingPageProps> = (props) => {
         </View>
         <View style={styles.ContentContainer}>
           <ScrollView contentContainerStyle={styles.interestsContainer}>
-            {groups.map((group) => (
-              <View key={group}>
-                <Text>{group}</Text>
-                {interests[group].map((interest) => (
-                  <InterestButton
-                    key={interest}
-                    title={interest}
-                    isSelected={selectedInterests[group]?.includes(interest) || false}
-                    onSelect={toggleInterest}
-                  />
-                ))}
-              </View>
-            ))}
+            <InterestGroup title={groups[0]} interests={interests[groups[0]]} />
           </ScrollView>
         </View>
         <View style={styles.bottomContainer}>
@@ -115,7 +86,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.ttt.pjWhite
   },
   interestsContainer: {
-    flexDirection: 'row', // change this for your desired layout
     flexWrap: 'wrap',
     padding: 16
   },

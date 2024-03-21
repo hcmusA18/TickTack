@@ -4,7 +4,7 @@ import { colors } from 'theme'
 
 const InterestButton = ({ title, isSelected, onSelect }) => {
   return (
-    <TouchableOpacity style={[styles.button, isSelected ? styles.buttonSelected : {}]} onPress={onSelect}>
+    <TouchableOpacity style={[styles.button, isSelected && styles.buttonSelected]} onPress={onSelect}>
       <Text style={[styles.buttonText, isSelected && styles.btnPressed]}>{title}</Text>
     </TouchableOpacity>
   )
