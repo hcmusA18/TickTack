@@ -75,7 +75,7 @@ export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
             <Text style={styles.buttonText}>Edit Profile</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttonStyle}>
+          <TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('UserProfile')}>
             <Text style={styles.buttonText}>Share Profile</Text>
           </TouchableOpacity>
         </View>
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
 
   countTextContainer: {
     fontSize: 16,
-    color: colors.textDim
+    color: colors.text
   },
 
   buttonContainer: {

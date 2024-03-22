@@ -34,8 +34,15 @@ export type AppStackParamList = {
   SavePost: { source: string }
   ProfileEditor: undefined
   FieldEditor: { fieldName: string; fieldValue: string }
+  UserProfile: undefined
+  SuggestedAccounts: undefined
   VideoPreviewer: { source: string }
   Search: undefined
+  SignUpByMail: undefined
+  SignUp: undefined
+  LoginByMail: undefined
+  PassWordInput: undefined
+  SearchResult: { searchQuery: string }
 }
 
 /**
@@ -101,6 +108,13 @@ const AppStack = () => {
         }}
       />
       <Stack.Screen
+        name="UserProfile"
+        component={Pages.UserProfilePage} // Use the imported component
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
         name="VideoPreviewer"
         component={Pages.VideoPreviewer}
         options={{
@@ -110,6 +124,48 @@ const AppStack = () => {
       <Stack.Screen
         name="Search"
         component={Pages.SearchPage}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="SuggestedAccounts"
+        component={Pages.SuggestedAccounts} // Use the imported component
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="SignUpByMail"
+        component={Pages.SignUpByMail}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={Pages.SignUpPage}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="LoginByMail"
+        component={Pages.LoginByMail}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="PassWordInput"
+        component={Pages.PassWordInput}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="SearchResult"
+        component={Pages.SearchResultPage}
         options={{
           headerShown: false
         }}

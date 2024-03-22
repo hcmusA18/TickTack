@@ -20,8 +20,6 @@
       "types/*": ["./src/types/*"],
       "configs": ["./src/libs/configs"],
       "configs/*": ["./src/libs/configs/*"],
-      "theme": ["./src/theme"],
-      "theme/*": ["./src/theme/*"],
       "navigators": ["./src/navigators"],
       "navigators/*": ["./src/navigators/*"],
       "components": ["./src/components"],

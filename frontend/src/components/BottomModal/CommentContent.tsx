@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 })
 
 // TODO: implement commentSend Handler
-export const ModalContent = ({ post }: { post: Post }) => {
+export const CommentContent = ({ post }: { post: Post }) => {
   const [comment, setComment] = useState('')
   const [commentList, setCommentList] = useState<Comment[]>([
     { comment: 'a', creator: 'usr2', id: '1', time: Math.floor((Date.now() - 100000000) / 1000).toString() },

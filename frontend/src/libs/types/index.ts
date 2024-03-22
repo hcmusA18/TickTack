@@ -11,6 +11,15 @@ export interface Post {
   musicThumbnail: string
 }
 
+export interface Sound {
+  id: string
+  name: string
+  artist: string
+  duration: string
+  url?: string | null
+  thumbnail?: string | null
+}
+
 export interface Comment {
   id: string
   creator: string
@@ -47,4 +56,10 @@ export interface Message {
   id: string
   creator: string
   message: string
+}
+
+export enum ModalType {
+  NONE = -1,
+  COMMENT = 0,
+  MUSIC_SELECT = 1
 }

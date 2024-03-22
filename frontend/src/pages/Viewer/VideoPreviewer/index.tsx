@@ -1,20 +1,22 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList } from 'react-native'
+import React, { FC, useEffect, useRef } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { ResizeMode, Video } from 'expo-av'
 import { Feather, MaterialIcons } from '@expo/vector-icons'
 import { AppStackScreenProps } from 'navigators'
 import { colors } from 'theme'
-import { Item } from './components/SoundItem'
+import { useAppDispatch, useAppSelector } from 'libs/redux'
+import { ModalType } from 'libs/types'
+import { openModal } from 'libs/redux/sliceModal'
+import { clearSound } from 'libs/redux/sliceSoundSelect'
 import DATA from './SoundRawData'
 
 interface VideoPreviewerProps extends AppStackScreenProps<'VideoPreviewer'> {}
 
 export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
   const { navigation } = props
+  const dispatch = useAppDispatch()
+  const sound = useAppSelector((state) => state.soundSelect.sound)
   const videoRef = useRef(null)
-
-  const [sound, setSound] = useState('First Item')
-  const [modalVisible, setModalVisible] = useState(false)
 
   useEffect(() => {
     videoRef.current?.playAsync()
@@ -26,13 +28,21 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
     navigation.navigate('SavePost', { source: props.route?.params?.source })
   }
 
+  const handleOpenSoundModal = () => {
+    console.log('open sound modal')
+    dispatch(openModal({ isOpen: true, data: DATA, modalType: ModalType.MUSIC_SELECT }))
+  }
+  const handleClearSoundSelect = () => {
+    dispatch(clearSound())
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.addSoundContainer}>
         {sound === null ? (
           <TouchableOpacity
             style={{ flexDirection: 'row', alignItems: 'center', width: '80%', justifyContent: 'space-evenly' }}
-            onPress={() => setModalVisible(true)}>
+            onPress={handleOpenSoundModal}>
             <Feather name="music" size={15} color={colors.white} />
             <Text style={{ color: colors.white, fontSize: 15 }}>Add sound</Text>
           </TouchableOpacity>
@@ -40,17 +50,17 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
           <>
             <TouchableOpacity
               style={{ flexDirection: 'row', alignItems: 'center', width: '70%', justifyContent: 'space-evenly' }}
-              onPress={() => setModalVisible(true)}>
+              onPress={handleOpenSoundModal}>
               <Feather name="music" size={15} color={colors.white} />
               <Text
                 style={{ color: colors.white, fontSize: 15, width: 85, marginLeft: 8 }}
                 numberOfLines={1}
                 ellipsizeMode="tail">
-                {sound}
+                {sound || 'Add sound'}
               </Text>
             </TouchableOpacity>
             <View style={styles.separator} />
-            <TouchableOpacity onPress={() => setSound(null)}>
+            <TouchableOpacity onPress={handleClearSoundSelect}>
               <Feather name="x" size={20} color={colors.white} />
             </TouchableOpacity>
           </>
@@ -69,7 +79,7 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
       />
 
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Camera')} style={styles.cancelButton}>
+        <TouchableOpacity onPress={() => navigation.navigate('Main', { screen: 'Camera' })} style={styles.cancelButton}>
           <Feather name="x" size={24} color="black" />
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </TouchableOpacity>
@@ -80,46 +90,7 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
         </TouchableOpacity>
       </View>
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        style={{ height: '50%', backgroundColor: colors.palette.neutral900 }}
-        onRequestClose={() => {
-          setModalVisible(false)
-        }}>
-        <View style={styles.modalViewContainer}>
-          <View style={styles.modalContainer}>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: 20,
-                paddingBottom: 10,
-                paddingTop: 0
-              }}>
-              <View></View>
-              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Select your favorite sound</Text>
-              <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <Feather name="x" size={24} color="black" />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.modalContent}>
-              <FlatList
-                data={DATA}
-                renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => setSound(item.name)}>
-                    <Item item={item} sound={sound} setSound={setSound} />
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item) => item.id}
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>
+      {/* <MusicModalGorhom visible={modalVisible} setVisible={setModalVisible} sound={sound} setSound={setSound} /> */}
     </View>
   )
 }
@@ -199,25 +170,5 @@ const styles = StyleSheet.create({
     color: colors.palette.neutral100,
     fontWeight: 'bold',
     fontSize: 16
-  },
-  modalViewContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: colors.palette.overlay20
-  },
-  modalContainer: {
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    backgroundColor: colors.palette.neutral200,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    height: '50%',
-    padding: 10
-  },
-  modalContent: {
-    backgroundColor: colors.palette.neutral100,
-    borderRadius: 10,
-    padding: 20,
-    height: '90%'
   }
 })

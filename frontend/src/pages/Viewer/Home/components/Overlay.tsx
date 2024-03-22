@@ -12,7 +12,7 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated'
 import { useAppDispatch } from 'libs/redux'
-import { openCommentModal } from 'libs/redux/sliceCommentModal'
+import { openModal } from 'libs/redux/sliceModal'
 import { Post, User } from 'libs/types'
 import { throttle } from 'lodash'
 import { Avatar } from 'react-native-paper'
@@ -152,7 +152,7 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
         <ActionButton
           iconName="chatbubble"
           text={commentsCount}
-          onPress={() => dispatch(openCommentModal({ isOpen: true, data: post, modalType: 0 }))}
+          onPress={() => dispatch(openModal({ isOpen: true, data: post, modalType: 0 }))}
         />
         <ActionButton iconName="paper-plane" text={post.sharesCount} />
         <Animated.Image source={{ uri: post.musicThumbnail }} style={[styles.musicThumbnail, animationStyle]} />
