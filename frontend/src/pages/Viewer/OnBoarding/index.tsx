@@ -10,31 +10,55 @@ interface OnboardingPageProps extends AppStackScreenProps<'OnboardingPage'> {}
 export const OnboardingPage: FC<OnboardingPageProps> = (props) => {
   const navigation = props.navigation
 
-  const [isSelected, setIsSelected] = useState<boolean>(false)
-  const getGroup = () => {
-    return ['Entertainment & Culture', 'Home & Family', 'Fashion & Beauty']
-  }
-  const getInterest = (group: string) => {
-    return ['Trends', 'TV shows', 'Marvel', 'BTS', 'HBO', 'Naruto', 'Motherhood']
-    // if (group === 'Entertainment & Culture')
-    //   return ['Trends', 'TV shows', 'Marvel', 'BTS', 'HBO', 'Naruto', 'Motherhood']
-    // if (group === 'Home & Family')
-    //   return ['Motherhood', 'Parenting', 'Weddings', 'Fatherhood', 'Married life', 'Relationship']
-    // if (group === 'Fashion & Beauty') return ['Fashion', 'Beauty', 'Makeup', 'Skincare', 'Hair', 'Nails', 'Shoes']
+  const getInterests = () => {
+    // TODO: get interests from the server
+
+    const result = [
+      {
+        interestGroup: 'Entertainment & Culture',
+        interestIcon: 'ticket-outline',
+        iconStyle: {
+          transform: [{ rotate: '-45deg' }]
+        },
+        interests: ['Trends', 'TV Shows', 'Marvel', 'Music', 'Movies', 'Books', 'BTS', 'HBO', 'Naruto']
+      },
+      {
+        interestGroup: 'Home & Family',
+        interestIcon: 'home',
+        iconStyle: {},
+        interests: [
+          'Parenting',
+          'Motherhood',
+          'Weddings',
+          'Home Decor',
+          'Gardening',
+          'DIY',
+          'Cooking',
+          'Pets',
+          'Travel'
+        ]
+      },
+      {
+        interestGroup: 'Fashion & Beauty',
+        interestIcon: 'bag-checked',
+        iconStyle: {},
+        interests: ['Make up', 'Nails', 'Snearkers', 'Streetwear', 'Luxury', 'Skincare', 'Hair', 'Fashion', 'Beauty']
+      }
+    ]
+
+    return result
   }
 
-  const groups = getGroup()
-  const interests = {}
-  for (let group of groups) {
-    interests[group] = getInterest(group)
-  }
+  // the next status
+  const [isSelected, setIsSelected] = useState<boolean>(false)
 
   const handlingSkip = () => {
     navigation.navigate('Welcome')
   }
   const handlingNext = () => {
-    navigation.navigate('Welcome')
-    // navigation.navigate('Main')
+    if (isSelected) {
+      navigation.navigate('Welcome')
+    }
   }
 
   return (
@@ -50,7 +74,17 @@ export const OnboardingPage: FC<OnboardingPageProps> = (props) => {
         {/* Content */}
         <View style={styles.ContentContainer}>
           <ScrollView contentContainerStyle={styles.interestsContainer}>
-            <InterestGroup categoryName={groups[0]} categoryIcon={'music'} interests={getInterest(null)} />
+            {/* The group of interest */}
+
+            {getInterests().map((group, index) => (
+              <InterestGroup
+                key={index} // Assuming group has an 'id' property
+                categoryName={group.interestGroup}
+                categoryIcon={group.interestIcon}
+                interests={group.interests}
+                iconStyle={group.iconStyle}
+              />
+            ))}
           </ScrollView>
         </View>
 

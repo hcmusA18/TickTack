@@ -8,31 +8,42 @@ interface InterestGroupProps {
   categoryName?: string
   categoryIcon?: string
   interests?: string[]
+  iconStyle?: any
 }
 
 // InterestGroup component
-const InterestGroup: React.FC<InterestGroupProps> = ({ categoryName, categoryIcon, interests }) => {
-  const [selectedInterests, setSelectedInterests] = useState<{ [key: string]: boolean }>({})
+const InterestGroup: React.FC<InterestGroupProps> = (props: InterestGroupProps) => {
+  const { categoryName, categoryIcon, interests, iconStyle } = props
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([])
 
-  const handleSelect = (interestKey: string) => {
-    setSelectedInterests((prevState) => ({
-      ...prevState,
-      [interestKey]: !prevState[interestKey] ?? true
-    }))
+  const handleSelect = (interest: string) => {
+    const newSelectedInterests = [...selectedInterests]
+
+    // Toggle interest selection
+    if (newSelectedInterests.includes(interest)) {
+      newSelectedInterests.splice(newSelectedInterests.indexOf(interest), 1)
+    } else {
+      newSelectedInterests.push(interest)
+    }
+
+    setSelectedInterests(newSelectedInterests)
   }
 
   const renderItem = ({ item }: { item: string }) => (
-    <InterestButton title={item} isSelected={selectedInterests[item]} onPress={() => handleSelect(item)} />
+    <InterestButton title={item} isSelected={selectedInterests.includes(item)} onPress={() => handleSelect(item)} />
   )
 
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        {categoryIcon && <Icon source={categoryIcon} size={24} color={colors.ttt.ink200} style={styles.iconStyle} />}
+        <View style={[styles.iconStyleDefaut, iconStyle]}>
+          {categoryIcon && <Icon source={categoryIcon} size={24} color={colors.ttt.ink200} />}
+        </View>
         <Text style={styles.titleText}>{categoryName}</Text>
       </View>
       <FlatList
-        horizontal
+        horizontal={false}
+        numColumns={5}
         data={interests}
         renderItem={renderItem}
         keyExtractor={(item) => item}
@@ -63,9 +74,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
     // Add other styling as needed
   },
-  iconStyle: {
-    transform: [{ rotate: '-45deg' }]
-  }
+  iconStyleDefaut: {}
 })
 
 export default InterestGroup
