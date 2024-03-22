@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AppStackScreenProps } from 'navigators'
 import { colors } from 'theme'
-import InterestButton from './components/InterestButton'
 import InterestGroup from './components/InterestGroup'
 
 interface OnboardingPageProps extends AppStackScreenProps<'OnboardingPage'> {}
@@ -16,11 +15,12 @@ export const OnboardingPage: FC<OnboardingPageProps> = (props) => {
     return ['Entertainment & Culture', 'Home & Family', 'Fashion & Beauty']
   }
   const getInterest = (group: string) => {
-    if (group === 'Entertainment & Culture')
-      return ['Trends', 'TV shows', 'Marvel', 'BTS', 'HBO', 'Naruto', 'Motherhood']
-    if (group === 'Home & Family')
-      return ['Motherhood', 'Parenting', 'Weddings', 'Fatherhood', 'Married life', 'Relationship']
-    if (group === 'Fashion & Beauty') return ['Fashion', 'Beauty', 'Makeup', 'Skincare', 'Hair', 'Nails', 'Shoes']
+    return ['Trends', 'TV shows', 'Marvel', 'BTS', 'HBO', 'Naruto', 'Motherhood']
+    // if (group === 'Entertainment & Culture')
+    //   return ['Trends', 'TV shows', 'Marvel', 'BTS', 'HBO', 'Naruto', 'Motherhood']
+    // if (group === 'Home & Family')
+    //   return ['Motherhood', 'Parenting', 'Weddings', 'Fatherhood', 'Married life', 'Relationship']
+    // if (group === 'Fashion & Beauty') return ['Fashion', 'Beauty', 'Makeup', 'Skincare', 'Hair', 'Nails', 'Shoes']
   }
 
   const groups = getGroup()
@@ -40,16 +40,21 @@ export const OnboardingPage: FC<OnboardingPageProps> = (props) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
+        {/* Top */}
         <View style={styles.TopBarContainer}>
           <TouchableOpacity style={styles.buttonSkip} onPress={handlingSkip}>
             <Text style={styles.skipText}>Skip</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Content */}
         <View style={styles.ContentContainer}>
           <ScrollView contentContainerStyle={styles.interestsContainer}>
-            <InterestGroup title={groups[0]} interests={interests[groups[0]]} />
+            <InterestGroup categoryName={groups[0]} categoryIcon={'music'} interests={getInterest(null)} />
           </ScrollView>
         </View>
+
+        {/* Bottom */}
         <View style={styles.bottomContainer}>
           <TouchableOpacity style={[styles.nextButton, isSelected && styles.selectedNextButton]} onPress={handlingNext}>
             <Text style={styles.nextButtonText}>Next</Text>

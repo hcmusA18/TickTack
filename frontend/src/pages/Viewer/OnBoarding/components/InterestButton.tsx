@@ -2,10 +2,16 @@ import React from 'react'
 import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { colors } from 'theme'
 
-const InterestButton = ({ title, isSelected, onSelect }) => {
+interface InterestButtonProps {
+  title: string
+  isSelected: boolean
+  onPress: () => void
+}
+
+const InterestButton: React.FC<InterestButtonProps> = ({ title, isSelected, onPress }) => {
   return (
-    <TouchableOpacity style={[styles.button, isSelected && styles.buttonSelected]} onPress={onSelect}>
-      <Text style={[styles.buttonText, isSelected && styles.btnPressed]}>{title}</Text>
+    <TouchableOpacity style={[styles.button, isSelected && styles.btnPressed]} onPress={onPress}>
+      <Text style={[styles.buttonText, isSelected && styles.textPressed]}>{title}</Text>
     </TouchableOpacity>
   )
 }
@@ -20,19 +26,17 @@ const styles = StyleSheet.create({
     marginBottom: 10
     // Add additional styling to match your design
   },
-  buttonSelected: {
-    backgroundColor: colors.ttt.UIRed,
-    borderColor: colors.ttt.pjWhite
-  },
   buttonText: {
     // Add styling for the text inside the button
     color: colors.ttt.pjBlack,
     fontSize: 15
   },
   btnPressed: {
-    color: colors.ttt.pjWhite,
     backgroundColor: colors.ttt.UIRed,
     borderColor: colors.transparent
+  },
+  textPressed: {
+    color: colors.ttt.pjWhite
   }
 })
 

@@ -4,46 +4,38 @@ import { Icon } from 'react-native-paper'
 import InterestButton from './InterestButton' // Assuming InterestButton is in the same directory
 import { colors } from 'theme'
 
-// Sample interests data
-const interests = [
-  { key: 'Trends' },
-  { key: 'TV shows' },
-  { key: 'Marvel' },
-  { key: 'Con' },
-  { key: 'BTS' },
-  { key: 'HBO' },
-  { key: 'Naruto' }
-]
+interface InterestGroupProps {
+  categoryName?: string
+  categoryIcon?: string
+  interests?: string[]
+}
 
-const InterestGroup = (props) => {
-  const [selectedInterest, setSelectedInterest] = useState(null)
-  const { title } = props
-  const handleSelect = (interest) => {
-    setSelectedInterest(interest)
+// InterestGroup component
+const InterestGroup: React.FC<InterestGroupProps> = ({ categoryName, categoryIcon, interests }) => {
+  const [selectedInterests, setSelectedInterests] = useState<{ [key: string]: boolean }>({})
+
+  const handleSelect = (interestKey: string) => {
+    setSelectedInterests((prevState) => ({
+      ...prevState,
+      [interestKey]: !prevState[interestKey] ?? true
+    }))
   }
 
-  const renderItem = ({ item }) => (
-    <InterestButton
-      title={item.key}
-      isSelected={selectedInterest === item.key}
-      onSelect={() => handleSelect(item.key)}
-    />
+  const renderItem = ({ item }: { item: string }) => (
+    <InterestButton title={item} isSelected={selectedInterests[item]} onPress={() => handleSelect(item)} />
   )
 
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <View style={styles.iconStyle}>
-          <Icon source="ticket-confirmation-outline" size={24} color={colors.ttt.ink200} />
-        </View>
-        <Text style={styles.titleText}>{title}</Text>
+        {categoryIcon && <Icon source={categoryIcon} size={24} color={colors.ttt.ink200} style={styles.iconStyle} />}
+        <Text style={styles.titleText}>{categoryName}</Text>
       </View>
-
       <FlatList
-        horizontal={true}
+        horizontal
         data={interests}
         renderItem={renderItem}
-        keyExtractor={(item) => item.key}
+        keyExtractor={(item) => item}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.interestContainer}
       />
@@ -74,7 +66,6 @@ const styles = StyleSheet.create({
   iconStyle: {
     transform: [{ rotate: '-45deg' }]
   }
-  // You may want to adjust or add styles for the FlatList or the items within it
 })
 
 export default InterestGroup
