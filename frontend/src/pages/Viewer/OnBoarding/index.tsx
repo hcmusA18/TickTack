@@ -1,5 +1,5 @@
-import React, { FC, useState } from 'react'
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import React, { FC, useState, useEffect } from 'react'
+import { StyleSheet, View, Text, TouchableOpacity, FlatList } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AppStackScreenProps } from 'navigators'
 import { colors } from 'theme'
@@ -12,7 +12,6 @@ export const OnboardingPage: FC<OnboardingPageProps> = (props) => {
 
   const getInterests = () => {
     // TODO: get interests from the server
-
     const result = [
       {
         interestGroup: 'Entertainment & Culture',
@@ -52,17 +51,35 @@ export const OnboardingPage: FC<OnboardingPageProps> = (props) => {
   // the next status
   const [isSelected, setIsSelected] = useState<boolean>(false)
 
+  // State to track isSelected status for each child
+  const [isSelectedMap, setIsSelectedMap] = useState<Map<number, boolean>>(new Map())
+
+  // Function to update isSelected state for a child component
+  const handleSelect = (childIndex: number, status: boolean) => {
+    setIsSelectedMap((prevMap) => new Map(prevMap.set(childIndex, status)))
+  }
+
+  // Function to check if all child components have no selected choices
+  const updateParentSelectedStatus = () => {
+    const allChildrenHaveNoSelectedChoices = Array.from(isSelectedMap.values()).every((status) => status === false)
+    setIsSelected(!allChildrenHaveNoSelectedChoices)
+  }
+
+  useEffect(() => {
+    updateParentSelectedStatus()
+  }, [isSelectedMap])
+
   const handlingSkip = () => {
-    navigation.navigate('Welcome')
+    navigation.navigate('UsingGuide')
   }
   const handlingNext = () => {
     if (isSelected) {
-      navigation.navigate('Welcome')
+      navigation.navigate('UsingGuide')
     }
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.ttt.pjWhite }}>
       <View style={styles.container}>
         {/* Top */}
         <View style={styles.TopBarContainer}>
@@ -73,25 +90,28 @@ export const OnboardingPage: FC<OnboardingPageProps> = (props) => {
 
         {/* Content */}
         <View style={styles.ContentContainer}>
-          <ScrollView contentContainerStyle={styles.interestsContainer}>
-            {/* The group of interest */}
-
-            {getInterests().map((group, index) => (
+          <Text style={styles.headerText}>Choose your{'\n'}intersts</Text>
+          <Text style={styles.detailText}>Personalize your experience by picking 3 or more topics</Text>
+          <FlatList
+            data={getInterests()}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item, index }) => (
               <InterestGroup
-                key={index} // Assuming group has an 'id' property
-                categoryName={group.interestGroup}
-                categoryIcon={group.interestIcon}
-                interests={group.interests}
-                iconStyle={group.iconStyle}
+                index={index}
+                categoryName={item.interestGroup}
+                categoryIcon={item.interestIcon}
+                interests={item.interests}
+                iconStyle={item.iconStyle}
+                handleSelectGroup={handleSelect}
               />
-            ))}
-          </ScrollView>
+            )}
+          />
         </View>
 
         {/* Bottom */}
         <View style={styles.bottomContainer}>
           <TouchableOpacity style={[styles.nextButton, isSelected && styles.selectedNextButton]} onPress={handlingNext}>
-            <Text style={styles.nextButtonText}>Next</Text>
+            <Text style={[styles.nextButtonText, isSelected && styles.NextBtnPressedText]}>Next</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -116,17 +136,25 @@ const styles = StyleSheet.create({
   },
   skipText: {
     fontSize: 15,
-    color: colors.ttt.ink200,
+    color: colors.ttt.ink100,
     textAlign: 'center'
+  },
+  headerText: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    marginVertical: 8
+  },
+  detailText: {
+    fontSize: 21,
+    color: colors.ttt.ink200,
+    marginVertical: 8
   },
   // Content
   ContentContainer: {
     flex: 8,
-    backgroundColor: colors.ttt.pjWhite
-  },
-  interestsContainer: {
-    flexWrap: 'wrap',
-    padding: 16
+    backgroundColor: colors.ttt.pjWhite,
+    width: '90%',
+    marginHorizontal: '5%'
   },
   // Bottom
   bottomContainer: {
@@ -150,6 +178,9 @@ const styles = StyleSheet.create({
     color: colors.ttt.ink100,
     fontSize: 16,
     fontWeight: '600'
+  },
+  NextBtnPressedText: {
+    color: colors.ttt.pjWhite
   }
 })
 

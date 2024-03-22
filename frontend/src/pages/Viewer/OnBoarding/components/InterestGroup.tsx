@@ -1,19 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, FlatList, StyleSheet, Text } from 'react-native'
 import { Icon } from 'react-native-paper'
 import InterestButton from './InterestButton' // Assuming InterestButton is in the same directory
 import { colors } from 'theme'
 
 interface InterestGroupProps {
+  index: number
   categoryName?: string
   categoryIcon?: string
   interests?: string[]
   iconStyle?: any
+  handleSelectGroup: (index: number, status: boolean) => void
 }
 
 // InterestGroup component
 const InterestGroup: React.FC<InterestGroupProps> = (props: InterestGroupProps) => {
-  const { categoryName, categoryIcon, interests, iconStyle } = props
+  const { index, categoryName, categoryIcon, interests, iconStyle, handleSelectGroup } = props
   const [selectedInterests, setSelectedInterests] = useState<string[]>([])
 
   const handleSelect = (interest: string) => {
@@ -28,6 +30,10 @@ const InterestGroup: React.FC<InterestGroupProps> = (props: InterestGroupProps) 
 
     setSelectedInterests(newSelectedInterests)
   }
+
+  useEffect(() => {
+    handleSelectGroup(index, selectedInterests.length > 0)
+  }, [index, selectedInterests])
 
   const renderItem = ({ item }: { item: string }) => (
     <InterestButton title={item} isSelected={selectedInterests.includes(item)} onPress={() => handleSelect(item)} />

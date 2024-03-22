@@ -19,3 +19,4 @@ export * from './SignupByMail'
 export * from './PasswordInput'
 // Onboarding section
 export * from './OnBoarding'
+export * from './UsingGuide'

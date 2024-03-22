@@ -20,16 +20,25 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: colors.ttt.ink200,
+    borderColor: colors.ttt.grey200,
     padding: 10,
     marginRight: 10,
     marginBottom: 10
     // Add additional styling to match your design
+    // shadowColor: colors.ttt.UIGrey, // Color of the shadow
+    // shadowOffset: {
+    //   width: 2,
+    //   height: 2, // The spread of the shadow
+    // },
+    // shadowOpacity: 0.01, // Shadow opacity, can be adjusted
+    // shadowRadius: 3.84, // Shadow blur radius
+    // elevation: 5, // Elevation for Android
   },
   buttonText: {
     // Add styling for the text inside the button
     color: colors.ttt.pjBlack,
-    fontSize: 15
+    fontSize: 15,
+    fontWeight: 'bold'
   },
   btnPressed: {
     backgroundColor: colors.ttt.UIRed,
