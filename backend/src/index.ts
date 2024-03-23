@@ -7,6 +7,9 @@ import pool from "./models/db";
 import passportConfig from "./config/passport";
 import passport from "passport";
 import session from "express-session";
+import dotenv from "dotenv";
+
+dotenv.config({ path: __dirname + "/.env" });
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -24,7 +27,7 @@ pool.connect((err: Error) => {
 passportConfig(passport);
 app.use(
   session({
-    secret: "s3cr3t k3y",
+    secret: process.env.PASSPORT_SECRET || "default-secret",
     resave: false,
     saveUninitialized: true,
   }),
