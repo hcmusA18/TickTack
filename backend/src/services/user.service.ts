@@ -1,4 +1,5 @@
-// import { User } from '../models/user.model';
+import UserModel from "../models/user.model";
+import { hashPassword } from "./password.service";
 
 class UserService {
   private static instance: UserService | null = null;
@@ -11,6 +12,32 @@ class UserService {
     }
     return UserService.instance;
   }
+  getUserByUsername = async (username: string) => {
+    try {
+      const user = await UserModel.getInstance().getUserByUsername(username);
+      return user;
+    } catch (error) {
+      throw `Error when getting user by username: ${error}`;
+    }
+  };
+  // LocalStrategy
+  addNewUser = async (username: string, password: string) => {
+    const isExist = await UserModel.getInstance().getUserByUsername(username);
+    if (isExist) {
+      throw "Username already exist";
+    }
+
+    const hashedPassword = await hashPassword(password);
+    try {
+      const user = await UserModel.getInstance().addNewUser(
+        username,
+        hashedPassword,
+      );
+      return user;
+    } catch (error) {
+      throw `Error when adding new user: ${error}`;
+    }
+  };
 }
 
-export default UserService.getInstance();
+export default UserService;
