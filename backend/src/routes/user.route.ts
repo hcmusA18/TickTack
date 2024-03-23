@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
 });
 
 router.post("/signup", (req, res) => {
-  authController.signUpByEmail(req, res);
+  authController.getInstance().signUpByEmail(req, res);
 });
 
 export default router;

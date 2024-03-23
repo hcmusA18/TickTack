@@ -15,7 +15,7 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 // PostgreSQL connection
-pool.connect((err: Error) => {
+pool.connect((err: Error | undefined) => {
   if (err) {
     console.error("Database connection error", err.stack);
   } else {

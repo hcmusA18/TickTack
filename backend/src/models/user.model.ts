@@ -22,7 +22,7 @@ class UserModel {
       const result = await pool.query(query);
       return result.rows[0];
     } catch (error) {
-      throw new Error(`${error}`);
+      throw `${error}`;
     }
   };
 
@@ -35,9 +35,9 @@ class UserModel {
       const result = await pool.query(query);
       return result.rows[0];
     } catch (error) {
-      throw new Error(`${error}`);
+      throw `${error}`;
     }
   };
 }
 
-export default UserModel.getInstance();
+export default UserModel;

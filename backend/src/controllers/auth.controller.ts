@@ -1,4 +1,4 @@
-import userService from "../services/user.service";
+import UserService from "../services/user.service";
 import { Request, Response } from "express";
 
 class AuthController {
@@ -21,7 +21,10 @@ class AuthController {
       password?: string;
     };
     try {
-      const user = await userService.addNewUser(username ?? "", password ?? "");
+      const user = await UserService.getInstance().addNewUser(
+        username ?? "",
+        password ?? "",
+      );
       res
         .status(201)
         .json({ message: `Sign up successfully! Welcome ${user.username}!` });
@@ -31,4 +34,4 @@ class AuthController {
   };
 }
 
-export default AuthController.getInstance();
+export default AuthController;
