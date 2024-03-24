@@ -167,9 +167,10 @@ const styles = StyleSheet.create({
     marginHorizontal: '5%',
     backgroundColor: colors.ttt.UIGrey,
     borderRadius: 4,
-    paddingVertical: 16,
     alignItems: 'center',
-    marginBottom: 24
+    justifyContent: 'center',
+    marginBottom: 24,
+    height: '65%'
   },
   selectedNextButton: {
     backgroundColor: colors.ttt.UIRed

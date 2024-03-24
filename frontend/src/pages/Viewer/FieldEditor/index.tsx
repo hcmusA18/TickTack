@@ -78,7 +78,7 @@ export const FieldEditor: FC<FieldEditorProps> = ({ route, navigation }) => {
       <Divider />
       <View style={styles.fieldsContainer}>
         <Text style={styles.fieldNameStyle}>{fieldName}</Text>
-        <TextInput style={styles.textInputStyle} defaultValue={fieldValue} onChangeText={(text) => setValue(text)} />
+        {/* <TextInput style={styles.textInputStyle} defaultValue={fieldValue} onChangeText={(text) => setValue(text)} /> */}
       </View>
     </Screen>
   )
