@@ -63,11 +63,14 @@ export const MainNavigator = ({ route }) => {
       <Tab.Screen
         name="Home"
         component={Pages.HomePage}
-        initialParams={{ profile: false }}
-        listeners={{
+        initialParams={{ profile: false, creator: null }}
+        listeners={({ navigation }) => ({
           focus: () => setHome(true),
-          blur: () => setHome(false)
-        }}
+          blur: () => {
+            setHome(false)
+            navigation.setParams({ creator: null, profile: false })
+          }
+        })}
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ color }) => <FontAwesome name="home" size={24} color={color} />

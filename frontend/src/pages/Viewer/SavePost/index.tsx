@@ -80,7 +80,7 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
       <View style={styles.spacer} />
 
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Camera')} style={styles.cancelButton}>
+        <TouchableOpacity onPress={() => navigation.navigate('Main', { screen: 'Camera' })} style={styles.cancelButton}>
           <Feather name="x" size={24} color="black" />
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </TouchableOpacity>

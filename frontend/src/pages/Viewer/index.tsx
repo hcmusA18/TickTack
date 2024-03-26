@@ -11,9 +11,11 @@ export * from './SuggestedAccounts'
 // Home Feed section
 export * from './Home'
 export * from './VideoPreviewer'
+export * from './Search'
 // Login + signup section
 export * from './Login'
 export * from './Signup'
 export * from './LoginByMail'
 export * from './SignupByMail'
 export * from './PasswordInput'
+export * from './SearchResult'
