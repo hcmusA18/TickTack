@@ -37,12 +37,14 @@ export type AppStackParamList = {
   UserProfile: undefined
   SuggestedAccounts: undefined
   VideoPreviewer: { source: string }
+  Search: undefined
   SignUpByMail: undefined
   SignUp: undefined
   LoginByMail: undefined
   PassWordInput: undefined
   OnboardingPage: undefined
   UsingGuide: undefined
+  SearchResult: { searchQuery: string }
 }
 
 /**
@@ -122,6 +124,13 @@ const AppStack = () => {
         }}
       />
       <Stack.Screen
+        name="Search"
+        component={Pages.SearchPage}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
         name="SuggestedAccounts"
         component={Pages.SuggestedAccounts} // Use the imported component
         options={{
@@ -166,6 +175,13 @@ const AppStack = () => {
       <Stack.Screen
         name="UsingGuide"
         component={Pages.UsingGuide}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="SearchResult"
+        component={Pages.SearchResultPage}
         options={{
           headerShown: false
         }}

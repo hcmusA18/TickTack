@@ -11,6 +11,7 @@ export * from './SuggestedAccounts'
 // Home Feed section
 export * from './Home'
 export * from './VideoPreviewer'
+export * from './Search'
 // Login + signup section
 export * from './Login'
 export * from './Signup'
@@ -20,3 +21,4 @@ export * from './PasswordInput'
 // Onboarding section
 export * from './OnBoarding'
 export * from './UsingGuide'
+export * from './SearchResult'
