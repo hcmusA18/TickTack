@@ -20,17 +20,27 @@ class UserService {
       throw `Error when getting user by username: ${error}`;
     }
   };
-  // LocalStrategy
-  addNewUser = async (username: string, password: string) => {
-    const isExist = await UserModel.getInstance().getUserByUsername(username);
-    if (isExist) {
-      throw "Username already exist";
-    }
 
-    const hashedPassword = await hashPassword(password);
+  getUserByEmail = async (email: string) => {
     try {
+      const user = await UserModel.getInstance().getUserByEmail(email);
+      return user;
+    } catch (error) {
+      throw `Error when getting user by email: ${error}`;
+    }
+  };
+
+  addNewUser = async (email: string, password: string) => {
+    try {
+      const isExist = await this.getUserByEmail(email);
+      if (isExist) {
+        throw "Email already exist";
+      }
+
+      const hashedPassword = await hashPassword(password);
+
       const user = await UserModel.getInstance().addNewUser(
-        username,
+        email,
         hashedPassword,
       );
       return user;

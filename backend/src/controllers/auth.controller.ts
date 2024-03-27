@@ -16,18 +16,18 @@ class AuthController {
   }
 
   signUpByEmail = async (req: Request, res: Response) => {
-    const { username, password } = req.body as {
-      username?: string;
+    const { email, password } = req.body as {
+      email?: string;
       password?: string;
     };
     try {
       const user = await UserService.getInstance().addNewUser(
-        username ?? "",
+        email ?? "",
         password ?? "",
       );
       res
         .status(201)
-        .json({ message: `Sign up successfully! Welcome ${user.username}!` });
+        .json({ message: `Sign up successfully! Welcome ${user.email}!` });
     } catch (error) {
       res.status(500).json({ message: `Error when signing up: ${error}` });
     }

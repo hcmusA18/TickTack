@@ -1,7 +1,6 @@
 import UserModel from "../../src/models/user.model";
 import pool from "../../src/models/db";
 
-// Mock the pool.query method
 jest.mock("../../src/models/db", () => ({
   query: jest.fn(),
 }));
@@ -10,7 +9,6 @@ describe("UserModel", () => {
   let userModel: UserModel;
 
   beforeEach(() => {
-    // Initialize UserModel
     userModel = UserModel.getInstance();
   });
 
@@ -18,9 +16,21 @@ describe("UserModel", () => {
     jest.clearAllMocks();
   });
 
+  it("should get user by email", async () => {
+    const mockedUser = { id: 1, email: "testUser@example.com" };
+    (pool.query as jest.Mock).mockResolvedValueOnce({ rows: [mockedUser] });
+
+    const result = await userModel.getUserByEmail("testUser@example.com");
+
+    expect(result).toEqual(mockedUser);
+    expect(pool.query).toHaveBeenCalledWith({
+      text: "SELECT * FROM users WHERE email = $1",
+      values: ["testUser@example.com"],
+    });
+  });
+
   it("should get user by username", async () => {
-    const mockedUser = { id: 1, username: "testUser", password: "password" };
-    // Mock the pool.query method to resolve with a mocked user
+    const mockedUser = { id: 1, username: "testUser" };
     (pool.query as jest.Mock).mockResolvedValueOnce({ rows: [mockedUser] });
 
     const result = await userModel.getUserByUsername("testUser");
@@ -33,19 +43,18 @@ describe("UserModel", () => {
   });
 
   it("should add a new user", async () => {
-    const username = "testUser";
+    const email = "testUser@example.com";
     const password = "password";
-    const mockedUser = { id: 1, username, password };
+    const mockedUser = { id: 1, email, password };
 
-    // Mock the pool.query method to resolve with a mocked user
     (pool.query as jest.Mock).mockResolvedValueOnce({ rows: [mockedUser] });
 
-    const result = await userModel.addNewUser(username, password);
+    const result = await userModel.addNewUser(email, password);
 
     expect(result).toEqual(mockedUser);
     expect(pool.query).toHaveBeenCalledWith({
-      text: "INSERT INTO users(username, password) VALUES($1, $2) RETURNING *",
-      values: ["testUser", "password"],
+      text: "INSERT INTO users(email, password) VALUES($1, $2) RETURNING *",
+      values: ["testUser@example.com", "password"],
     });
   });
 });
