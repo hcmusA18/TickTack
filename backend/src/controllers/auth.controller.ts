@@ -1,5 +1,7 @@
 import UserService from "../services/user.service";
 import { Request, Response } from "express";
+import passport from "passport";
+import jwt from "jsonwebtoken";
 
 class AuthController {
   private static instance: AuthController | null = null;
@@ -36,9 +38,32 @@ class AuthController {
     }
   };
 
-  // signIn = async (req: Request, res: Response) => {
-  //   res.status(200).json({ res });
-  // };
+  signIn = async (req: Request, res: Response) => {
+    passport.authenticate("local", (err: any, user: any, info: any) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ message: err.message });
+      }
+      if (!user) {
+        return res.status(401).json({ message: info.message });
+      }
+      req.logIn(user, (err) => {
+        if (err) {
+          return res.status(500).json({ message: err.message });
+        }
+
+        const token = jwt.sign(
+          { user },
+          process.env.JWT_SECRET || "default_jwt_secret",
+          { expiresIn: "1h" },
+        );
+
+        return res.status(200).json({ token });
+      });
+
+      return;
+    })(req, res);
+  };
 }
 
 export default AuthController;

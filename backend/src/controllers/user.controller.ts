@@ -20,4 +20,4 @@ class UserController {
   };
 }
 
-export default UserController.getInstance();
+export default UserController;

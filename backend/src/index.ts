@@ -3,6 +3,7 @@ import cors from "cors";
 import express from "express";
 import userRouter from "./routes/user.route";
 import authMiddleware from "./middlewares/auth.middleware";
+import authController from "./controllers/auth.controller";
 import pool from "./models/db";
 import passportConfig from "./config/passport";
 import passport from "passport";
@@ -37,6 +38,15 @@ app.use(passport.session());
 
 app.use(cors());
 app.use(express.json());
+
+// signup and signin routes
+app.post("/signup", (req, res) => {
+  authController.getInstance().signUpByEmail(req, res);
+});
+
+app.post("/signin", (req, res) => {
+  authController.getInstance().signIn(req, res);
+});
 
 // auth middleware
 app.use(authMiddleware.authenticate);
