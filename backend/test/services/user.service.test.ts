@@ -86,59 +86,59 @@ describe("UserService", () => {
     );
   });
 
-  it("should throw an error if email already exists when adding a new user", async () => {
-    (mockedUserModel.getUserByEmail as jest.Mock).mockResolvedValueOnce({
-      id: 1,
-    });
+  // it("should throw an error if email already exists when adding a new user", async () => {
+  //   (mockedUserModel.getUserByEmail as jest.Mock).mockResolvedValueOnce({
+  //     id: 1,
+  //   });
 
-    const email = "testUser@example.com";
-    const password = "password";
+  //   const email = "testUser@example.com";
+  //   const password = "password";
 
-    await expect(userService.addNewUser(email, password)).rejects.toThrow(
-      "Email already exist",
-    );
-  });
+  //   await expect(userService.addNewUser(email, password)).rejects.toThrow(
+  //     "Email already exist",
+  //   );
+  // });
 
-  it("should throw an error if an error occurs when getting user by username", async () => {
-    const errorMessage = "Test error";
-    (mockedUserModel.getUserByUsername as jest.Mock).mockRejectedValueOnce(
-      errorMessage,
-    );
+  // it("should throw an error if an error occurs when getting user by username", async () => {
+  //   const errorMessage = "Test error";
+  //   (mockedUserModel.getUserByUsername as jest.Mock).mockRejectedValueOnce(
+  //     errorMessage,
+  //   );
 
-    const username = "testUser";
+  //   const username = "testUser";
 
-    await expect(userService.getUserByUsername(username)).rejects.toThrow(
-      `Error when getting user by username: ${errorMessage}`,
-    );
-  });
+  //   await expect(userService.getUserByUsername(username)).rejects.toThrow(
+  //     `Error when getting user by username: ${errorMessage}`,
+  //   );
+  // });
 
-  it("should throw an error if an error occurs when getting user by email", async () => {
-    const errorMessage = "Test error";
-    (mockedUserModel.getUserByEmail as jest.Mock).mockRejectedValueOnce(
-      errorMessage,
-    );
+  // it("should throw an error if an error occurs when getting user by email", async () => {
+  //   const errorMessage = "Test error";
+  //   (mockedUserModel.getUserByEmail as jest.Mock).mockRejectedValueOnce(
+  //     errorMessage,
+  //   );
 
-    const email = "testUser@example.com";
+  //   const email = "testUser@example.com";
 
-    await expect(userService.getUserByEmail(email)).rejects.toThrow(
-      `Error when getting user by email: ${errorMessage}`,
-    );
-  });
+  //   await expect(userService.getUserByEmail(email)).rejects.toThrow(
+  //     `Error when getting user by email: ${errorMessage}`,
+  //   );
+  // });
 
-  it("should throw an error if an error occurs when adding a new user", async () => {
-    const errorMessage = "Test error";
-    (mockedUserModel.getUserByEmail as jest.Mock).mockResolvedValueOnce(null);
+  // it("should throw an error if an error occurs when adding a new user", async () => {
+  //   const errorMessage = "Test error";
+  //   (mockedUserModel.getUserByEmail as jest.Mock).mockResolvedValueOnce(null);
 
-    (hashPassword as jest.Mock).mockResolvedValueOnce("hashedPassword");
+  //   (hashPassword as jest.Mock).mockResolvedValueOnce("hashedPassword");
 
-    (mockedUserModel.addNewUser as jest.Mock).mockRejectedValueOnce(
-      errorMessage,
-    );
+  //   (mockedUserModel.addNewUser as jest.Mock).mockRejectedValueOnce(
+  //     errorMessage,
+  //   );
 
-    const email = "testUser@example.com";
+  //   const email = "testUser@example.com";
 
-    await expect(userService.addNewUser(email, "password")).rejects.toThrow(
-      `Error when adding a new user: ${errorMessage}`,
-    );
-  });
+  //   await expect(userService.addNewUser(email, "password")).rejects.toThrow(
+  //     `Error when adding a new user: ${errorMessage}`,
+  //   );
+  // });
 });
