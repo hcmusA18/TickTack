@@ -17,7 +17,8 @@ class UserService {
       const user = await UserModel.getInstance().getUserByUsername(username);
       return user;
     } catch (error) {
-      throw `Error when getting user by username: ${error}`;
+      const _error = error as Error;
+      throw new Error(`Error when getting user by username: ${_error.message}`);
     }
   };
 
@@ -26,7 +27,8 @@ class UserService {
       const user = await UserModel.getInstance().getUserByEmail(email);
       return user;
     } catch (error) {
-      throw `Error when getting user by email: ${error}`;
+      const _error = error as Error;
+      throw new Error(`Error when getting user by email: ${_error.message}`);
     }
   };
 
@@ -34,7 +36,7 @@ class UserService {
     try {
       const isExist = await this.getUserByEmail(email);
       if (isExist) {
-        throw "Email already exist";
+        throw new Error("Email already exist");
       }
 
       const hashedPassword = await hashPassword(password);
@@ -45,7 +47,8 @@ class UserService {
       );
       return user;
     } catch (error) {
-      throw `Error when adding a new user: ${error}`;
+      const _error = error as Error;
+      throw new Error(`Error when adding a new user: ${_error.message}`);
     }
   };
 }

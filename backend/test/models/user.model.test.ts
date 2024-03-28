@@ -57,4 +57,29 @@ describe("UserModel", () => {
       values: ["testUser@example.com", "password"],
     });
   });
+
+  it("should throw error when getting user by email", async () => {
+    const error = new Error("Test error");
+    (pool.query as jest.Mock).mockRejectedValueOnce(error);
+
+    const email = "testUser@example.com";
+    await expect(userModel.getUserByEmail(email)).rejects.toThrow(error);
+  });
+
+  it("should throw error when getting user by username", async () => {
+    const error = new Error("Test error");
+    (pool.query as jest.Mock).mockRejectedValueOnce(error);
+
+    const username = "testUser";
+    await expect(userModel.getUserByUsername(username)).rejects.toThrow(error);
+  });
+
+  it("should throw error when adding a new user", async () => {
+    const error = new Error("Test error");
+    (pool.query as jest.Mock).mockRejectedValueOnce(error);
+
+    const email = "testUser@example.com";
+    const password = "password";
+    await expect(userModel.addNewUser(email, password)).rejects.toThrow(error);
+  });
 });

@@ -22,7 +22,8 @@ class UserModel {
       const result = await pool.query(query);
       return result.rows[0];
     } catch (error) {
-      throw `${error}`;
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
     }
   };
 
@@ -35,7 +36,8 @@ class UserModel {
       const result = await pool.query(query);
       return result.rows[0];
     } catch (error) {
-      throw `${error}`;
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
     }
   };
 
@@ -48,7 +50,8 @@ class UserModel {
       const result = await pool.query(query);
       return result.rows[0];
     } catch (error) {
-      throw `${error}`;
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
     }
   };
 }

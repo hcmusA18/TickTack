@@ -94,7 +94,7 @@ describe("UserService", () => {
     const email = "testUser@example.com";
     const password = "password";
 
-    await expect(userService.addNewUser(email, password)).rejects.toMatch(
+    await expect(userService.addNewUser(email, password)).rejects.toThrow(
       "Email already exist",
     );
   });
@@ -102,12 +102,12 @@ describe("UserService", () => {
   it("should throw an error if an error occurs when getting user by username", async () => {
     const errorMessage = "Test error";
     (mockedUserModel.getUserByUsername as jest.Mock).mockRejectedValueOnce(
-      errorMessage,
+      new Error(errorMessage),
     );
 
     const username = "testUser";
 
-    await expect(userService.getUserByUsername(username)).rejects.toMatch(
+    await expect(userService.getUserByUsername(username)).rejects.toThrow(
       `Error when getting user by username: ${errorMessage}`,
     );
   });
@@ -115,12 +115,12 @@ describe("UserService", () => {
   it("should throw an error if an error occurs when getting user by email", async () => {
     const errorMessage = "Test error";
     (mockedUserModel.getUserByEmail as jest.Mock).mockRejectedValueOnce(
-      errorMessage,
+      new Error(errorMessage),
     );
 
     const email = "testUser@example.com";
 
-    await expect(userService.getUserByEmail(email)).rejects.toMatch(
+    await expect(userService.getUserByEmail(email)).rejects.toThrow(
       `Error when getting user by email: ${errorMessage}`,
     );
   });
@@ -132,12 +132,12 @@ describe("UserService", () => {
     (hashPassword as jest.Mock).mockResolvedValueOnce("hashedPassword");
 
     (mockedUserModel.addNewUser as jest.Mock).mockRejectedValueOnce(
-      errorMessage,
+      new Error(errorMessage),
     );
 
     const email = "testUser@example.com";
 
-    await expect(userService.addNewUser(email, "password")).rejects.toMatch(
+    await expect(userService.addNewUser(email, "password")).rejects.toThrow(
       `Error when adding a new user: ${errorMessage}`,
     );
   });
