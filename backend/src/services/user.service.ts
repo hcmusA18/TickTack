@@ -45,7 +45,7 @@ class UserService {
       );
       return user;
     } catch (error) {
-      throw `Error when adding new user: ${error}`;
+      throw `Error when adding a new user: ${error}`;
     }
   };
 }
