@@ -25,6 +25,10 @@ const passportConfig = (passport: PassportStatic) => {
     ),
   );
 
+  passport.serializeUser((user: any, done) => {
+    done(null, user.username);
+  });
+
   passport.deserializeUser(async (username: string, done) => {
     try {
       const user = await userService.getInstance().getUserByUsername(username);

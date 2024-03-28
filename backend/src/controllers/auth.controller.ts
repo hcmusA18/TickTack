@@ -29,9 +29,16 @@ class AuthController {
         .status(201)
         .json({ message: `Sign up successfully! Welcome ${user.email}!` });
     } catch (error) {
-      res.status(500).json({ message: `Error when signing up: ${error}` });
+      const _error = error as Error;
+      res
+        .status(500)
+        .json({ message: `Error when signing up: ${_error.message}` });
     }
   };
+
+  // signIn = async (req: Request, res: Response) => {
+  //   res.status(200).json({ res });
+  // };
 }
 
 export default AuthController;

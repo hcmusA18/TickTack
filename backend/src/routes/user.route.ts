@@ -12,4 +12,8 @@ router.post("/signup", (req, res) => {
   authController.getInstance().signUpByEmail(req, res);
 });
 
+// router.post("/signin", (req, res) => {
+//   authController.getInstance().signIn(req, res);
+// });
+
 export default router;

@@ -18,7 +18,7 @@ class UserService {
       return user;
     } catch (error) {
       const _error = error as Error;
-      throw new Error(`Error when getting user by username: ${_error.message}`);
+      throw new Error(`${_error.message}`);
     }
   };
 
@@ -28,12 +28,16 @@ class UserService {
       return user;
     } catch (error) {
       const _error = error as Error;
-      throw new Error(`Error when getting user by email: ${_error.message}`);
+      throw new Error(`${_error.message}`);
     }
   };
 
   addNewUser = async (email: string, password: string) => {
     try {
+      if (email === "") {
+        throw new Error("Email is required");
+      }
+
       const isExist = await this.getUserByEmail(email);
       if (isExist) {
         throw new Error("Email already exist");
@@ -48,7 +52,7 @@ class UserService {
       return user;
     } catch (error) {
       const _error = error as Error;
-      throw new Error(`Error when adding a new user: ${_error.message}`);
+      throw new Error(`${_error.message}`);
     }
   };
 }
