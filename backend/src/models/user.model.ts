@@ -22,20 +22,36 @@ class UserModel {
       const result = await pool.query(query);
       return result.rows[0];
     } catch (error) {
-      throw `${error}`;
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
     }
   };
 
-  addNewUser = async (username: string, password: string) => {
+  getUserByEmail = async (email: string) => {
     const query = {
-      text: "INSERT INTO users(username, password) VALUES($1, $2) RETURNING *",
-      values: [username, password],
+      text: "SELECT * FROM users WHERE email = $1",
+      values: [email],
     };
     try {
       const result = await pool.query(query);
       return result.rows[0];
     } catch (error) {
-      throw `${error}`;
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
+  addNewUser = async (email: string, password: string) => {
+    const query = {
+      text: "INSERT INTO users(email, password) VALUES($1, $2) RETURNING *",
+      values: [email, password],
+    };
+    try {
+      const result = await pool.query(query);
+      return result.rows[0];
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
     }
   };
 }

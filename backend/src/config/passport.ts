@@ -9,7 +9,9 @@ const passportConfig = (passport: PassportStatic) => {
       { usernameField: "username", passwordField: "password" },
       async (username, password, done) => {
         try {
-          const user = await userService.getUserByUsername(username);
+          const user = await userService
+            .getInstance()
+            .getUserByUsername(username);
           if (!user || !(await comparePassword(password, user.password))) {
             return done(null, false, {
               message: "Invalid username or password.",
@@ -25,7 +27,7 @@ const passportConfig = (passport: PassportStatic) => {
 
   passport.deserializeUser(async (username: string, done) => {
     try {
-      const user = await userService.getUserByUsername(username);
+      const user = await userService.getInstance().getUserByUsername(username);
       done(null, user);
     } catch (error) {
       done(error);

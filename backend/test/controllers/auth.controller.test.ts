@@ -21,14 +21,14 @@ describe("AuthController", () => {
 
   it("should sign up a user successfully", async () => {
     const req = {
-      body: { username: "testUser", password: "testPassword" },
+      body: { email: "testUser@example.com", password: "testPassword" },
     } as unknown as Request;
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
     } as unknown as Response;
 
-    const mockedUser = { username: "testUser" };
+    const mockedUser = { email: "testUser@example.com" };
     (mockedUserService.addNewUser as jest.Mock).mockResolvedValueOnce(
       mockedUser,
     );
@@ -37,13 +37,13 @@ describe("AuthController", () => {
 
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith({
-      message: `Sign up successfully! Welcome ${mockedUser.username}!`,
+      message: `Sign up successfully! Welcome ${mockedUser.email}!`,
     });
   });
 
   it("should handle error when signing up", async () => {
     const req = {
-      body: { username: "testUser", password: "testPassword" },
+      body: { email: "testUser@example.com", password: "testPassword" },
     } as unknown as Request;
     const res = {
       status: jest.fn().mockReturnThis(),
