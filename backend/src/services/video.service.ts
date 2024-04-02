@@ -1,4 +1,5 @@
 import { google } from "googleapis";
+import fs from "fs";
 import multer, { Multer } from "multer";
 import { Request } from "express";
 
@@ -41,7 +42,7 @@ class VideoService {
         },
         media: {
           mimeType: file.mimetype,
-          body: file.buffer,
+          body: fs.createReadStream(file.path),
         },
       } as any);
       return response.data;
