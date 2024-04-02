@@ -1,0 +1,1 @@
+This is a placeholder file placed inside the uploads folder used for multer storage

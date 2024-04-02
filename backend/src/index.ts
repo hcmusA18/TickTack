@@ -2,6 +2,7 @@ import "dotenv/config";
 import cors from "cors";
 import express from "express";
 import userRouter from "./routes/user.route";
+import videoRouter from "./routes/video.route";
 import authMiddleware from "./middlewares/auth.middleware";
 import authController from "./controllers/auth.controller";
 import pool from "./models/db";
@@ -51,8 +52,8 @@ app.post("/signin", (req, res) => {
 // auth middleware
 app.use(authMiddleware.authenticate);
 
-// user router
-app.use("/", userRouter);
+app.use("/user", userRouter);
+app.use("/video", videoRouter);
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}!`));
 
