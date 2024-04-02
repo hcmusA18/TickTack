@@ -2,6 +2,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import userService from "../services/user.service";
 import { comparePassword } from "../services/password.service";
 import { PassportStatic } from "passport";
+import UserModel from "../models/user.model";
 
 const passportConfig = (passport: PassportStatic) => {
   passport.use(
@@ -30,7 +31,7 @@ const passportConfig = (passport: PassportStatic) => {
   passport.deserializeUser(async (email: string, done) => {
     try {
       const user = await userService.getInstance().getUserByEmail(email);
-      done(null, user);
+      done(null, user as UserModel);
     } catch (error) {
       done(error);
     }

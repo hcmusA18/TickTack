@@ -1,7 +1,7 @@
 import { google } from "googleapis";
 import fs from "fs";
-import multer, { Multer } from "multer";
-import { Request } from "express";
+import VideoModel from "../models/video.model";
+import VideoRepository from "../repositories/video.repository";
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
@@ -32,20 +32,43 @@ class VideoService {
     return VideoService.instance;
   }
 
-  uploadVideo = async (file: Express.Multer.File) => {
+  uploadVideo = async (
+    file: Express.Multer.File,
+    video: VideoModel,
+  ): Promise<VideoModel | null> => {
     try {
-      const response = await drive.files.create({
-        requestBody: {
-          name: file.originalname,
-          mimeType: file.mimetype,
-          parents: [process.env.GOOGLE_DRIVE_FOLDER_ID],
-        },
-        media: {
-          mimeType: file.mimetype,
-          body: fs.createReadStream(file.path),
-        },
-      } as any);
-      return response.data;
+      // const response = await drive.files.create({
+      //   requestBody: {
+      //     name: file.originalname,
+      //     mimeType: file.mimetype,
+      //     parents: [process.env.GOOGLE_DRIVE_FOLDER_ID],
+      //   },
+      //   media: {
+      //     mimeType: file.mimetype,
+      //     body: fs.createReadStream(file.path),
+      //   },
+      // } as any);
+
+      const id = "123";
+
+      video.video_url = "https://drive.google.com/uc?export=view&id=" + id;
+      const newVideo = await this.storeVideo(video);
+      console.log(newVideo);
+
+      return newVideo;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
+  storeVideo = async (video: VideoModel): Promise<VideoModel | null> => {
+    try {
+      if (!video.create_time) {
+        video.create_time = Date.now();
+      }
+      const newVideo = await VideoRepository.getInstance().addNewVideo(video);
+      return newVideo;
     } catch (error) {
       const _error = error as Error;
       throw new Error(`${_error.message}`);

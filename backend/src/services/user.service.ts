@@ -1,4 +1,5 @@
 import UserModel from "../models/user.model";
+import UserRepository from "../repositories/user.repository";
 import { hashPassword } from "./password.service";
 
 class UserService {
@@ -12,9 +13,10 @@ class UserService {
     }
     return UserService.instance;
   }
-  getUserByUsername = async (username: string) => {
+  getUserByUsername = async (username: string): Promise<UserModel | null> => {
     try {
-      const user = await UserModel.getInstance().getUserByUsername(username);
+      const user =
+        await UserRepository.getInstance().getUserByUsername(username);
       return user;
     } catch (error) {
       const _error = error as Error;
@@ -22,9 +24,9 @@ class UserService {
     }
   };
 
-  getUserByEmail = async (email: string) => {
+  getUserByEmail = async (email: string): Promise<UserModel | null> => {
     try {
-      const user = await UserModel.getInstance().getUserByEmail(email);
+      const user = await UserRepository.getInstance().getUserByEmail(email);
       return user;
     } catch (error) {
       const _error = error as Error;
@@ -32,7 +34,10 @@ class UserService {
     }
   };
 
-  addNewUser = async (email: string, password: string) => {
+  addNewUser = async (
+    email: string,
+    password: string,
+  ): Promise<UserModel | null> => {
     try {
       if (email === "") {
         throw new Error("Email is required");
@@ -45,7 +50,7 @@ class UserService {
 
       const hashedPassword = await hashPassword(password);
 
-      const user = await UserModel.getInstance().addNewUser(
+      const user = await UserRepository.getInstance().addNewUser(
         email,
         hashedPassword,
       );

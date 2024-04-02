@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import userService from "../services/user.service";
+import UserService from "../services/user.service";
 
 class UserController {
   private static instance: UserController | null = null;

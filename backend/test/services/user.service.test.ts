@@ -1,5 +1,5 @@
 import UserService from "../../src/services/user.service";
-import UserModel from "../../src/models/user.model";
+import UserModel from "../../src/repositories/user.repository";
 import { hashPassword } from "../../src/services/password.service";
 
 jest.mock("../../src/models/user.model", () => ({

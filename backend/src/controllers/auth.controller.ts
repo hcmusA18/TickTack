@@ -1,5 +1,6 @@
 import UserService from "../services/user.service";
 import { Request, Response } from "express";
+import UserModel from "../models/user.model";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 
@@ -23,10 +24,10 @@ class AuthController {
       password?: string;
     };
     try {
-      const user = await UserService.getInstance().addNewUser(
+      const user = (await UserService.getInstance().addNewUser(
         email ?? "",
         password ?? "",
-      );
+      )) as UserModel;
       res
         .status(201)
         .json({ message: `Sign up successfully! Welcome ${user.email}!` });
@@ -39,7 +40,7 @@ class AuthController {
   };
 
   signIn = async (req: Request, res: Response) => {
-    passport.authenticate("local", (err: any, user: any, info: any) => {
+    passport.authenticate("local", (err: Error, user: UserModel, info: any) => {
       if (err) {
         console.log(err);
         return res.status(500).json({ message: err.message });

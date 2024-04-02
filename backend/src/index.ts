@@ -5,7 +5,7 @@ import userRouter from "./routes/user.route";
 import videoRouter from "./routes/video.route";
 import authMiddleware from "./middlewares/auth.middleware";
 import authController from "./controllers/auth.controller";
-import pool from "./models/db";
+import pool from "./repositories/db";
 import passportConfig from "./config/passport";
 import passport from "passport";
 import session from "express-session";

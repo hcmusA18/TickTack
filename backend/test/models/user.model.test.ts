@@ -1,7 +1,7 @@
-import UserModel from "../../src/models/user.model";
-import pool from "../../src/models/db";
+import UserModel from "../../src/repositories/user.repository";
+import pool from "../../src/repositories/db";
 
-jest.mock("../../src/models/db", () => ({
+jest.mock("../../src/repositories/db", () => ({
   query: jest.fn(),
 }));
 

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import multer, { Multer, diskStorage } from "multer";
 import VideoService from "../services/video.service";
+import VideoModel from "../models/video.model";
 import fs from "fs";
 
 const upload: Multer = multer({
@@ -42,7 +43,12 @@ class VideoController {
           return;
         }
 
-        const response = await VideoService.getInstance().uploadVideo(file);
+        const video = req.body as VideoModel;
+
+        const response = await VideoService.getInstance().uploadVideo(
+          file,
+          video,
+        );
 
         // Delete the file after uploading
         fs.unlinkSync(file.path);
