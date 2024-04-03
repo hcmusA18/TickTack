@@ -49,10 +49,17 @@ class VideoService {
         },
       } as any);
 
+      await drive.permissions.create({
+        fileId: response.data.id || "",
+        requestBody: {
+          role: "reader",
+          type: "anyone",
+        },
+      });
+
       video.video_url =
         "https://drive.google.com/uc?export=view&id=" + response.data.id;
       const newVideo = await this.storeVideo(video);
-      console.log(newVideo);
 
       return newVideo;
     } catch (error) {
