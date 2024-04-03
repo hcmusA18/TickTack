@@ -89,3 +89,55 @@ pip install numpy
 3. Open pgAdmin and create a new database named "ticktack"
 4. Run the sql script in the backend/src/database folder to create the tables
 5. Run the python script in the backend/src/database folder to insert the data into the tables
+
+## How to run the docker to host the Recomendation System
+
+1. Open the backend/serving folder to check existing models (retrieval_index, ranking_model)
+2. Pull the tensorflow/serving image from docker hub
+
+```bash
+  docker pull tensorflow/serving
+```
+
+3. Run the following command to host the Recomendation System
+
+```bash
+docker run -p 8501:8501 --mount type=bind,source=absolute_path_to_serving/retrieval_index,target=/models/retrieval_index --mount type=bind,source=absolute_path_to_serving/ranking_model,target=/models/ranking_model --mount type=bind,source=absolute_path_to_serving/config/models.config,target=/models/models.config -t tensorflow/serving --model_config_file=/models/models.config
+```
+
+4. The Rest API will be hosted on http://localhost:8501/v1/models/retrieval:predict and http://localhost:8501/v1/models/ranking:predict
+
+### How to check the status of the models
+
+- Open the browser and go to http://localhost:8501/v1/models/retrieval and http://localhost:8501/v1/models/ranking
+
+### How to request the models
+
+#### Retrieval model
+
+Post request to http://localhost:8501/v1/models/retrieval:predict
+
+```json
+{
+  "instances": ["1", "2", "3", "4", "5"]
+}
+```
+
+instances is the input of the model, it is a list of strings, each string is the id of a user
+Response will be a list of lists, each list is the id of the recommended video for the corresponding user (output_2)
+
+#### Ranking model
+
+Post request to http://localhost:8501/v1/models/ranking:predict
+
+```json
+{
+  "inputs": {
+    "user_id": ["1", "1", "1"],
+    "video_id": ["1", "2", "3"]
+  }
+}
+```
+
+inputs is the input of the model, it is a dictionary with 2 keys: user_id and video_id, each key is a list of strings, each string is the id of a user or a video. The length of the 2 lists must be the same and the i-th element of the user_id list is the id of the user who watched the i-th video in the video_id list
+Response will be a list of lists, each list is the score of the corresponding video for the corresponding user
