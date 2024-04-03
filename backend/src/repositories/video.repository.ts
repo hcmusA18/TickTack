@@ -13,7 +13,7 @@ class VideoRepository {
     return VideoRepository.instance;
   }
 
-  private stringArrayParser = (value: string[]): string => {
+  private stringArrayConverter = (value: string[]): string => {
     return `ARRAY[${value.map((v) => `'${v}'`).join(", ")}]`;
   };
 
@@ -23,7 +23,7 @@ class VideoRepository {
       text: `INSERT INTO videos(user_id, text, create_time, video_url, duration, music_id, hashtags, is_private, view_count) 
       VALUES($1, $2, $3, $4, $5, ${
         video.music_id || null
-      }, ${this.stringArrayParser(video.hashtags)}, $6, $7) RETURNING *`,
+      }, ${this.stringArrayConverter(video.hashtags)}, $6, $7) RETURNING *`,
       values: [
         video.user_id.toString(),
         video.text,

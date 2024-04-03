@@ -37,21 +37,20 @@ class VideoService {
     video: VideoModel,
   ): Promise<VideoModel | null> => {
     try {
-      // const response = await drive.files.create({
-      //   requestBody: {
-      //     name: file.originalname,
-      //     mimeType: file.mimetype,
-      //     parents: [process.env.GOOGLE_DRIVE_FOLDER_ID],
-      //   },
-      //   media: {
-      //     mimeType: file.mimetype,
-      //     body: fs.createReadStream(file.path),
-      //   },
-      // } as any);
+      const response = await drive.files.create({
+        requestBody: {
+          name: file.originalname,
+          mimeType: file.mimetype,
+          parents: [process.env.GOOGLE_DRIVE_FOLDER_ID],
+        },
+        media: {
+          mimeType: file.mimetype,
+          body: fs.createReadStream(file.path),
+        },
+      } as any);
 
-      const id = "123";
-
-      video.video_url = "https://drive.google.com/uc?export=view&id=" + id;
+      video.video_url =
+        "https://drive.google.com/uc?export=view&id=" + response.data.id;
       const newVideo = await this.storeVideo(video);
       console.log(newVideo);
 
