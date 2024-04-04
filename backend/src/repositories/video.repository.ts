@@ -42,6 +42,20 @@ class VideoRepository {
       throw new Error(`${_error.message}`);
     }
   };
+
+  getVideoById = async (video_id: number): Promise<VideoModel | null> => {
+    const query = {
+      text: "SELECT * FROM videos WHERE video_id = $1",
+      values: [video_id],
+    };
+    try {
+      const result = await pool.query(query);
+      return result.rows[0];
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
 export default VideoRepository;

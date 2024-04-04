@@ -25,11 +25,9 @@ class UserController {
       res.status(200).json({ userIds });
     } catch (error) {
       const _error = error as Error;
-      res
-        .status(500)
-        .json({
-          message: `Error when getting all user ids: ${_error.message}`,
-        });
+      res.status(500).json({
+        message: `Error when getting all user ids: ${_error.message}`,
+      });
     }
   };
 }

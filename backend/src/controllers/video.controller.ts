@@ -55,9 +55,25 @@ class VideoController {
 
         res.status(200).send(response);
       } catch (error) {
-        res.status(500).send(error);
+        const _error = error as Error;
+        res
+          .status(500)
+          .json({ message: `Error when uploading video: ${_error.message}` });
       }
     });
+  };
+
+  getVideoById = async (req: Request, res: Response) => {
+    try {
+      const video_id = parseInt(req.params.video_id);
+      const video = await VideoService.getInstance().getVideoById(video_id);
+      res.status(200).json({ video });
+    } catch (error) {
+      const _error = error as Error;
+      res
+        .status(500)
+        .json({ message: `Error when getting video by id: ${_error.message}` });
+    }
   };
 }
 
