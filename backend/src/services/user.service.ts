@@ -60,6 +60,16 @@ class UserService {
       throw new Error(`${_error.message}`);
     }
   };
+
+  getAllUserIds = async (): Promise<number[]> => {
+    try {
+      const userIds = await UserRepository.getInstance().getAllUserIds();
+      return userIds;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
 export default UserService;

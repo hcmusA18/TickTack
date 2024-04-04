@@ -3,6 +3,7 @@ import cors from "cors";
 import express from "express";
 import userRouter from "./routes/user.route";
 import videoRouter from "./routes/video.route";
+import apiRouter from "./routes/api.route";
 import authMiddleware from "./middlewares/auth.middleware";
 import authController from "./controllers/auth.controller";
 import pool from "./repositories/db";
@@ -48,6 +49,8 @@ app.post("/signup", (req, res) => {
 app.post("/signin", (req, res) => {
   authController.getInstance().signIn(req, res);
 });
+
+app.use("/api", apiRouter);
 
 // auth middleware
 app.use(authMiddleware.authenticate);
