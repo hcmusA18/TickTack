@@ -52,7 +52,7 @@ describe("AuthController", () => {
 
     const errorMessage = "Test error";
     (mockedUserService.addNewUser as jest.Mock).mockRejectedValueOnce(
-      errorMessage,
+      new Error(errorMessage),
     );
 
     await authController.signUpByEmail(req, res);

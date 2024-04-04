@@ -1,15 +1,15 @@
-import UserModel from "../../src/models/user.model";
-import pool from "../../src/models/db";
+import UserRepository from "../../src/repositories/user.repository";
+import pool from "../../src/repositories/db";
 
-jest.mock("../../src/models/db", () => ({
+jest.mock("../../src/repositories/db", () => ({
   query: jest.fn(),
 }));
 
-describe("UserModel", () => {
-  let userModel: UserModel;
+describe("UserRepository", () => {
+  let userRepository: UserRepository;
 
   beforeEach(() => {
-    userModel = UserModel.getInstance();
+    userRepository = UserRepository.getInstance();
   });
 
   afterEach(() => {
@@ -20,7 +20,7 @@ describe("UserModel", () => {
     const mockedUser = { id: 1, email: "testUser@example.com" };
     (pool.query as jest.Mock).mockResolvedValueOnce({ rows: [mockedUser] });
 
-    const result = await userModel.getUserByEmail("testUser@example.com");
+    const result = await userRepository.getUserByEmail("testUser@example.com");
 
     expect(result).toEqual(mockedUser);
     expect(pool.query).toHaveBeenCalledWith({
@@ -33,7 +33,7 @@ describe("UserModel", () => {
     const mockedUser = { id: 1, username: "testUser" };
     (pool.query as jest.Mock).mockResolvedValueOnce({ rows: [mockedUser] });
 
-    const result = await userModel.getUserByUsername("testUser");
+    const result = await userRepository.getUserByUsername("testUser");
 
     expect(result).toEqual(mockedUser);
     expect(pool.query).toHaveBeenCalledWith({
@@ -49,7 +49,7 @@ describe("UserModel", () => {
 
     (pool.query as jest.Mock).mockResolvedValueOnce({ rows: [mockedUser] });
 
-    const result = await userModel.addNewUser(email, password);
+    const result = await userRepository.addNewUser(email, password);
 
     expect(result).toEqual(mockedUser);
     expect(pool.query).toHaveBeenCalledWith({
@@ -63,7 +63,7 @@ describe("UserModel", () => {
     (pool.query as jest.Mock).mockRejectedValueOnce(error);
 
     const email = "testUser@example.com";
-    await expect(userModel.getUserByEmail(email)).rejects.toThrow(error);
+    await expect(userRepository.getUserByEmail(email)).rejects.toThrow(error);
   });
 
   it("should throw error when getting user by username", async () => {
@@ -71,7 +71,9 @@ describe("UserModel", () => {
     (pool.query as jest.Mock).mockRejectedValueOnce(error);
 
     const username = "testUser";
-    await expect(userModel.getUserByUsername(username)).rejects.toThrow(error);
+    await expect(userRepository.getUserByUsername(username)).rejects.toThrow(
+      error,
+    );
   });
 
   it("should throw error when adding a new user", async () => {
@@ -80,6 +82,8 @@ describe("UserModel", () => {
 
     const email = "testUser@example.com";
     const password = "password";
-    await expect(userModel.addNewUser(email, password)).rejects.toThrow(error);
+    await expect(userRepository.addNewUser(email, password)).rejects.toThrow(
+      error,
+    );
   });
 });

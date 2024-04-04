@@ -1,4 +1,5 @@
 import UserModel from "../models/user.model";
+import UserRepository from "../repositories/user.repository";
 import { hashPassword } from "./password.service";
 
 class UserService {
@@ -12,28 +13,36 @@ class UserService {
     }
     return UserService.instance;
   }
-  getUserByUsername = async (username: string) => {
+  getUserByUsername = async (username: string): Promise<UserModel | null> => {
     try {
-      const user = await UserModel.getInstance().getUserByUsername(username);
+      const user =
+        await UserRepository.getInstance().getUserByUsername(username);
       return user;
     } catch (error) {
       const _error = error as Error;
-      throw new Error(`Error when getting user by username: ${_error.message}`);
+      throw new Error(`${_error.message}`);
     }
   };
 
-  getUserByEmail = async (email: string) => {
+  getUserByEmail = async (email: string): Promise<UserModel | null> => {
     try {
-      const user = await UserModel.getInstance().getUserByEmail(email);
+      const user = await UserRepository.getInstance().getUserByEmail(email);
       return user;
     } catch (error) {
       const _error = error as Error;
-      throw new Error(`Error when getting user by email: ${_error.message}`);
+      throw new Error(`${_error.message}`);
     }
   };
 
-  addNewUser = async (email: string, password: string) => {
+  addNewUser = async (
+    email: string,
+    password: string,
+  ): Promise<UserModel | null> => {
     try {
+      if (email === "") {
+        throw new Error("Email is required");
+      }
+
       const isExist = await this.getUserByEmail(email);
       if (isExist) {
         throw new Error("Email already exist");
@@ -41,14 +50,14 @@ class UserService {
 
       const hashedPassword = await hashPassword(password);
 
-      const user = await UserModel.getInstance().addNewUser(
+      const user = await UserRepository.getInstance().addNewUser(
         email,
         hashedPassword,
       );
       return user;
     } catch (error) {
       const _error = error as Error;
-      throw new Error(`Error when adding a new user: ${_error.message}`);
+      throw new Error(`${_error.message}`);
     }
   };
 }

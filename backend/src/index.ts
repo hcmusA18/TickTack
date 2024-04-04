@@ -2,8 +2,10 @@ import "dotenv/config";
 import cors from "cors";
 import express from "express";
 import userRouter from "./routes/user.route";
+import videoRouter from "./routes/video.route";
 import authMiddleware from "./middlewares/auth.middleware";
-import pool from "./models/db";
+import authController from "./controllers/auth.controller";
+import pool from "./repositories/db";
 import passportConfig from "./config/passport";
 import passport from "passport";
 import session from "express-session";
@@ -38,11 +40,20 @@ app.use(passport.session());
 app.use(cors());
 app.use(express.json());
 
+// signup and signin routes
+app.post("/signup", (req, res) => {
+  authController.getInstance().signUpByEmail(req, res);
+});
+
+app.post("/signin", (req, res) => {
+  authController.getInstance().signIn(req, res);
+});
+
 // auth middleware
 app.use(authMiddleware.authenticate);
 
-// user router
-app.use("/", userRouter);
+app.use("/user", userRouter);
+app.use("/video", videoRouter);
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}!`));
 

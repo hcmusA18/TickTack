@@ -74,6 +74,13 @@ DB_HOST=localhost
 DB_NAME=ticktack
 DB_PORT=5432
 DB_PASS=your-password-here
+JWT_SECRET=jwts3cr3t
+GOOGLE_REFRESH_TOKEN=your-refresh-token-here
+GOOGLE_CLIENT_ID=your-client-id-here
+GOOGLE_CLIENT_SECRET=your-client-secret-here
+GOOGLE_REDIRECT_URI=https://developers.google.com/oauthplayground
+GOOGLE_DRIVE_FOLDER_ID=your-folder-id-here
+COOKIE_PARSER_SECRET=cookieparsersecret
 ```
 
 2. As we use python to insert data into the database, you need to install the following packages:

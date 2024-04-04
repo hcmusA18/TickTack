@@ -1,5 +1,5 @@
 import UserService from "../../src/services/user.service";
-import UserModel from "../../src/models/user.model";
+import UserModel from "../../src/repositories/user.repository";
 import { hashPassword } from "../../src/services/password.service";
 
 jest.mock("../../src/models/user.model", () => ({
@@ -99,6 +99,19 @@ describe("UserService", () => {
     );
   });
 
+  it("should throw an error if email is empty when adding a new user", async () => {
+    (mockedUserModel.getUserByEmail as jest.Mock).mockResolvedValueOnce({
+      id: 1,
+    });
+
+    const email = "";
+    const password = "password";
+
+    await expect(userService.addNewUser(email, password)).rejects.toThrow(
+      "Email is required",
+    );
+  });
+
   it("should throw an error if an error occurs when getting user by username", async () => {
     const errorMessage = "Test error";
     (mockedUserModel.getUserByUsername as jest.Mock).mockRejectedValueOnce(
@@ -108,7 +121,7 @@ describe("UserService", () => {
     const username = "testUser";
 
     await expect(userService.getUserByUsername(username)).rejects.toThrow(
-      `Error when getting user by username: ${errorMessage}`,
+      `${errorMessage}`,
     );
   });
 
@@ -121,7 +134,7 @@ describe("UserService", () => {
     const email = "testUser@example.com";
 
     await expect(userService.getUserByEmail(email)).rejects.toThrow(
-      `Error when getting user by email: ${errorMessage}`,
+      `${errorMessage}`,
     );
   });
 
@@ -138,7 +151,7 @@ describe("UserService", () => {
     const email = "testUser@example.com";
 
     await expect(userService.addNewUser(email, "password")).rejects.toThrow(
-      `Error when adding a new user: ${errorMessage}`,
+      `${errorMessage}`,
     );
   });
 });
