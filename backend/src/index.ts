@@ -4,6 +4,7 @@ import express from "express";
 import userRouter from "./routes/user.route";
 import videoRouter from "./routes/video.route";
 import apiRouter from "./routes/api.route";
+import recsysRouter from "./routes/recsys.route";
 import authMiddleware from "./middlewares/auth.middleware";
 import authController from "./controllers/auth.controller";
 import pool from "./repositories/db";
@@ -38,7 +39,17 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(cors());
+/// allow from localhost:8051 and localhost:5000
+app.use(
+  cors({
+    origin: [
+      "http://localhost:8051",
+      "http://localhost:5173",
+      "https://7f92-113-172-122-34.ngrok-free.app",
+    ],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 // signup and signin routes
@@ -51,6 +62,7 @@ app.post("/signin", (req, res) => {
 });
 
 app.use("/api", apiRouter);
+app.use("/recsys", recsysRouter);
 
 // auth middleware
 app.use(authMiddleware.authenticate);
