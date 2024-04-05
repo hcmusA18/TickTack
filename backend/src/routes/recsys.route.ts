@@ -1,6 +1,7 @@
-import express from "express";
+import express, { json } from "express";
 import RecSysController from "../controllers/recsys.controller";
 import axios from "axios";
+import VideoService from "../services/video.service";
 
 const router = express.Router();
 
@@ -8,10 +9,12 @@ router.get("/user/:userId", (req, res) => {
   RecSysController.getInstance().getRecommendation(req, res);
 });
 
-router.get("/video", async (req, res) => {
+router.get("/video/:videoId", async (req, res) => {
   try {
-    const videoUrl =
-      "https://drive.google.com/uc?export=view&id=1TzSmaVRpsD6517n6PIGiPRm0W0z1kZJp";
+    const idReq = await VideoService.getInstance().getVideoById(
+      parseInt(req.params.videoId),
+    );
+    const videoUrl = idReq?.video_url ?? "";
     const response = await axios.get(videoUrl, { responseType: "stream" });
     response.data.pipe(res);
   } catch (error) {
