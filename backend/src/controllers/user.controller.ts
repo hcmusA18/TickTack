@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import UserService from "../services/user.service";
 
 class UserController {
   private static instance: UserController | null = null;
@@ -15,9 +14,9 @@ class UserController {
     return UserController.instance;
   }
 
-  getUserDetail = async (req: Request, res: Response) => {
+  getUserDetail = async (_: Request, res: Response) => {
     res.send("Getting users from database");
   };
 }
 
-export default UserController;
+export { UserController };

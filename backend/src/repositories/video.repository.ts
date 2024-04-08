@@ -1,4 +1,4 @@
-import VideoModel from "../models/video.model";
+import { VideoModel } from "@models";
 import pool from "./db";
 
 class VideoRepository {
@@ -44,4 +44,4 @@ class VideoRepository {
   };
 }
 
-export default VideoRepository;
+export { VideoRepository };

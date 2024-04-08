@@ -1,5 +1,5 @@
 import pool from "./db";
-import UserModel from "../models/user.model";
+import { UserModel } from "@models";
 
 class UserRepository {
   private static instance: UserRepository | null = null;
@@ -60,4 +60,4 @@ class UserRepository {
   };
 }
 
-export default UserRepository;
+export { UserRepository };

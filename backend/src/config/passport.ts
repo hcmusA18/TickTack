@@ -1,8 +1,7 @@
 import { Strategy as LocalStrategy } from "passport-local";
-import userService from "../services/user.service";
-import { comparePassword } from "../services/password.service";
+import { UserService, PasswordService } from "@services";
 import { PassportStatic } from "passport";
-import UserModel from "../models/user.model";
+import { UserModel } from "../models/user.model";
 
 const passportConfig = (passport: PassportStatic) => {
   passport.use(
@@ -10,8 +9,14 @@ const passportConfig = (passport: PassportStatic) => {
       { usernameField: "email", passwordField: "password" },
       async (email, password, done) => {
         try {
-          const user = await userService.getInstance().getUserByEmail(email);
-          if (!user || !(await comparePassword(password, user.password))) {
+          const user = await UserService.getInstance().getUserByEmail(email);
+          if (
+            !user ||
+            !(await PasswordService.getInstance().comparePassword(
+              password,
+              user.password,
+            ))
+          ) {
             return done(null, false, {
               message: "Invalid email or password.",
             });
@@ -30,7 +35,7 @@ const passportConfig = (passport: PassportStatic) => {
 
   passport.deserializeUser(async (email: string, done) => {
     try {
-      const user = await userService.getInstance().getUserByEmail(email);
+      const user = await UserService.getInstance().getUserByEmail(email);
       done(null, user as UserModel);
     } catch (error) {
       done(error);
