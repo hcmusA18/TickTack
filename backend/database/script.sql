@@ -22,6 +22,8 @@ CREATE TABLE musics (
     music_url TEXT
 );
 
+CREATE TYPE privacy_level AS ENUM ('public', 'private', 'friends');
+
 CREATE TABLE videos (
     video_id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES "users"(user_id),
@@ -31,7 +33,7 @@ CREATE TABLE videos (
     duration INTEGER,
     music_id TEXT REFERENCES musics(music_id),
     hashtags TEXT[],
-    is_private BOOLEAN,
+    privacy privacy_level,
     view_count INTEGER
 );
 
