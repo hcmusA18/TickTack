@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import multer, { Multer, diskStorage } from "multer";
-import VideoService from "../services/video.service";
-import VideoModel from "../models/video.model";
+import { VideoService } from "@services";
+import { VideoModel } from "@models";
 import fs from "fs";
 
 const upload: Multer = multer({
   storage: diskStorage({
-    destination: (req, file, cb) => {
+    destination: (_, __, cb) => {
       cb(null, "uploads/");
     },
-    filename: (req, file, cb) => {
+    filename: (_, file, cb) => {
       cb(null, file.originalname);
     },
   }),
@@ -61,4 +61,4 @@ class VideoController {
   };
 }
 
-export default VideoController;
+export { VideoController };

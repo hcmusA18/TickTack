@@ -1,6 +1,6 @@
-import UserService from "../services/user.service";
+import { UserService } from "@services";
 import { Request, Response } from "express";
-import UserModel from "../models/user.model";
+import { UserModel } from "@models";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 
@@ -42,7 +42,6 @@ class AuthController {
   signIn = async (req: Request, res: Response) => {
     passport.authenticate("local", (err: Error, user: UserModel, info: any) => {
       if (err) {
-        console.log(err);
         return res.status(500).json({ message: err.message });
       }
       if (!user) {
@@ -67,4 +66,4 @@ class AuthController {
   };
 }
 
-export default AuthController;
+export { AuthController };

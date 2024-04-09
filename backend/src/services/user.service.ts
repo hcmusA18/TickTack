@@ -1,6 +1,6 @@
-import UserModel from "../models/user.model";
-import UserRepository from "../repositories/user.repository";
-import { hashPassword } from "./password.service";
+import { UserModel } from "@models";
+import { UserRepository } from "@repositories";
+import { PasswordService } from "@services";
 
 class UserService {
   private static instance: UserService | null = null;
@@ -48,7 +48,8 @@ class UserService {
         throw new Error("Email already exist");
       }
 
-      const hashedPassword = await hashPassword(password);
+      const hashedPassword =
+        await PasswordService.getInstance().hashPassword(password);
 
       const user = await UserRepository.getInstance().addNewUser(
         email,
@@ -62,4 +63,4 @@ class UserService {
   };
 }
 
-export default UserService;
+export { UserService };

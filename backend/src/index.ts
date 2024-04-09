@@ -1,10 +1,10 @@
 import "dotenv/config";
+import "module-alias/register";
 import cors from "cors";
 import express from "express";
-import userRouter from "./routes/user.route";
-import videoRouter from "./routes/video.route";
+import { userRouter, videoRouter } from "@routes";
 import authMiddleware from "./middlewares/auth.middleware";
-import authController from "./controllers/auth.controller";
+import { AuthController } from "@controllers";
 import pool from "./repositories/db";
 import passportConfig from "./config/passport";
 import passport from "passport";
@@ -42,11 +42,11 @@ app.use(express.json());
 
 // signup and signin routes
 app.post("/signup", (req, res) => {
-  authController.getInstance().signUpByEmail(req, res);
+  AuthController.getInstance().signUpByEmail(req, res);
 });
 
 app.post("/signin", (req, res) => {
-  authController.getInstance().signIn(req, res);
+  AuthController.getInstance().signIn(req, res);
 });
 
 // auth middleware

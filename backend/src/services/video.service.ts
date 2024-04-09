@@ -1,7 +1,7 @@
 import { google } from "googleapis";
 import fs from "fs";
-import VideoModel from "../models/video.model";
-import VideoRepository from "../repositories/video.repository";
+import { VideoModel } from "@models";
+import { VideoRepository } from "@repositories";
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
@@ -82,4 +82,4 @@ class VideoService {
   };
 }
 
-export default VideoService;
+export { VideoService };

@@ -4,6 +4,22 @@
  */
 
 module.exports = {
+  testEnvironment: "node",
+  moduleNameMapper: {
+    "^@/(.*)$": "<rootDir>/src/$1",
+    "^@routes/(.*)$": "<rootDir>/src/routes/$1",
+    "^@routes$": "<rootDir>/src/routes/index.ts",
+    "^@controllers/(.*)$": "<rootDir>/src/controllers/$1",
+    "^@controllers$": "<rootDir>/src/controllers/index.ts",
+    "^@middlewares/(.*)$": "<rootDir>/src/middlewares/$1",
+    "^@middlewares$": "<rootDir>/src/middlewares/index.ts",
+    "^@services/(.*)$": "<rootDir>/src/services/$1",
+    "^@services$": "<rootDir>/src/services/index.ts",
+    "^@models/(.*)$": "<rootDir>/src/models/$1",
+    "^@models$": "<rootDir>/src/models/index.ts",
+    "^@repositories/(.*)$": "<rootDir>/src/repositories/$1",
+    "^@repositories$": "<rootDir>/src/repositories/index.ts",
+  },
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
