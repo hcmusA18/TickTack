@@ -50,7 +50,7 @@ app.post("/signin", (req, res) => {
 });
 
 // auth middleware
-app.use(authMiddleware.authenticate);
+// app.use(authMiddleware.authenticate);
 
 app.use("/user", userRouter);
 app.use("/video", videoRouter);

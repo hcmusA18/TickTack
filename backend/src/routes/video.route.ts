@@ -7,4 +7,8 @@ router.post("/upload", (req, res) => {
   VideoController.getInstance().uploadVideo(req, res);
 });
 
+router.post("/privacy", (req, res) => {
+  VideoController.getInstance().setPrivacy(req, res);
+});
+
 export { router as videoRouter };

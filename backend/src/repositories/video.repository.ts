@@ -42,6 +42,23 @@ class VideoRepository {
       throw new Error(`${_error.message}`);
     }
   };
+
+  setPrivacy = async (
+    videoId: number,
+    privacy: string,
+  ): Promise<VideoModel | null> => {
+    const query = {
+      text: `UPDATE videos SET privacy = $1 WHERE video_id = $2 RETURNING *`,
+      values: [privacy, videoId.toString()],
+    };
+    try {
+      const result = await pool.query(query);
+      return result.rows[0];
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
 export { VideoRepository };
