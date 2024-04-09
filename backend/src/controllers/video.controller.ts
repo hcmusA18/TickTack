@@ -93,6 +93,28 @@ class VideoController {
         .json({ message: `Error setting privacy: ${_error.message}` });
     }
   };
+
+  removeVideo = async (req: Request, res: Response) => {
+    try {
+      const videoId = parseInt(req.params.videoId);
+      if (isNaN(videoId)) {
+        res.status(400).json({ message: "Invalid videoId" });
+        return;
+      }
+
+      const response = await VideoService.getInstance().removeVideo(videoId);
+      if (response) {
+        res.status(200).json({ message: "Video removed" });
+      } else {
+        res.status(400).json({ message: "Something went wrong!" });
+      }
+    } catch (error) {
+      const _error = error as Error;
+      res
+        .status(500)
+        .json({ message: `Error removing video: ${_error.message}` });
+    }
+  };
 }
 
 export { VideoController };

@@ -44,28 +44,28 @@ CREATE TABLE socials (
 
 CREATE TABLE likes (
     user_id INTEGER REFERENCES "users"(user_id),
-    video_id INTEGER REFERENCES videos(video_id),
+    video_id INTEGER REFERENCES videos(video_id) ON DELETE CASCADE,
     time BIGINT,
     PRIMARY KEY (user_id, video_id)
 );
 
 CREATE TABLE dislikes (
     user_id INTEGER REFERENCES "users"(user_id),
-    video_id INTEGER REFERENCES videos(video_id),
+    video_id INTEGER REFERENCES videos(video_id) ON DELETE CASCADE,
     time BIGINT,
     PRIMARY KEY (user_id, video_id)
 );
 
 CREATE TABLE saves (
     user_id INTEGER REFERENCES "users"(user_id),
-    video_id INTEGER REFERENCES videos(video_id),
+    video_id INTEGER REFERENCES videos(video_id) ON DELETE CASCADE,
     time BIGINT,
     PRIMARY KEY (user_id, video_id)
 );
 
 CREATE TABLE comments (
     user_id INTEGER REFERENCES "users"(user_id),
-    video_id INTEGER REFERENCES videos(video_id),
+    video_id INTEGER REFERENCES videos(video_id) ON DELETE CASCADE,
     comment_text TEXT,
     time BIGINT,
     PRIMARY KEY (user_id, video_id, time)

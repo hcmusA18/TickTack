@@ -59,6 +59,20 @@ class VideoRepository {
       throw new Error(`${_error.message}`);
     }
   };
+
+  removeVideo = async (videoId: number): Promise<boolean> => {
+    const query = {
+      text: `DELETE FROM videos WHERE video_id = $1`,
+      values: [videoId.toString()],
+    };
+    try {
+      await pool.query(query);
+      return true;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
 export { VideoRepository };

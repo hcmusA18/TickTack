@@ -96,6 +96,16 @@ class VideoService {
       throw new Error(`${_error.message}`);
     }
   };
+
+  removeVideo = async (videoId: number): Promise<boolean> => {
+    try {
+      const deleted = await VideoRepository.getInstance().removeVideo(videoId);
+      return deleted;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
 export { VideoService };
