@@ -6,7 +6,11 @@ import numpy as np
 import os
 import re
 
-load_dotenv(pathlib.Path().resolve() / 'backend' / '.env')
+# D:\HCMUS\SoftwareDesign\Project\TickTack\backend\.env
+
+load_env_result = load_dotenv(pathlib.Path().resolve() / 'backend' / '.env')
+
+print(pathlib.Path().resolve())
 
 conn = psycopg2.connect(
     host=os.getenv('DB_HOST'),
@@ -19,7 +23,7 @@ cur = conn.cursor()
 
 # Read music.csv
 try:
-    with open('./backend/database/music.csv', encoding='utf-8') as f:
+    with open('./backend/dataabase/music.csv', encoding='utf-8') as f:
         music = f.readlines()
         music = [m.strip() for m in music]
         music = music[1:]
