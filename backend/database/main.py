@@ -6,11 +6,7 @@ import numpy as np
 import os
 import re
 
-# D:\HCMUS\SoftwareDesign\Project\TickTack\backend\.env
-
 load_env_result = load_dotenv(pathlib.Path().resolve() / 'backend' / '.env')
-
-print(pathlib.Path().resolve())
 
 conn = psycopg2.connect(
     host=os.getenv('DB_HOST'),

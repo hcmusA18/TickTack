@@ -44,7 +44,7 @@ class AuthController {
     log("Sign in");
     passport.authenticate("local", (err: Error, user: UserModel, info: any) => {
       if (err) {
-        console.log(err);
+        console.error(err);
         return res.status(500).json({ message: err.message });
       }
       if (!user) {

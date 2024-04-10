@@ -1,7 +1,6 @@
 import React from 'react'
 import { View, TouchableOpacity, Text } from 'react-native'
-import { FontAwesome, Feather, MaterialCommunityIcons, AntDesign } from '@expo/vector-icons'
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
+import { FontAwesome } from '@expo/vector-icons'
 
 // Custom Tab Bar Component
 const CustomTabBar = ({ state, descriptors, navigation }) => {

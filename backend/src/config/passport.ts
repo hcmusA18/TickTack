@@ -3,7 +3,6 @@ import userService from "../services/user.service";
 import { comparePassword } from "../services/password.service";
 import { PassportStatic } from "passport";
 import UserModel from "../models/user.model";
-import { log } from "console";
 
 const passportConfig = (passport: PassportStatic) => {
   passport.use(
@@ -12,7 +11,6 @@ const passportConfig = (passport: PassportStatic) => {
       async (email, password, done) => {
         try {
           const user = await userService.getInstance().getUserByEmail(email);
-          console.log("User: ", user);
           if (!user || !(await comparePassword(password, user.password))) {
             return done(null, false, {
               message: "Invalid email or password.",

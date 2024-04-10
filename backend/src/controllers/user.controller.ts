@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import UserService from "../services/user.service";
-import { user } from "firebase-functions/v1/auth";
 
 class UserController {
   private static instance: UserController | null = null;
