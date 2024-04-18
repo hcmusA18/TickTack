@@ -20,7 +20,7 @@ class VideoRepository {
   addNewVideo = async (video: VideoModel): Promise<VideoModel | null> => {
     if (!video.music_id) video.music_id = null;
     const query = {
-      text: `INSERT INTO videos(user_id, text, create_time, video_url, duration, music_id, hashtags, is_private, view_count) 
+      text: `INSERT INTO videos(user_id, text, create_time, video_url, duration, music_id, hashtags, privacy, view_count) 
       VALUES($1, $2, $3, $4, $5, ${
         video.music_id || null
       }, ${this.stringArrayConverter(video.hashtags)}, $6, $7) RETURNING *`,
@@ -30,13 +30,44 @@ class VideoRepository {
         video.create_time.toString(),
         video.video_url,
         video.duration.toString(),
-        (video.is_private || false).toString(),
+        (video.privacy || "public").toString(),
         (video.view_count || 0).toString(),
       ],
     };
     try {
       const result = await pool.query(query);
       return result.rows[0];
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
+  setPrivacy = async (
+    videoId: number,
+    privacy: string,
+  ): Promise<VideoModel | null> => {
+    const query = {
+      text: `UPDATE videos SET privacy = $1 WHERE video_id = $2 RETURNING *`,
+      values: [privacy, videoId.toString()],
+    };
+    try {
+      const result = await pool.query(query);
+      return result.rows[0];
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
+  removeVideo = async (videoId: number): Promise<boolean> => {
+    const query = {
+      text: `DELETE FROM videos WHERE video_id = $1`,
+      values: [videoId.toString()],
+    };
+    try {
+      await pool.query(query);
+      return true;
     } catch (error) {
       const _error = error as Error;
       throw new Error(`${_error.message}`);
