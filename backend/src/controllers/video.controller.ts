@@ -64,6 +64,18 @@ class VideoController {
       }
     });
   };
+  getVideoById = async (req: Request, res: Response) => {
+    try {
+      const video_id = parseInt(req.params.video_id);
+      const video = await VideoService.getInstance().getVideoById(video_id);
+      res.status(200).json({ video });
+    } catch (error) {
+      const _error = error as Error;
+      res
+        .status(500)
+        .json({ message: `Error when getting video by id: ${_error.message}` });
+    }
+  };
 
   setPrivacy = async (req: Request, res: Response) => {
     try {
@@ -116,5 +128,4 @@ class VideoController {
     }
   };
 }
-
 export { VideoController };

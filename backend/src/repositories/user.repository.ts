@@ -58,6 +58,19 @@ class UserRepository {
       throw new Error(`${_error.message}`);
     }
   };
+
+  getAllUserIds = async (): Promise<number[]> => {
+    const query = {
+      text: "SELECT user_id FROM users",
+    };
+    try {
+      const result = await pool.query(query);
+      return result.rows.map((user) => user.user_id);
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
 export { UserRepository };

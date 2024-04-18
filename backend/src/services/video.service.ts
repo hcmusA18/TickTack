@@ -81,6 +81,16 @@ class VideoService {
     }
   };
 
+  getVideoById = async (video_id: number): Promise<VideoModel | null> => {
+    try {
+      const video = await VideoRepository.getInstance().getVideoById(video_id);
+      return video;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
   setPrivacy = async (
     videoId: number,
     privacy: string,

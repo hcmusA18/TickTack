@@ -7,6 +7,14 @@ router.post("/upload", (req, res) => {
   VideoController.getInstance().uploadVideo(req, res);
 });
 
+router.get("/:video_id", (req, res) => {
+  VideoController.getInstance().getVideoById(req, res);
+});
+
+router.get("/:video_id", (req, res) => {
+  VideoController.getInstance().getVideoById(req, res);
+});
+
 router.post("/privacy", (req, res) => {
   VideoController.getInstance().setPrivacy(req, res);
 });
