@@ -1,12 +1,10 @@
 import "dotenv/config";
+import "module-alias/register";
 import cors from "cors";
 import express from "express";
-import userRouter from "./routes/user.route";
-import videoRouter from "./routes/video.route";
-import apiRouter from "./routes/api.route";
-import recsysRouter from "./routes/recsys.route";
+import { userRouter, videoRouter, apiRouter, recsysRouter } from "@routes";
 import authMiddleware from "./middlewares/auth.middleware";
-import authController from "./controllers/auth.controller";
+import { AuthController } from "@controllers";
 import pool from "./repositories/db";
 import passportConfig from "./config/passport";
 import passport from "passport";
@@ -16,7 +14,7 @@ import dotenv from "dotenv";
 dotenv.config({ path: __dirname + "/.env" });
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT ?? 4000;
 
 // PostgreSQL connection
 pool.connect((err: Error | undefined) => {
@@ -54,11 +52,11 @@ app.use(express.json());
 
 // signup and signin routes
 app.post("/signup", (req, res) => {
-  authController.getInstance().signUpByEmail(req, res);
+  AuthController.getInstance().signUpByEmail(req, res);
 });
 
 app.post("/signin", (req, res) => {
-  authController.getInstance().signIn(req, res);
+  AuthController.getInstance().signIn(req, res);
 });
 
 app.use("/api", apiRouter);

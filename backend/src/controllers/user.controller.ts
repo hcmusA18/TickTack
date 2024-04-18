@@ -1,5 +1,5 @@
+import { UserService } from "@/services";
 import { Request, Response } from "express";
-import UserService from "../services/user.service";
 
 class UserController {
   private static instance: UserController | null = null;
@@ -15,11 +15,11 @@ class UserController {
     return UserController.instance;
   }
 
-  getUserDetail = async (req: Request, res: Response) => {
+  getUserDetail = async (_: Request, res: Response) => {
     res.send("Getting users from database");
   };
 
-  getAllUserIds = async (req: Request, res: Response) => {
+  getAllUserIds = async (_req: Request, res: Response) => {
     try {
       const userIds = await UserService.getInstance().getAllUserIds();
       res.status(200).json({ userIds });
@@ -32,4 +32,4 @@ class UserController {
   };
 }
 
-export default UserController;
+export { UserController };

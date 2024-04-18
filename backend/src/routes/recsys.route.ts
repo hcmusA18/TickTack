@@ -1,7 +1,7 @@
-import express, { json } from "express";
+import express from "express";
 import RecSysController from "../controllers/recsys.controller";
 import axios from "axios";
-import VideoService from "../services/video.service";
+import { VideoService } from "@services";
 
 const router = express.Router();
 
@@ -23,4 +23,4 @@ router.get("/video/:videoId", async (req, res) => {
   }
 });
 
-export default router;
+export { router as recsysRouter };

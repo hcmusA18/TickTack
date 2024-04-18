@@ -1,6 +1,5 @@
 import express from "express";
-import UserController from "../controllers/user.controller";
-import VideoController from "../controllers/video.controller";
+import { VideoController, UserController } from "@controllers";
 
 const router = express.Router();
 
@@ -12,4 +11,4 @@ router.get("/video/:video_id", (req, res) => {
   VideoController.getInstance().getVideoById(req, res);
 });
 
-export default router;
+export { router as apiRouter };

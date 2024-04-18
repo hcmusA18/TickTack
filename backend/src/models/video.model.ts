@@ -7,7 +7,7 @@ class VideoModel {
   duration: number;
   music_id: string | null;
   hashtags: string[];
-  is_private: boolean;
+  privacy: "public" | "private" | "friends";
   view_count: number;
 
   constructor(
@@ -16,7 +16,7 @@ class VideoModel {
     video_url: string,
     duration: number,
     hashtags: string[],
-    is_private = false,
+    privacy: "public" | "private" | "friends" = "public",
     view_count = 0,
     music_id = null,
     video_id?: number,
@@ -30,9 +30,9 @@ class VideoModel {
     this.duration = duration;
     this.music_id = music_id;
     this.hashtags = hashtags;
-    this.is_private = is_private;
+    this.privacy = privacy;
     this.view_count = view_count;
   }
 }
 
-export default VideoModel;
+export { VideoModel };

@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import multer, { Multer, diskStorage } from "multer";
-import VideoService from "../services/video.service";
-import VideoModel from "../models/video.model";
+import { VideoService } from "@services";
+import { VideoModel } from "@models";
 import fs from "fs";
 
 const upload: Multer = multer({
   storage: diskStorage({
-    destination: (req, file, cb) => {
+    destination: (_, __, cb) => {
       cb(null, "uploads/");
     },
-    filename: (req, file, cb) => {
+    filename: (_, file, cb) => {
       cb(null, file.originalname);
     },
   }),
@@ -33,7 +33,9 @@ class VideoController {
     upload.single("video")(req, res, async (err: any) => {
       try {
         if (err) {
-          res.status(400).send(`Error uploading file: ${err.message}`); // Unexpected end of form
+          res
+            .status(400)
+            .json({ message: `Error uploading file: ${err.message}` });
           return;
         }
 
@@ -53,16 +55,15 @@ class VideoController {
         // Delete the file after uploading
         fs.unlinkSync(file.path);
 
-        res.status(200).send(response);
+        res.status(200).json(response);
       } catch (error) {
         const _error = error as Error;
         res
           .status(500)
-          .json({ message: `Error when uploading video: ${_error.message}` });
+          .json({ message: `Error uploading file: ${_error.message}` });
       }
     });
   };
-
   getVideoById = async (req: Request, res: Response) => {
     try {
       const video_id = parseInt(req.params.video_id);
@@ -75,6 +76,56 @@ class VideoController {
         .json({ message: `Error when getting video by id: ${_error.message}` });
     }
   };
-}
 
-export default VideoController;
+  setPrivacy = async (req: Request, res: Response) => {
+    try {
+      const { videoId, privacy } = req.body;
+      if (!videoId || !privacy) {
+        res.status(400).json({ message: "Missing videoId or privacy" });
+        return;
+      }
+      if (
+        privacy !== "public" &&
+        privacy !== "private" &&
+        privacy !== "friends"
+      ) {
+        res.status(400).json({ message: "Invalid privacy" });
+        return;
+      }
+
+      const response = await VideoService.getInstance().setPrivacy(
+        videoId,
+        privacy,
+      );
+      res.status(200).json(response);
+    } catch (error) {
+      const _error = error as Error;
+      res
+        .status(500)
+        .json({ message: `Error setting privacy: ${_error.message}` });
+    }
+  };
+
+  removeVideo = async (req: Request, res: Response) => {
+    try {
+      const videoId = parseInt(req.params.videoId);
+      if (isNaN(videoId)) {
+        res.status(400).json({ message: "Invalid videoId" });
+        return;
+      }
+
+      const response = await VideoService.getInstance().removeVideo(videoId);
+      if (response) {
+        res.status(200).json({ message: "Video removed" });
+      } else {
+        res.status(400).json({ message: "Something went wrong!" });
+      }
+    } catch (error) {
+      const _error = error as Error;
+      res
+        .status(500)
+        .json({ message: `Error removing video: ${_error.message}` });
+    }
+  };
+}
+export { VideoController };

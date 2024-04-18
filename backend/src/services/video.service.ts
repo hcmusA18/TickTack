@@ -1,7 +1,7 @@
 import { google } from "googleapis";
 import fs from "fs";
-import VideoModel from "../models/video.model";
-import VideoRepository from "../repositories/video.repository";
+import { VideoModel } from "@models";
+import { VideoRepository } from "@repositories";
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
@@ -90,6 +90,32 @@ class VideoService {
       throw new Error(`${_error.message}`);
     }
   };
+
+  setPrivacy = async (
+    videoId: number,
+    privacy: string,
+  ): Promise<VideoModel | null> => {
+    try {
+      const updatedVideo = await VideoRepository.getInstance().setPrivacy(
+        videoId,
+        privacy,
+      );
+      return updatedVideo;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
+  removeVideo = async (videoId: number): Promise<boolean> => {
+    try {
+      const deleted = await VideoRepository.getInstance().removeVideo(videoId);
+      return deleted;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
-export default VideoService;
+export { VideoService };
