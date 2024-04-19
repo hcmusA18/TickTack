@@ -8,6 +8,7 @@ import { useAppSelector, useAppDispatch } from 'libs/redux'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import axiosInstance from 'libs/utils/axiosInstance'
 import { setAuthToken } from 'libs/redux/sliceAuth'
+import Toast from 'react-native-simple-toast'
 
 interface PassWordInputProps extends AppStackScreenProps<'PassWordInput'> {}
 
@@ -34,20 +35,27 @@ export const PassWordInput: FC<PassWordInputProps> = (props) => {
   }
 
   const verifyPassword = () => {
-    return () => {
+    return async () => {
       if (isValid) {
-        axiosInstance
+        await axiosInstance
           .getAxios()
           .post('/signin', {
             email,
             password
           })
           .then((response) => {
-            const token = response.data.data
-            dispatch(setAuthToken(token))
-            axiosInstance.setAuthToken(token)
+            if (response.status === 200) {
+              const token = response.data.data
+              dispatch(setAuthToken(token))
+              axiosInstance.setAuthToken(token)
+              navigation.navigate('Main')
+              Toast.show('Login successful', Toast.LONG)
+            } else {
+              Toast.show(response.data.message, Toast.LONG)
+            }
           })
           .catch((error) => {
+            Toast.show(error.message, Toast.LONG)
             console.error(error)
           })
       } else {

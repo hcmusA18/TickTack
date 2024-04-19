@@ -12,6 +12,9 @@ class AxiosInstance {
     this.instance = axios.create({
       baseURL: this.baseURL,
       timeout: this.timeout,
+      validateStatus: (status) => {
+        return status >= 0 && status < 600
+      },
       headers: {
         'Content-Type': this.contentType,
         Authorization: `Bearer ${this.token}`

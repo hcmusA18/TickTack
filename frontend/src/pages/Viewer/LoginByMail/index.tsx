@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { AppStackScreenProps } from 'navigators'
 import { TopBar } from '../Login/components/LoginTopBar'
 import { colors } from '../Login/components/MyColors'
-import { setAuth, setAuthEmail } from 'libs/redux/sliceAuth'
+import { setAuthEmail } from 'libs/redux/sliceAuth'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { useAppDispatch } from 'libs/redux'
 
