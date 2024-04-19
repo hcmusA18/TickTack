@@ -5,7 +5,7 @@ class AxiosInstance {
   private contentType = 'application/json'
   private timeout = 3000
   private token = ''
-  private baseURL = 'https://1314-42-115-164-149.ngrok-free.app'
+  private baseURL = process.env.API_URL
   private instance: Axios | null = null
 
   private constructor() {
