@@ -58,7 +58,7 @@ class AuthController {
           { expiresIn: "1h" },
         );
 
-        return res.status(200).json({ token });
+        return res.status(200).json({ data: token });
       });
 
       return;

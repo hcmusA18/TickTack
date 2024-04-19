@@ -4,7 +4,10 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { AppStackScreenProps } from 'navigators'
 import { TopBar } from '../Login/components/LoginTopBar'
 import { colors } from '../Login/components/MyColors'
+import { useAppSelector, useAppDispatch } from 'libs/redux'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import axiosInstance from 'libs/utils/axiosInstance'
+import { setAuthToken } from 'libs/redux/sliceAuth'
 
 interface PassWordInputProps extends AppStackScreenProps<'PassWordInput'> {}
 
@@ -13,6 +16,9 @@ export const PassWordInput: FC<PassWordInputProps> = (props) => {
   const [isPasswordHidden, setIsPasswordHidden] = useState(true) // State to track whether password is hidden or shown
   const [isValid, setIsValid] = useState(true)
   const [password, setPassword] = useState('')
+
+  const email = useAppSelector((state) => state.auth.authEmail)
+  const dispatch = useAppDispatch()
 
   const checkBoxClicked = () => {
     setIsPasswordHidden(!isPasswordHidden)
@@ -28,9 +34,25 @@ export const PassWordInput: FC<PassWordInputProps> = (props) => {
   }
 
   const verifyPassword = () => {
-    console.log('Password:', password)
-    if (isValid) {
-      navigation.navigate('Home')
+    return () => {
+      if (isValid) {
+        axiosInstance
+          .getAxios()
+          .post('/signin', {
+            email,
+            password
+          })
+          .then((response) => {
+            const token = response.data.data
+            dispatch(setAuthToken(token))
+            axiosInstance.setAuthToken(token)
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      } else {
+        console.error('Password is invalid')
+      }
     }
   }
 
@@ -76,7 +98,7 @@ export const PassWordInput: FC<PassWordInputProps> = (props) => {
         <TouchableOpacity style={styles.checkboxContainer}>
           <Text style={styles.linkText}>Forgot your password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.nextButton} onPress={verifyPassword}>
+        <TouchableOpacity style={styles.nextButton} onPress={verifyPassword()}>
           <Text style={styles.nextButtonText}>Next</Text>
         </TouchableOpacity>
       </ScrollView>
