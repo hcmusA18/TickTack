@@ -1,9 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react'
+import axiosInstance from 'libs/utils/axiosInstance'
 import { Dimensions, FlatList, View } from 'react-native'
 import { PostSingle } from './Post'
 import { colors } from 'theme'
 import { Post } from 'libs/types'
-import axios from 'axios'
 import useMaterialNavbarHeight from 'libs/hooks/useMaterialNavbarHeight'
 import { useIsFocused } from '@react-navigation/native'
 
@@ -36,9 +36,12 @@ export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
   }, [screenIsFocused])
 
   const fetchAndSetPost = (videoId) => {
-    axios.get(`https://6030-113-172-122-34.ngrok-free.app/recsys/video/${videoId}`).then((res) => {
-      setPosts((prev) => [...prev, res.data])
-    })
+    axiosInstance
+      .getAxios()
+      .get(`/recsys/video/${videoId}`)
+      .then((res) => {
+        setPosts((prev) => [...prev, res.data])
+      })
     setRemaining((prev) => prev + 1)
   }
 
