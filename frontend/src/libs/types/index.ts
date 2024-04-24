@@ -1,14 +1,14 @@
 export interface Post {
-  id: string
-  creator: string
-  media: string[]
-  description: string
-  likesCount: number
-  commentsCount: number
-  sharesCount: number
-  creation: string
+  video_id: string
+  user_id: number // creator
+  text: string // description
+  create_time: string // creation
+  video_url: string // media
+  duration: number
+  music_id: string
   hashtags: string[]
-  musicThumbnail: string
+  privacy: 'public' | 'private' | 'friends'
+  view_count: number
 }
 
 export interface Sound {

@@ -1,43 +1,29 @@
-import pool from "./db";
-
 class UserModel {
-  private static instance: UserModel | null = null;
-  constructor() {
-    // do something
+  userId?: number;
+  username: string;
+  email: string;
+  password: string;
+  avatar: string | null;
+  bio: string | null;
+  regisDate: number;
+
+  constructor(
+    userId: number,
+    username: string,
+    email: string,
+    password: string,
+    avatar: string | null,
+    bio: string | null,
+    regisDate: number,
+  ) {
+    this.userId = userId;
+    this.username = username;
+    this.email = email;
+    this.password = password;
+    this.avatar = avatar;
+    this.bio = bio;
+    this.regisDate = regisDate;
   }
-
-  static getInstance(): UserModel {
-    if (UserModel.instance === null) {
-      UserModel.instance = new UserModel();
-    }
-    return UserModel.instance;
-  }
-
-  getUserByUsername = async (username: string) => {
-    const query = {
-      text: "SELECT * FROM users WHERE username = $1",
-      values: [username],
-    };
-    try {
-      const result = await pool.query(query);
-      return result.rows[0];
-    } catch (error) {
-      throw `${error}`;
-    }
-  };
-
-  addNewUser = async (username: string, password: string) => {
-    const query = {
-      text: "INSERT INTO users(username, password) VALUES($1, $2) RETURNING *",
-      values: [username, password],
-    };
-    try {
-      const result = await pool.query(query);
-      return result.rows[0];
-    } catch (error) {
-      throw `${error}`;
-    }
-  };
 }
 
-export default UserModel;
+export { UserModel };

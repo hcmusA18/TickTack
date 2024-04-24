@@ -1,0 +1,226 @@
+{
+  "format": "graph-model",
+  "generatedBy": "2.6.2",
+  "convertedBy": "TensorFlow.js Converter v3.18.0",
+  "signature": {
+    "inputs": {
+      "input_1": {
+        "name": "input_1:0",
+        "dtype": "DT_STRING",
+        "tensorShape": { "dim": [{ "size": "-1" }, { "size": "10" }] }
+      }
+    },
+    "outputs": {
+      "output_1": {
+        "name": "Identity:0",
+        "dtype": "DT_FLOAT",
+        "tensorShape": {
+          "dim": [{ "size": "-1" }, { "size": "10" }, { "size": "10" }]
+        }
+      },
+      "output_2": {
+        "name": "Identity_1:0",
+        "dtype": "DT_STRING",
+        "tensorShape": {
+          "dim": [{ "size": "-1" }, { "size": "10" }, { "size": "10" }]
+        }
+      }
+    }
+  },
+  "modelTopology": {
+    "node": [
+      {
+        "name": "unknown_3",
+        "op": "Const",
+        "attr": {
+          "value": {
+            "tensor": {
+              "dtype": "DT_STRING",
+              "tensorShape": { "dim": [{ "size": "1000" }] }
+            }
+          },
+          "dtype": { "type": "DT_STRING" }
+        }
+      },
+      {
+        "name": "unknown_1",
+        "op": "Const",
+        "attr": {
+          "value": {
+            "tensor": {
+              "dtype": "DT_FLOAT",
+              "tensorShape": { "dim": [{ "size": "102" }, { "size": "32" }] }
+            }
+          },
+          "dtype": { "type": "DT_FLOAT" }
+        }
+      },
+      {
+        "name": "unknown_0",
+        "op": "Const",
+        "attr": {
+          "value": { "tensor": { "dtype": "DT_INT64", "tensorShape": {} } },
+          "dtype": { "type": "DT_INT64" }
+        }
+      },
+      {
+        "name": "StatefulPartitionedCall/brute_force/sequential/embedding/embedding_lookup/axis",
+        "op": "Const",
+        "attr": {
+          "value": { "tensor": { "dtype": "DT_INT64", "tensorShape": {} } },
+          "dtype": { "type": "DT_INT64" }
+        }
+      },
+      {
+        "name": "StatefulPartitionedCall/brute_force/MatMul/ReadVariableOp",
+        "op": "Const",
+        "attr": {
+          "value": {
+            "tensor": {
+              "dtype": "DT_FLOAT",
+              "tensorShape": { "dim": [{ "size": "1000" }, { "size": "32" }] }
+            }
+          },
+          "dtype": { "type": "DT_FLOAT" }
+        }
+      },
+      {
+        "name": "StatefulPartitionedCall/brute_force/TopKV2/k",
+        "op": "Const",
+        "attr": {
+          "value": { "tensor": { "dtype": "DT_INT32", "tensorShape": {} } },
+          "dtype": { "type": "DT_INT32" }
+        }
+      },
+      {
+        "name": "StatefulPartitionedCall/brute_force/Gather/axis",
+        "op": "Const",
+        "attr": {
+          "value": { "tensor": { "dtype": "DT_INT32", "tensorShape": {} } },
+          "dtype": { "type": "DT_INT32" }
+        }
+      },
+      {
+        "name": "input_1",
+        "op": "Placeholder",
+        "attr": {
+          "shape": { "shape": { "dim": [{ "size": "-1" }, { "size": "10" }] } },
+          "dtype": { "type": "DT_STRING" }
+        }
+      },
+      {
+        "name": "unknown",
+        "op": "Placeholder",
+        "attr": { "shape": { "shape": {} }, "dtype": { "type": "DT_RESOURCE" } }
+      },
+      {
+        "name": "StatefulPartitionedCall/brute_force/sequential/string_lookup/hash_table_Lookup/LookupTableFindV2",
+        "op": "LookupTableFindV2",
+        "input": ["unknown", "input_1", "unknown_0"],
+        "attr": {
+          "Tout": { "type": "DT_INT64" },
+          "Tin": { "type": "DT_STRING" }
+        }
+      },
+      {
+        "name": "StatefulPartitionedCall/brute_force/sequential/embedding/embedding_lookup",
+        "op": "GatherV2",
+        "input": [
+          "unknown_1",
+          "StatefulPartitionedCall/brute_force/sequential/string_lookup/hash_table_Lookup/LookupTableFindV2",
+          "StatefulPartitionedCall/brute_force/sequential/embedding/embedding_lookup/axis"
+        ],
+        "attr": {
+          "Taxis": { "type": "DT_INT64" },
+          "batch_dims": { "i": "0" },
+          "Tindices": { "type": "DT_INT64" },
+          "Tparams": { "type": "DT_FLOAT" }
+        }
+      },
+      {
+        "name": "StatefulPartitionedCall/brute_force/MatMul",
+        "op": "BatchMatMulV2",
+        "input": [
+          "StatefulPartitionedCall/brute_force/sequential/embedding/embedding_lookup",
+          "StatefulPartitionedCall/brute_force/MatMul/ReadVariableOp"
+        ],
+        "attr": {
+          "adj_x": { "b": false },
+          "adj_y": { "b": true },
+          "T": { "type": "DT_FLOAT" }
+        }
+      },
+      {
+        "name": "StatefulPartitionedCall/brute_force/TopKV2",
+        "op": "TopKV2",
+        "input": [
+          "StatefulPartitionedCall/brute_force/MatMul",
+          "StatefulPartitionedCall/brute_force/TopKV2/k"
+        ],
+        "attr": { "sorted": { "b": true }, "T": { "type": "DT_FLOAT" } }
+      },
+      {
+        "name": "StatefulPartitionedCall/brute_force/Gather",
+        "op": "GatherV2",
+        "input": [
+          "unknown_3",
+          "StatefulPartitionedCall/brute_force/TopKV2:1",
+          "StatefulPartitionedCall/brute_force/Gather/axis"
+        ],
+        "attr": {
+          "Taxis": { "type": "DT_INT32" },
+          "batch_dims": { "i": "0" },
+          "Tindices": { "type": "DT_INT32" },
+          "Tparams": { "type": "DT_STRING" }
+        }
+      },
+      {
+        "name": "Identity_1",
+        "op": "Identity",
+        "input": ["StatefulPartitionedCall/brute_force/Gather"],
+        "attr": { "T": { "type": "DT_STRING" } }
+      },
+      {
+        "name": "Identity",
+        "op": "Identity",
+        "input": [
+          "StatefulPartitionedCall/brute_force/TopKV2",
+          "^StatefulPartitionedCall/brute_force/Gather"
+        ],
+        "attr": { "T": { "type": "DT_FLOAT" } }
+      }
+    ],
+    "library": {},
+    "versions": { "producer": 808 }
+  },
+  "weightsManifest": [
+    {
+      "paths": ["group1-shard1of1.bin"],
+      "weights": [
+        { "name": "unknown_3", "shape": [1000], "dtype": "string" },
+        { "name": "unknown_1", "shape": [102, 32], "dtype": "float32" },
+        { "name": "unknown_0", "shape": [], "dtype": "int32" },
+        {
+          "name": "StatefulPartitionedCall/brute_force/sequential/embedding/embedding_lookup/axis",
+          "shape": [],
+          "dtype": "int32"
+        },
+        {
+          "name": "StatefulPartitionedCall/brute_force/MatMul/ReadVariableOp",
+          "shape": [1000, 32],
+          "dtype": "float32"
+        },
+        {
+          "name": "StatefulPartitionedCall/brute_force/TopKV2/k",
+          "shape": [],
+          "dtype": "int32"
+        },
+        {
+          "name": "StatefulPartitionedCall/brute_force/Gather/axis",
+          "shape": [],
+          "dtype": "int32"
+        }
+      ]
+    }
+  ]
+}

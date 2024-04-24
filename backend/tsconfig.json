@@ -2,7 +2,21 @@
   "files": ["./src/type.d.ts", "./src/env.d.ts"],
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {},
+    "paths": {
+      "@/*": ["src/*"],
+      "@routes": ["src/routes"],
+      "@routes/*": ["src/routes/*"],
+      "@controllers": ["src/controllers"],
+      "@controllers/*": ["src/controllers/*"],
+      "@middlewares": ["src/middlewares"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@services": ["src/services"],
+      "@services/*": ["src/services/*"],
+      "@models": ["src/models"],
+      "@models/*": ["src/models/*"],
+      "@repositories": ["src/repositories"],
+      "@repositories/*": ["src/repositories/*"]
+    },
     "outDir": "bin",
     "composite": false,
     "forceConsistentCasingInFileNames": true,
@@ -29,8 +43,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "types": ["jest"],
+    "types": ["jest"]
   },
   "exclude": ["node_modules"],
-  "include": ["./src/**/*.ts", "./test/**/*.ts"],
+  "include": ["./src/**/*.ts", "./test/**/*.ts"]
 }

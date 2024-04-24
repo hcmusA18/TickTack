@@ -1,65 +1,174 @@
-import AuthController from "../../src/controllers/auth.controller";
-import UserService from "../../src/services/user.service";
+import "module-alias/register";
+import { AuthController } from "@controllers";
 import { Request, Response } from "express";
+import passport from "passport";
+import "jsonwebtoken";
+import { UserService } from "@services";
+import { UserModel } from "@models";
+
+jest.mock("@services/user.service", () => ({
+  UserService: {
+    getInstance: jest.fn(() => ({
+      addNewUser: jest.fn(),
+    })),
+  },
+}));
+
+jest.mock("passport", () => ({
+  authenticate: jest.fn(
+    (
+      _: string,
+      callback: (err: Error | null, user: UserModel | null, info: any) => void,
+    ) =>
+      () => {
+        callback(null, {} as UserModel, {});
+      },
+  ),
+}));
+
+jest.mock("jsonwebtoken", () => ({
+  sign: jest.fn(() => "mockedToken"),
+}));
 
 describe("AuthController", () => {
   let authController: AuthController;
   let mockedUserService: UserService;
+  let mockRequest: Partial<Request>;
+  let mockResponse: Partial<Response>;
 
   beforeEach(() => {
+    authController = AuthController.getInstance();
+
     mockedUserService = {
       addNewUser: jest.fn(),
     } as unknown as UserService;
     jest.spyOn(UserService, "getInstance").mockReturnValue(mockedUserService);
 
-    authController = AuthController.getInstance();
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it("should sign up a user successfully", async () => {
-    const req = {
-      body: { username: "testUser", password: "testPassword" },
-    } as unknown as Request;
-    const res = {
+    mockRequest = {};
+    mockResponse = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
-    } as unknown as Response;
+    };
+  });
 
-    const mockedUser = { username: "testUser" };
-    (mockedUserService.addNewUser as jest.Mock).mockResolvedValueOnce(
-      mockedUser,
-    );
+  describe("signUpByEmail", () => {
+    it("should sign up successfully", async () => {
+      const email = "test@example.com";
+      const password = "password";
+      const user: UserModel = {
+        userId: 1,
+        username: "testUser",
+        email,
+        password,
+        bio: "test bio",
+        avatar: "test image",
+        regisDate: 123456789,
+      };
 
-    await authController.signUpByEmail(req, res);
+      (mockedUserService.addNewUser as jest.Mock).mockResolvedValueOnce(user);
 
-    expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith({
-      message: `Sign up successfully! Welcome ${mockedUser.username}!`,
+      mockRequest.body = { email, password };
+
+      await authController.signUpByEmail(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockedUserService.addNewUser).toHaveBeenCalledWith(
+        email,
+        password,
+      );
+      expect(mockResponse.status).toHaveBeenCalledWith(201);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: `Sign up successfully! Welcome ${email}!`,
+      });
+    });
+
+    it("should handle sign up error", async () => {
+      const errorMessage = "Sign up error";
+      (mockedUserService.addNewUser as jest.Mock).mockRejectedValueOnce(
+        new Error(errorMessage),
+      );
+
+      mockRequest.body = { email: "test@example.com", password: "password" };
+
+      await authController.signUpByEmail(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(500);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: `Error when signing up: ${errorMessage}`,
+      });
     });
   });
 
-  it("should handle error when signing up", async () => {
-    const req = {
-      body: { username: "testUser", password: "testPassword" },
-    } as unknown as Request;
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    } as unknown as Response;
+  describe("signIn", () => {
+    it("should sign in successfully", async () => {
+      const token = "mockedToken";
 
-    const errorMessage = "Test error";
-    (mockedUserService.addNewUser as jest.Mock).mockRejectedValueOnce(
-      errorMessage,
-    );
+      mockRequest.logIn = jest.fn(
+        (_: UserModel, callback: (err?: Error) => void) => callback(),
+      ) as any;
 
-    await authController.signUpByEmail(req, res);
+      await authController.signIn(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
 
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({
-      message: `Error when signing up: ${errorMessage}`,
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({ data: token });
+    });
+
+    it("should handle authentication failure", async () => {
+      const errorMessage = "Authentication error";
+      (passport.authenticate as jest.Mock).mockImplementationOnce(
+        (
+          _: string,
+          callback: (
+            err: Error | null,
+            user: UserModel | null,
+            info: any,
+          ) => void,
+        ) =>
+          () => {
+            callback(new Error(errorMessage), null, {});
+          },
+      );
+
+      await authController.signIn(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(500);
+      expect(mockResponse.json).toHaveBeenCalledWith({ message: errorMessage });
+    });
+
+    it("should handle missing user", async () => {
+      const errorMessage = "Missing user";
+      (passport.authenticate as jest.Mock).mockImplementationOnce(
+        (
+          _: string,
+          callback: (
+            err: Error | null,
+            user: UserModel | null,
+            info: any,
+          ) => void,
+        ) =>
+          () => {
+            callback(null, null, { message: errorMessage });
+          },
+      );
+
+      await authController.signIn(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(401);
+      expect(mockResponse.json).toHaveBeenCalledWith({ message: errorMessage });
     });
   });
 });

@@ -14,10 +14,11 @@ const styles = {
 export const PostSingle = ({ item, shouldPlay }: { item: Post; shouldPlay: boolean }) => {
   const video = useRef<Video | null>(null)
   const [status, setStatus] = useState<any>({})
-  const user = useUser(item.creator)
+  const user = useUser(item.user_id.toString())
   useEffect(() => {
     if (!video.current) return
     if (shouldPlay) {
+      console.log(item.video_id, 'playing')
       video.current.playAsync()
     } else {
       video.current.pauseAsync()
@@ -38,7 +39,7 @@ export const PostSingle = ({ item, shouldPlay }: { item: Post; shouldPlay: boole
         resizeMode={ResizeMode.COVER}
         style={styles.container}
         isLooping
-        source={{ uri: item.media[0] }}
+        source={{ uri: item.video_url }}
         useNativeControls={false}
         onPlaybackStatusUpdate={(status) => setStatus(() => status)}
       />
