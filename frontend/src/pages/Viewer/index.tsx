@@ -18,4 +18,7 @@ export * from './Signup'
 export * from './LoginByMail'
 export * from './SignupByMail'
 export * from './PasswordInput'
+// Onboarding section
+export * from './OnBoarding'
+export * from './UsingGuide'
 export * from './SearchResult'

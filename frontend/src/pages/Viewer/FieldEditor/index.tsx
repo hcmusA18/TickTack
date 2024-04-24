@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { AppStackScreenProps } from 'navigators'
 import { Screen } from 'components'
 import { Divider } from 'react-native-paper'
-import { TextInput } from 'react-native-gesture-handler'
 import { colors } from 'theme'
 
 interface FieldEditorProps extends AppStackScreenProps<'FieldEditor'> {}
@@ -52,7 +51,7 @@ export const FieldEditor: FC<FieldEditorProps> = ({ route, navigation }) => {
   // const { navigation } = props;
   const { fieldName, fieldValue } = route.params ?? { fieldName: 'Username', fieldValue: '' }
 
-  const [value, setValue] = useState(fieldValue)
+  const [value] = useState(fieldValue)
 
   const onSave = () => {
     // Save the new value
@@ -78,7 +77,6 @@ export const FieldEditor: FC<FieldEditorProps> = ({ route, navigation }) => {
       <Divider />
       <View style={styles.fieldsContainer}>
         <Text style={styles.fieldNameStyle}>{fieldName}</Text>
-        <TextInput style={styles.textInputStyle} defaultValue={fieldValue} onChangeText={(text) => setValue(text)} />
       </View>
     </Screen>
   )
