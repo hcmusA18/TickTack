@@ -43,7 +43,7 @@ const InterestGroup: React.FC<InterestGroupProps> = (props: InterestGroupProps) 
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         <View style={[styles.iconStyleDefaut, iconStyle]}>
-          {categoryIcon && <Icon source={categoryIcon} size={24} color={colors.ttt.ink200} />}
+          {categoryIcon !== '' && <Icon source={categoryIcon} size={24} color={colors.ttt.ink200} />}
         </View>
         <Text style={styles.titleText}>{categoryName}</Text>
       </View>
