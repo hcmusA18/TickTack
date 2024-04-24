@@ -35,20 +35,20 @@ export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
     }
   }, [screenIsFocused])
 
+  const fetchAndSetPost = (videoId) => {
+    axios.get(`https://6030-113-172-122-34.ngrok-free.app/recsys/video/${videoId}`).then((res) => {
+      setPosts((prev) => [...prev, res.data])
+    })
+    setRemaining((prev) => prev + 1)
+  }
+
   useEffect(() => {
     if (profile && creator) {
       // fetch user's posts
-    } else {
-      if (remaining <= 2) {
-        videoIds.forEach((videoId) => {
-          axios.get(`https://6030-113-172-122-34.ngrok-free.app/recsys/video/${videoId}`).then((res) => {
-            setPosts((prev) => [...prev, res.data])
-          })
-          setRemaining((prev) => prev + 1)
-        })
-      }
+    } else if (remaining <= 2) {
+      videoIds.forEach((videoId) => fetchAndSetPost(videoId))
     }
-  }, [remaining])
+  }, [creator, profile, remaining])
 
   const viewabilityConfigCallbackPairs = useRef([{ viewabilityConfig, onViewableItemsChanged }])
   const feedItemHeight = Dimensions.get('window').height - useMaterialNavbarHeight(profile)
