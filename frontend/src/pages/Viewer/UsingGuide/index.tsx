@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, Animated, Easing } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { AppStackScreenProps } from 'navigators'
+import React, { useEffect, useState } from 'react'
+import { Animated, Dimensions, Easing, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { colors } from 'theme'
 
 interface UsingGuideProps extends AppStackScreenProps<'UsingGuide'> {}
@@ -60,11 +60,7 @@ export const UsingGuide: React.FC<UsingGuideProps> = (props: UsingGuideProps) =>
       <View style={{ flex: 1 }}>
         {/* Top */}
         <View style={styles.TopBarContainer}>
-          <TouchableOpacity
-            style={styles.buttonSkip}
-            onPress={() => {
-              return
-            }}>
+          <TouchableOpacity style={styles.buttonSkip}>
             <Text style={styles.skipText}></Text>
           </TouchableOpacity>
         </View>
@@ -114,7 +110,7 @@ export const UsingGuide: React.FC<UsingGuideProps> = (props: UsingGuideProps) =>
   )
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   TopBarContainer: {
     flex: 1,
     backgroundColor: colors.ttt.pjWhite,
