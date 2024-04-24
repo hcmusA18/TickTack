@@ -4,30 +4,47 @@ import { merge } from 'lodash'
 type AuthState = {
   authToken: string | null
   authEmail: string | null
+  firstOpen: boolean
 }
 
 const AuthSlice = createSlice({
   name: 'auth',
   initialState: {
     authToken: null,
-    authEmail: null
+    authEmail: null,
+    firstOpen: true
   } as AuthState,
   reducers: {
     setAuthToken(state, action: PayloadAction<string>) {
-      state.authToken = action.payload
+      return {
+        ...state,
+        authToken: action.payload
+      }
     },
     setAuthEmail(state, action: PayloadAction<string>) {
-      state.authEmail = action.payload
+      return {
+        ...state,
+        authEmail: action.payload
+      }
+    },
+    setFirstOpen(state) {
+      return {
+        ...state,
+        firstOpen: false
+      }
     },
     setAuth(state, action: PayloadAction<AuthState>) {
       merge(state, action.payload)
     },
-    clearAuth(state) {
-      state.authToken = null
-      state.authEmail = null
+    clearAuth(_state) {
+      return {
+        authToken: null,
+        authEmail: null,
+        firstOpen: false
+      }
     }
   }
 })
 
-export const { setAuthToken, setAuthEmail, setAuth, clearAuth } = AuthSlice.actions
+export const { setAuthToken, setAuthEmail, setAuth, setFirstOpen, clearAuth } = AuthSlice.actions
 export const AuthReducer = AuthSlice.reducer

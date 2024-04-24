@@ -73,7 +73,7 @@ export const PassWordInput: FC<PassWordInputProps> = (props) => {
         onFirstIconPress={() => {
           navigation.goBack()
         }}
-        onSecondIconPress={() => {}}
+        onSecondIconPress={undefined}
       />
     )
   }

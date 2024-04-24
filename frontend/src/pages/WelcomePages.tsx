@@ -4,6 +4,8 @@ import { Screen } from '../components'
 import { AppStackScreenProps } from '../navigators'
 import { Button } from 'react-native-paper'
 import { spacing } from '../theme'
+import { useAppDispatch, useAppSelector } from 'libs/redux'
+import { setFirstOpen } from 'libs/redux/sliceAuth'
 
 interface WelcomePageProps extends AppStackScreenProps<'Welcome'> {}
 
@@ -27,9 +29,18 @@ const styles = StyleSheet.create({
 
 export const WelcomePage: FC<WelcomePageProps> = (props) => {
   const { navigation } = props
+  const { firstOpen, authToken } = useAppSelector((state) => state.auth)
+  const dispatch = useAppDispatch()
 
   const goNext = () => {
-    navigation.navigate('OnboardingPage')
+    if (firstOpen) {
+      dispatch(setFirstOpen())
+      navigation.navigate('OnboardingPage')
+    } else if (authToken) {
+      navigation.navigate('Main')
+    } else {
+      navigation.navigate('Login')
+    }
   }
 
   return (

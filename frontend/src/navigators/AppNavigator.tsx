@@ -66,6 +66,7 @@ const AppStack = () => {
         options={{
           headerShown: false
         }}
+        // first screen is the welcome screen
       />
       <Stack.Screen
         name="Login"
