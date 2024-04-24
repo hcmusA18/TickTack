@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
+import axiosInstance from 'libs/utils/axiosInstance'
 import { Dimensions, FlatList, View } from 'react-native'
 import { PostSingle } from './Post'
 import { colors } from 'theme'
@@ -6,44 +7,7 @@ import { Post } from 'libs/types'
 import useMaterialNavbarHeight from 'libs/hooks/useMaterialNavbarHeight'
 import { useIsFocused } from '@react-navigation/native'
 
-const posts: Post[] = [
-  {
-    id: '1',
-    creator: 'usr1',
-    media: ['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4'],
-    description: 'desc1',
-    likesCount: 1,
-    commentsCount: 1,
-    sharesCount: 1,
-    creation: '1',
-    hashtags: ['hashtag1', 'hashtag2'],
-    musicThumbnail: 'https://reactnative.dev/img/tiny_logo.png'
-  },
-  {
-    id: '2',
-    creator: 'usr2',
-    media: ['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'],
-    description: 'desc2',
-    likesCount: 2,
-    commentsCount: 2,
-    sharesCount: 2,
-    creation: '2',
-    hashtags: ['hashtag1', 'hashtag2'],
-    musicThumbnail: 'https://reactnative.dev/img/tiny_logo.png'
-  },
-  {
-    id: '3',
-    creator: 'usr3',
-    media: ['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'],
-    description: 'desc3',
-    likesCount: 3,
-    commentsCount: 3,
-    sharesCount: 3,
-    creation: '3',
-    hashtags: ['hashtag1', 'hashtag2'],
-    musicThumbnail: 'https://reactnative.dev/img/tiny_logo.png'
-  }
-]
+const videoIds = Array.from({ length: 100 }, (_, i) => `${i + 1}`)
 
 interface FeedProps {
   creator: string
@@ -52,6 +16,8 @@ interface FeedProps {
 }
 
 export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
+  const [posts, setPosts] = useState<Post[]>([])
+  const [remaining, setRemaining] = useState<number>(0)
   const screenIsFocused = useIsFocused()
   const [currentViewableItemIndex, setCurrentViewableItemIndex] = useState<number>(0)
   const viewabilityConfig = {
@@ -59,6 +25,7 @@ export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
   }
   const onViewableItemsChanged = ({ viewableItems }) => {
     if (viewableItems.length > 0) {
+      console.log(viewableItems[0].index)
       setCurrentViewableItemIndex(viewableItems[0].index)
     }
   }
@@ -68,13 +35,23 @@ export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
     }
   }, [screenIsFocused])
 
-  // useEffect(() => {
-  //   if (profile && creator) {
-  //     // fetch user's posts
-  //   } else {
-  //     // fetch for you posts
-  //   }
-  // }, []);
+  const fetchAndSetPost = (videoId) => {
+    axiosInstance
+      .getAxios()
+      .get(`/recsys/video/${videoId}`)
+      .then((res) => {
+        setPosts((prev) => [...prev, res.data])
+      })
+    setRemaining((prev) => prev + 1)
+  }
+
+  useEffect(() => {
+    if (profile && creator) {
+      // fetch user's posts
+    } else if (remaining <= 2) {
+      videoIds.forEach((videoId) => fetchAndSetPost(videoId))
+    }
+  }, [creator, profile, remaining])
 
   const viewabilityConfigCallbackPairs = useRef([{ viewabilityConfig, onViewableItemsChanged }])
   const feedItemHeight = Dimensions.get('window').height - useMaterialNavbarHeight(profile)
