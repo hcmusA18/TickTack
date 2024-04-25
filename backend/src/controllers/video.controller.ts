@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import multer, { Multer, diskStorage } from "multer";
 import { VideoService } from "@services";
-import { VideoModel } from "@models";
+import { UserModel, VideoModel } from "@models";
 import fs from "fs";
 
 const upload: Multer = multer({
@@ -33,19 +33,26 @@ class VideoController {
     upload.single("video")(req, res, async (err: any) => {
       try {
         if (err) {
+          console.error(err);
           res
             .status(400)
             .json({ message: `Error uploading file: ${err.message}` });
           return;
         }
 
+        console.log("Passed upload.single");
+
         const file = req.file;
         if (!file) {
+          console.error("No file uploaded.");
           res.status(400).send("No file uploaded.");
           return;
         }
 
         const video = req.body as VideoModel;
+        video.userId = (req.user as UserModel)?.userId || 1;
+
+        console.log("Passed req.body as VideoModel", video);
 
         const response = await VideoService.getInstance().uploadVideo(
           file,
@@ -66,8 +73,8 @@ class VideoController {
   };
   getVideoById = async (req: Request, res: Response) => {
     try {
-      const video_id = parseInt(req.params.video_id);
-      const video = await VideoService.getInstance().getVideoById(video_id);
+      const videoId = parseInt(req.params.videoId);
+      const video = await VideoService.getInstance().getVideoById(videoId);
       res.status(200).json({ video });
     } catch (error) {
       const _error = error as Error;

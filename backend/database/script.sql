@@ -26,12 +26,12 @@ CREATE TYPE privacy_level AS ENUM ('public', 'private', 'friends');
 
 CREATE TABLE videos (
     video_id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES "users"(user_id),
+    user_id INTEGER REFERENCES "users"(user_id) ON DELETE CASCADE,
     text TEXT,
     create_time BIGINT,
     video_url TEXT,
     duration INTEGER,
-    music_id TEXT REFERENCES musics(music_id),
+    music_id TEXT REFERENCES musics(music_id) ON DELETE CASCADE,
     hashtags TEXT[],
     privacy privacy_level,
     view_count INTEGER
@@ -43,32 +43,40 @@ CREATE TABLE socials (
 );
 
 CREATE TABLE likes (
-    user_id INTEGER REFERENCES "users"(user_id),
+    user_id INTEGER REFERENCES "users"(user_id) ON DELETE CASCADE,
     video_id INTEGER REFERENCES videos(video_id) ON DELETE CASCADE,
     time BIGINT,
     PRIMARY KEY (user_id, video_id)
 );
 
 CREATE TABLE dislikes (
-    user_id INTEGER REFERENCES "users"(user_id),
+    user_id INTEGER REFERENCES "users"(user_id) ON DELETE CASCADE,
     video_id INTEGER REFERENCES videos(video_id) ON DELETE CASCADE,
     time BIGINT,
     PRIMARY KEY (user_id, video_id)
 );
 
 CREATE TABLE saves (
-    user_id INTEGER REFERENCES "users"(user_id),
+    user_id INTEGER REFERENCES "users"(user_id) ON DELETE CASCADE,
     video_id INTEGER REFERENCES videos(video_id) ON DELETE CASCADE,
     time BIGINT,
     PRIMARY KEY (user_id, video_id)
 );
 
 CREATE TABLE comments (
-    user_id INTEGER REFERENCES "users"(user_id),
+    user_id INTEGER REFERENCES "users"(user_id) ON DELETE CASCADE,
     video_id INTEGER REFERENCES videos(video_id) ON DELETE CASCADE,
     comment_text TEXT,
     time BIGINT,
     PRIMARY KEY (user_id, video_id, time)
+);
+
+CREATE TABLE watched (
+    user_id INTEGER REFERENCES "users"(user_id) ON DELETE CASCADE,
+    video_id INTEGER REFERENCES videos(video_id) ON DELETE CASCADE,
+    percent REAL,
+    time BIGINT,
+    PRIMARY KEY (user_id, video_id)
 );
 
 insert into "users" (username, email, password, avatar, bio, regis_date) values

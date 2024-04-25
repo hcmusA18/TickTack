@@ -1,13 +1,14 @@
-import React, { FC } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import { Feather } from '@expo/vector-icons'
-import { colors } from 'theme'
-import { clearModal } from 'libs/redux/sliceModal'
+import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import { useAppDispatch, useAppSelector } from 'libs/redux'
-import { setSound } from 'libs/redux/sliceSoundSelect'
-import { SoundItem } from './SoundItem'
+import { clearModal } from 'libs/redux/sliceModal'
+import { setMusicId } from 'libs/redux/sliceVideoPost'
 import { Sound } from 'libs/types'
+import DATA from 'pages/Viewer/VideoPreviewer/SoundRawData'
+import React, { FC, useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { colors } from 'theme'
+import { SoundItem } from './SoundItem'
 
 const styles = StyleSheet.create({
   modalContent: {
@@ -24,7 +25,8 @@ interface MusicContentProps {
 
 export const MusicContent: FC<MusicContentProps> = ({ sounds }) => {
   const dispatch = useAppDispatch()
-  const sound = useAppSelector((state) => state.soundSelect.sound)
+  const musicId = useAppSelector((state) => state.videoPost.music_id)
+  const [sound, _] = useState(DATA.find((item) => item.id === musicId)?.name || null)
   console.log('sound', sound)
   return (
     <View style={{ backgroundColor: colors.white, padding: 16, height: '100%' }}>
@@ -49,7 +51,7 @@ export const MusicContent: FC<MusicContentProps> = ({ sounds }) => {
           data={sounds}
           renderItem={({ item }) => {
             return (
-              <TouchableOpacity onPress={() => dispatch(setSound(item.name))}>
+              <TouchableOpacity onPress={() => dispatch(setMusicId(item.id))}>
                 <SoundItem item={item} sound={sound} />
               </TouchableOpacity>
             )

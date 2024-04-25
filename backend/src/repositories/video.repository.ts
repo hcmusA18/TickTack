@@ -18,20 +18,21 @@ class VideoRepository {
   };
 
   addNewVideo = async (video: VideoModel): Promise<VideoModel | null> => {
-    if (!video.music_id) video.music_id = null;
+    if (!video.musicId) video.musicId = null;
+    console.log("Repository: ", video);
     const query = {
       text: `INSERT INTO videos(user_id, text, create_time, video_url, duration, music_id, hashtags, privacy, view_count) 
       VALUES($1, $2, $3, $4, $5, ${
-        video.music_id || null
+        video.musicId || null
       }, ${this.stringArrayConverter(video.hashtags)}, $6, $7) RETURNING *`,
       values: [
-        video.user_id.toString(),
+        video.userId.toString(),
         video.text,
-        video.create_time.toString(),
-        video.video_url,
+        video.createTime.toString(),
+        video.videoUrl,
         video.duration.toString(),
         (video.privacy || "public").toString(),
-        (video.view_count || 0).toString(),
+        (video.viewCount || 0).toString(),
       ],
     };
     try {
@@ -39,6 +40,7 @@ class VideoRepository {
       return result.rows[0];
     } catch (error) {
       const _error = error as Error;
+      console.error(_error.message);
       throw new Error(`${_error.message}`);
     }
   };

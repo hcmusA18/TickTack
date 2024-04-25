@@ -15,7 +15,8 @@ interface VideoPreviewerProps extends AppStackScreenProps<'VideoPreviewer'> {}
 export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
   const { navigation } = props
   const dispatch = useAppDispatch()
-  const sound = useAppSelector((state) => state.soundSelect.sound)
+  const sound = useAppSelector((state) => state.videoPost.musicId)
+  const videoUrl = useAppSelector((state) => state.videoPost.videoUrl)
   const videoRef = useRef(null)
 
   useEffect(() => {
@@ -25,11 +26,10 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
   const handleNext = () => {
     // destroy the video previewer
     videoRef.current?.pauseAsync()
-    navigation.navigate('SavePost', { source: props.route?.params?.source })
+    navigation.navigate('SavePost')
   }
 
   const handleOpenSoundModal = () => {
-    console.log('open sound modal')
     dispatch(openModal({ isOpen: true, data: DATA, modalType: ModalType.MUSIC_SELECT }))
   }
   const handleClearSoundSelect = () => {
@@ -67,7 +67,7 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
         )}
       </View>
       <Video
-        source={{ uri: props.route?.params?.source }}
+        source={{ uri: videoUrl }}
         rate={1.0}
         ref={videoRef}
         volume={1.0}
@@ -89,8 +89,6 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
           <Text style={styles.postButtonText}>Next</Text>
         </TouchableOpacity>
       </View>
-
-      {/* <MusicModalGorhom visible={modalVisible} setVisible={setModalVisible} sound={sound} setSound={setSound} /> */}
     </View>
   )
 }

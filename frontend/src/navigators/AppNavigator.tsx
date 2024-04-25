@@ -31,12 +31,12 @@ export type AppStackParamList = {
   Login: undefined
   // 🔥 Your screens go here
   Main: NavigatorScreenParams<MainTabParamList>
-  SavePost: { source: string }
+  SavePost: undefined
   ProfileEditor: undefined
   FieldEditor: { fieldName: string; fieldValue: string }
   UserProfile: undefined
   SuggestedAccounts: undefined
-  VideoPreviewer: { source: string }
+  VideoPreviewer: undefined
   Search: undefined
   SignUpByMail: undefined
   SignUp: undefined
