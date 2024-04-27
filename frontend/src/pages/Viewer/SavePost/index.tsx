@@ -7,6 +7,8 @@ import { Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } fro
 import Toast from 'react-native-simple-toast'
 import { RadioButton } from 'react-native-paper'
 import { colors } from 'theme'
+import axiosInstance from 'libs/utils/axiosInstance'
+import axios from 'axios'
 
 interface SavePostPageProps extends AppStackScreenProps<'SavePost'> {}
 
@@ -42,7 +44,7 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
       type: 'video/mp4'
     })
 
-    const hashtags = textInput.match(/#[a-zA-Z0-9]+/g) || []
+    const hashtags = textInput.match(/#[a-zA-Z0-9]+/g)
     const text = textInput.replace(/#[a-zA-Z0-9]+/g, '').trim()
     formData.append('text', text)
     forEach(hashtags, (hashtag) => {
@@ -53,18 +55,21 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
     formData.append('duration', duration.toString())
 
     try {
-      await fetch(process.env.EXPO_PUBLIC_API_URL + '/video/upload', { method: 'POST', body: formData })
-        .then((response) => {
-          console.log(response)
-          Toast.show('Post uploaded', Toast.LONG)
-        })
-        .catch((error) => {
-          console.error(error)
-          Toast.show('Error uploading post', Toast.LONG)
-        })
+      axiosInstance.setContentType('multipart/form-data')
+      const response = await axiosInstance.getAxios().post('/video/upload', formData)
+
+      axiosInstance.setContentType('application/json')
+
+      if (response.status === 200) {
+        Toast.show('Post uploaded', Toast.LONG)
+      } else {
+        Toast.show('Error uploading post', Toast.LONG)
+      }
     } catch (error) {
+      if (error.response) {
+        console.log(error.response.data)
+      }
       console.error(error)
-      console.log(process.env.EXPO_PUBLIC_API_URL)
       Toast.show('Error uploading post', Toast.LONG)
     }
   }

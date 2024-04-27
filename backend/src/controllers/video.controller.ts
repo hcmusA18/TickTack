@@ -40,8 +40,6 @@ class VideoController {
           return;
         }
 
-        console.log("Passed upload.single");
-
         const file = req.file;
         if (!file) {
           console.error("No file uploaded.");
@@ -51,8 +49,6 @@ class VideoController {
 
         const video = req.body as VideoModel;
         video.userId = (req.user as UserModel)?.userId || 1;
-
-        console.log("Passed req.body as VideoModel", video);
 
         const response = await VideoService.getInstance().uploadVideo(
           file,

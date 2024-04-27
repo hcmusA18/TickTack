@@ -3,7 +3,6 @@ import "module-alias/register";
 import cors from "cors";
 import express from "express";
 import { userRouter, videoRouter, apiRouter, recsysRouter } from "@routes";
-import authMiddleware from "./middlewares/auth.middleware";
 import { AuthController } from "@controllers";
 import pool from "./repositories/db";
 import passportConfig from "./config/passport";
