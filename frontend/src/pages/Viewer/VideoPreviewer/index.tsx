@@ -1,6 +1,6 @@
-import React, { FC, useEffect, useRef } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import { ResizeMode, Video } from 'expo-av'
+import { ResizeMode, Video, Audio } from 'expo-av'
 import { Feather, MaterialIcons } from '@expo/vector-icons'
 import { AppStackScreenProps } from 'navigators'
 import { colors } from 'theme'
@@ -18,15 +18,39 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
   const sound = useAppSelector((state) => state.videoPost.musicId)
   const videoUrl = useAppSelector((state) => state.videoPost.videoUrl)
   const videoRef = useRef(null)
+  const soundObject = new Audio.Sound()
 
   useEffect(() => {
     videoRef.current?.playAsync()
+
+    loadBackgroundMusic()
+
+    return () => {
+      videoRef.current?.pauseAsync()
+      soundObject.unloadAsync()
+    }
   })
 
   const handleNext = () => {
     // destroy the video previewer
     videoRef.current?.pauseAsync()
     navigation.navigate('SavePost')
+  }
+
+  const loadBackgroundMusic = async () => {
+    try {
+      await soundObject.loadAsync(require('./test.mp3'))
+      await soundObject.setIsLoopingAsync(true)
+      await soundObject.playAsync()
+    } catch (error) {
+      console.log('Error loading sound', error)
+    }
+  }
+
+  const handlePlaybackStatusUpdate = (status) => {
+    if (status.didJustFinish) {
+      soundObject.replayAsync()
+    }
   }
 
   const handleOpenSoundModal = () => {
@@ -76,6 +100,7 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
         shouldPlay
         isLooping
         style={styles.video}
+        onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
       />
 
       <View style={styles.buttonsContainer}>
