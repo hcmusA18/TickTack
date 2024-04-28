@@ -2,7 +2,13 @@ import "dotenv/config";
 import "module-alias/register";
 import cors from "cors";
 import express from "express";
-import { userRouter, videoRouter, apiRouter, recsysRouter } from "@routes";
+import {
+  userRouter,
+  videoRouter,
+  apiRouter,
+  recsysRouter,
+  musicRouter,
+} from "@routes";
 import { AuthController } from "@controllers";
 import pool from "./repositories/db";
 import passportConfig from "./config/passport";
@@ -67,6 +73,7 @@ app.use("/recsys", recsysRouter);
 
 app.use("/user", userRouter);
 app.use("/video", videoRouter);
+app.use("/music", musicRouter);
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}!`));
 

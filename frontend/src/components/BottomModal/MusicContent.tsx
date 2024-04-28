@@ -25,7 +25,7 @@ interface MusicContentProps {
 
 export const MusicContent: FC<MusicContentProps> = ({ sounds }) => {
   const dispatch = useAppDispatch()
-  const musicId = useAppSelector((state) => state.videoPost.music_id)
+  const musicId = useAppSelector((state) => state.videoPost.musicId)
   const [sound, _] = useState(DATA.find((item) => item.id === musicId)?.name || null)
   console.log('sound', sound)
   return (
