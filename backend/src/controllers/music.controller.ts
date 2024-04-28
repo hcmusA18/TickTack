@@ -28,7 +28,7 @@ class MusicController {
 
   getAllMusic = async (req: Request, res: Response) => {
     try {
-      const from = parseInt(req.query.from as string) || undefined;
+      const from = parseInt(req.query.from as string) || 0;
       const limit = parseInt(req.query.limit as string) || undefined;
       const music = await MusicService.getInstance().getAllMusic(from, limit);
       res.status(200).json({ data: music });

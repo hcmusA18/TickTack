@@ -2,9 +2,8 @@ import { Feather } from '@expo/vector-icons'
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import { useAppDispatch, useAppSelector } from 'libs/redux'
 import { clearModal } from 'libs/redux/sliceModal'
-import { setMusicId } from 'libs/redux/sliceVideoPost'
+import { setMusic } from 'libs/redux/sliceVideoPost'
 import { Sound } from 'libs/types'
-import DATA from 'pages/Viewer/VideoPreviewer/SoundRawData'
 import React, { FC, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { colors } from 'theme'
@@ -25,9 +24,9 @@ interface MusicContentProps {
 
 export const MusicContent: FC<MusicContentProps> = ({ sounds }) => {
   const dispatch = useAppDispatch()
-  const musicId = useAppSelector((state) => state.videoPost.musicId)
-  const [sound, _] = useState(DATA.find((item) => item.id === musicId)?.name || null)
-  console.log('sound', sound)
+  const music = useAppSelector((state) => state.videoPost.music)
+  const [sound, setSound] = useState(sounds.find((item) => item.music_id === music?.music_id)?.music_name || null)
+
   return (
     <View style={{ backgroundColor: colors.white, padding: 16, height: '100%' }}>
       <View
@@ -51,12 +50,16 @@ export const MusicContent: FC<MusicContentProps> = ({ sounds }) => {
           data={sounds}
           renderItem={({ item }) => {
             return (
-              <TouchableOpacity onPress={() => dispatch(setMusicId(item.id))}>
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(setMusic(item))
+                  setSound(item.music_name)
+                }}>
                 <SoundItem item={item} sound={sound} />
               </TouchableOpacity>
             )
           }}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.music_id}
           style={{ flex: 1 }}
         />
       </View>

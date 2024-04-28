@@ -1,9 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { Sound } from 'libs/types'
 
 type VideoPostType = {
   text: string
   privacy: string
-  musicId: string | null
+  music: Sound | null
   hashtags: string[]
   duration: number
   videoUrl: string
@@ -15,7 +16,7 @@ const VideoPostSlice = createSlice({
   initialState: {
     text: '',
     privacy: 'public',
-    musicId: null,
+    music: null,
     hashtags: [],
     duration: 0,
     videoUrl: '',
@@ -28,8 +29,8 @@ const VideoPostSlice = createSlice({
     setPrivacy(state, action: PayloadAction<string>) {
       state.privacy = action.payload
     },
-    setMusicId(state, action: PayloadAction<string | null>) {
-      state.musicId = action.payload
+    setMusic(state, action: PayloadAction<Sound | null>) {
+      state.music = action.payload
     },
     setHashtags(state, action: PayloadAction<string[]>) {
       state.hashtags = action.payload
@@ -47,7 +48,7 @@ const VideoPostSlice = createSlice({
       return {
         text: '',
         privacy: 'public',
-        musicId: null,
+        music: null,
         hashtags: [],
         duration: 0,
         videoUrl: '',
@@ -57,6 +58,6 @@ const VideoPostSlice = createSlice({
   }
 })
 
-export const { setText, setPrivacy, setMusicId, setHashtags, setDuration, setVideoUrl, setFile, clearVideoPost } =
+export const { setText, setPrivacy, setMusic, setHashtags, setDuration, setVideoUrl, setFile, clearVideoPost } =
   VideoPostSlice.actions
 export const VideoPostReducer = VideoPostSlice.reducer

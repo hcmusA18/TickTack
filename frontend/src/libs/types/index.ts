@@ -12,12 +12,10 @@ export interface Post {
 }
 
 export interface Sound {
-  id: string
-  name: string
-  artist: string
-  duration: string
-  url?: string | null
-  thumbnail?: string | null
+  music_id: string
+  music_name: string
+  music_author: string
+  music_url?: string | null
 }
 
 export interface Comment {

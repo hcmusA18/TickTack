@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { ResizeMode, Video, Audio } from 'expo-av'
 import { Feather, MaterialIcons } from '@expo/vector-icons'
@@ -8,25 +8,28 @@ import { useAppDispatch, useAppSelector } from 'libs/redux'
 import { ModalType } from 'libs/types'
 import { openModal } from 'libs/redux/sliceModal'
 import { clearSound } from 'libs/redux/sliceSoundSelect'
-import DATA from './SoundRawData'
+import axiosInstance from 'libs/utils/axiosInstance'
 
 interface VideoPreviewerProps extends AppStackScreenProps<'VideoPreviewer'> {}
 
 export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
   const { navigation } = props
   const dispatch = useAppDispatch()
-  const sound = useAppSelector((state) => state.videoPost.musicId)
+  const music = useAppSelector((state) => state.videoPost.music)
   const videoUrl = useAppSelector((state) => state.videoPost.videoUrl)
   const videoRef = useRef(null)
   const soundObject = new Audio.Sound()
+
+  let musicData = []
 
   useEffect(() => {
     videoRef.current?.playAsync()
 
     loadBackgroundMusic()
 
+    getAllMusics()
+
     return () => {
-      videoRef.current?.pauseAsync()
       soundObject.unloadAsync()
     }
   })
@@ -53,8 +56,23 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
     }
   }
 
-  const handleOpenSoundModal = () => {
-    dispatch(openModal({ isOpen: true, data: DATA, modalType: ModalType.MUSIC_SELECT }))
+  const getAllMusics = async () => {
+    try {
+      await axiosInstance
+        .getAxios()
+        .get('/music/all')
+        .then((response) => {
+          musicData = response.data.data
+        })
+    } catch (error) {
+      const _error = error as Error
+      console.error(`${_error.message}`)
+      throw new Error(`${_error.message}`)
+    }
+  }
+
+  const handleOpenSoundModal = async () => {
+    dispatch(openModal({ isOpen: true, data: musicData, modalType: ModalType.MUSIC_SELECT }))
   }
   const handleClearSoundSelect = () => {
     dispatch(clearSound())
@@ -63,7 +81,7 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.addSoundContainer}>
-        {sound === null ? (
+        {music === null ? (
           <TouchableOpacity
             style={{ flexDirection: 'row', alignItems: 'center', width: '80%', justifyContent: 'space-evenly' }}
             onPress={handleOpenSoundModal}>
@@ -80,7 +98,7 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
                 style={{ color: colors.white, fontSize: 15, width: 85, marginLeft: 8 }}
                 numberOfLines={1}
                 ellipsizeMode="tail">
-                {sound || 'Add sound'}
+                {music.music_name || 'Add sound'}
               </Text>
             </TouchableOpacity>
             <View style={styles.separator} />
@@ -95,7 +113,7 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
         rate={1.0}
         ref={videoRef}
         volume={1.0}
-        isMuted={false}
+        isMuted={true}
         resizeMode={ResizeMode.COVER}
         shouldPlay
         isLooping
