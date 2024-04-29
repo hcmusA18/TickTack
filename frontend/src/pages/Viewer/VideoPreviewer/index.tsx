@@ -7,8 +7,8 @@ import { colors } from 'theme'
 import { useAppDispatch, useAppSelector } from 'libs/redux'
 import { ModalType } from 'libs/types'
 import { openModal } from 'libs/redux/sliceModal'
-import { clearSound } from 'libs/redux/sliceSoundSelect'
 import axiosInstance from 'libs/utils/axiosInstance'
+import { setMusic } from 'libs/redux/sliceVideoPost'
 
 interface VideoPreviewerProps extends AppStackScreenProps<'VideoPreviewer'> {}
 
@@ -45,7 +45,7 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
   const loadBackgroundMusic = async () => {
     try {
       const { sound } = await Audio.Sound.createAsync({
-        uri: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/45/f3/c5/45f3c5bc-2c53-a83c-d6a1-a91ac1ad2e37/mzaf_16558570487470259656.plus.aac.p.m4a'
+        uri: music?.music_url
       })
       // await sound.loadAsync()
       soundObject = sound
@@ -57,7 +57,7 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
   }
 
   const handlePlaybackStatusUpdate = (status) => {
-    if (status.didJustFinish) {
+    if (status.didJustFinish && soundObject !== null) {
       soundObject.replayAsync()
     }
   }
@@ -81,7 +81,7 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
     dispatch(openModal({ isOpen: true, data: musicData, modalType: ModalType.MUSIC_SELECT }))
   }
   const handleClearSoundSelect = () => {
-    dispatch(clearSound())
+    dispatch(setMusic(null))
   }
 
   return (
@@ -119,7 +119,7 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
         rate={1.0}
         ref={videoRef}
         volume={1.0}
-        isMuted={true}
+        isMuted={music !== null}
         resizeMode={ResizeMode.COVER}
         shouldPlay
         isLooping
