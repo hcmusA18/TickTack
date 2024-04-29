@@ -17,6 +17,15 @@ conn = psycopg2.connect(
 )
 cur = conn.cursor()
 
+# read music_links.csv
+music_links = []
+with open('./backend/database/music_links.csv', encoding='utf-8') as f:
+    links = f.readlines()
+    links = [link.strip() for link in links]
+    music_links = links
+
+i = 0
+
 # Read music.csv
 try:
     with open('./backend/database/music.csv', encoding='utf-8') as f:
@@ -27,7 +36,10 @@ try:
             music_id = m.split(',')[0]
             music_author = m.split(',')[1]
             music_name = m.split(',')[2]
-            music_url = m.split(',')[7]
+            music_url = m.split(',')[-3]
+            if i < len(music_links):
+                music_url = music_links[i]
+                i += 1
             cur.execute("INSERT INTO musics (music_id, music_author, music_name, music_url) VALUES (%s, %s, %s, %s) ON CONFLICT (music_id) DO NOTHING", (music_id, music_author, music_name, music_url))
     print('Music data inserted successfully')
 except Exception as e:

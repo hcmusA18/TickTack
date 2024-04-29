@@ -18,7 +18,7 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
   const music = useAppSelector((state) => state.videoPost.music)
   const videoUrl = useAppSelector((state) => state.videoPost.videoUrl)
   const videoRef = useRef(null)
-  const soundObject = new Audio.Sound()
+  let soundObject = null
 
   let musicData = []
 
@@ -30,7 +30,9 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
     getAllMusics()
 
     return () => {
-      soundObject.unloadAsync()
+      if (soundObject !== null) {
+        soundObject.unloadAsync()
+      }
     }
   })
 
@@ -42,7 +44,11 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
 
   const loadBackgroundMusic = async () => {
     try {
-      await soundObject.loadAsync(require('./test.mp3'))
+      const { sound } = await Audio.Sound.createAsync({
+        uri: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/45/f3/c5/45f3c5bc-2c53-a83c-d6a1-a91ac1ad2e37/mzaf_16558570487470259656.plus.aac.p.m4a'
+      })
+      // await sound.loadAsync()
+      soundObject = sound
       await soundObject.setIsLoopingAsync(true)
       await soundObject.playAsync()
     } catch (error) {
