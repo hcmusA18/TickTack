@@ -97,54 +97,51 @@ pip install numpy
 4. Run the sql script in the backend/src/database folder to create the tables
 5. Run the python script in the backend/src/database folder to insert the data into the tables
 
-## How to run the docker to host the Recomendation System
+## How to start the recommender
 
-1. Open the backend/serving folder to check existing models (retrieval_index, ranking_model)
-2. Pull the tensorflow/serving image from docker hub
+### Run on your own
 
-```bash
-  docker pull tensorflow/serving
-```
-
-3. Run the following command to host the Recomendation System
+1. Change the directory to the `recommender` folder
+2. Create a virtual environment in the `recommender` folder with python 3.10
 
 ```bash
-docker run -p 8501:8501 --mount type=bind,source=absolute_path_to_serving/retrieval_index,target=/models/retrieval_index --mount type=bind,source=absolute_path_to_serving/ranking_model,target=/models/ranking_model --mount type=bind,source=absolute_path_to_serving/config/models.config,target=/models/models.config -t tensorflow/serving --model_config_file=/models/models.config
+python -m venv venv
 ```
 
-4. The Rest API will be hosted on http://localhost:8501/v1/models/retrieval:predict and http://localhost:8501/v1/models/ranking:predict
+3. Activate the virtual environment
 
-### How to check the status of the models
-
-- Open the browser and go to http://localhost:8501/v1/models/retrieval and http://localhost:8501/v1/models/ranking
-
-### How to request the models
-
-#### Retrieval model
-
-Post request to http://localhost:8501/v1/models/retrieval:predict
-
-```json
-{
-  "instances": ["1", "2", "3", "4", "5"]
-}
+```bash
+venv/Scripts/activate
 ```
 
-instances is the input of the model, it is a list of strings, each string is the id of a user
-Response will be a list of lists, each list is the id of the recommended video for the corresponding user (output_2)
+4. Install the required packages
 
-#### Ranking model
-
-Post request to http://localhost:8501/v1/models/ranking:predict
-
-```json
-{
-  "inputs": {
-    "user_id": ["1", "1", "1"],
-    "video_id": ["1", "2", "3"]
-  }
-}
+```bash
+pip install -r requirements.txt
 ```
 
-inputs is the input of the model, it is a dictionary with 2 keys: user_id and video_id, each key is a list of strings, each string is the id of a user or a video. The length of the 2 lists must be the same and the i-th element of the user_id list is the id of the user who watched the i-th video in the video_id list
-Response will be a list of lists, each list is the score of the corresponding video for the corresponding user
+5. Run the 2 scripts in the `recommender` folder separately
+
+```bash
+python .\model_builder.py
+python .\recommender.py
+```
+
+### Run on docker
+
+1. Change the directory to the `recommender` folder
+2. Build the docker image for the first time or after changes
+
+```bash
+docker compose up --build
+```
+
+- If you want to run the docker image without building it
+
+```bash
+docker compose up
+```
+
+If successfully run, the recommender will be available at `http://127.0.0.1:8080/recommend`. The request format is as follows: `http://127.0.0.1:8080/recommend?userId=1&number=5`. The `userId` is the user id and the `number` is the number of recommendations to be returned.
+
+`model_builder.py` will track the changes in the database and update the model accordingly. `recommender.py` will start a flask server to serve the recommendations.

@@ -10,32 +10,33 @@ import tensorflow as tf
 from typing import Dict, Text
 import tensorflow_recommenders as tfrs
 
+def create_embedding_model(datasets): 
+    user_vocab = tf.keras.layers.StringLookup(mask_token=None)
+    user_vocab.adapt(datasets["users"])
+    video_vocab = tf.keras.layers.StringLookup(mask_token=None)
+    video_vocab.adapt(datasets["videos"])
+    user_model = tf.keras.Sequential(
+        [
+            user_vocab,
+            tf.keras.layers.Embedding(len(datasets["users"]) + 1, 32),
+        ]
+    )
+    video_model = tf.keras.Sequential(
+        [
+            video_vocab,
+            tf.keras.layers.Embedding(len(datasets["videos"]) + 1, 32),
+        ]
+    )
+    return user_model, video_model
 
 class RetrievalModel(tfrs.Model):
     def __init__(self, datasets: Dict[Text, tf.data.Dataset]):
         super().__init__()
-        user_vocab = tf.keras.layers.StringLookup(mask_token=None)
-        user_vocab.adapt(datasets["users"])
-
-        video_vocab = tf.keras.layers.StringLookup(mask_token=None)
-        video_vocab.adapt(datasets["videos"])
-
-        self.user_model = tf.keras.Sequential(
-            [
-                user_vocab,
-                tf.keras.layers.Embedding(len(datasets["users"]) + 1, 32),
-            ]
-        )
-        self.video_model = tf.keras.Sequential(
-            [
-                video_vocab,
-                tf.keras.layers.Embedding(len(datasets["videos"]) + 1, 32),
-            ]
-        )
+        self.user_model, self.video_model = create_embedding_model(datasets)
 
         self.task = tfrs.tasks.Retrieval(
             metrics=tfrs.metrics.FactorizedTopK(
-                candidates=datasets["videos"].batch(128).map(lambda x: (x, self.video_model(x))),
+                candidates=datasets["videos"].batch(128).map(self.video_model)
             )
         )
 
@@ -50,22 +51,7 @@ class RetrievalModel(tfrs.Model):
 class RankingModel(tf.keras.Model):
     def __init__(self, datasets: Dict[Text, tf.data.Dataset]):
         super().__init__()
-        user_vocab = tf.keras.layers.StringLookup(mask_token=None)
-        user_vocab.adapt(datasets["users"])
-        video_vocab = tf.keras.layers.StringLookup(mask_token=None)
-        video_vocab.adapt(datasets["videos"])
-        self.user_model = tf.keras.Sequential(
-            [
-                user_vocab,
-                tf.keras.layers.Embedding(len(datasets["users"]) + 1, 32),
-            ]
-        )
-        self.video_model = tf.keras.Sequential(
-            [
-                video_vocab,
-                tf.keras.layers.Embedding(len(datasets["videos"]) + 1, 32),
-            ]
-        )
+        self.user_model, self.video_model = create_embedding_model(datasets)
         self.ranking_model = tf.keras.Sequential(
             [
                 tf.keras.layers.Dense(128, activation="relu"),
