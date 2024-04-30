@@ -1,11 +1,9 @@
+import { QueryConfig } from "pg";
 import pool from "./db";
 import { UserModel } from "@models";
 
 class UserRepository {
   private static instance: UserRepository | null = null;
-  constructor() {
-    // do something
-  }
 
   static getInstance(): UserRepository {
     if (UserRepository.instance === null) {
@@ -59,6 +57,49 @@ class UserRepository {
     }
   };
 
+  // Update: Update user details
+  updateUser = async (
+    id: string,
+    updateData: Partial<UserModel>,
+  ): Promise<UserModel | null> => {
+    const fields = Object.keys(updateData);
+    const values = Object.values(updateData);
+
+    // Generating the SET part of the SQL query dynamically based on the fields to be updated
+    const setQuery = fields
+      .map((field, index) => `${field} = $${index + 2}`)
+      .join(", ");
+
+    // Ensure values are appropriately typed
+    const queryValues: Array<string | number | null> = [id, ...values];
+
+    const query: QueryConfig = {
+      text: `UPDATE users SET ${setQuery} WHERE user_id = $1 RETURNING *`,
+      values: queryValues,
+    };
+
+    try {
+      const result = await pool.query(query);
+      return result.rows[0];
+    } catch (error) {
+      throw new Error(`Error updating user: ${(error as Error).message}`);
+    }
+  };
+
+  // Delete: Remove a user by ID
+  deleteUser = async (id: string): Promise<boolean> => {
+    const query = {
+      text: "DELETE FROM users WHERE id = $1",
+      values: [id],
+    };
+
+    try {
+      await pool.query(query);
+      return true;
+    } catch (error) {
+      throw new Error(`Error deleting user: ${(error as Error).message}`);
+    }
+  };
   getAllUserIds = async (): Promise<number[]> => {
     const query = {
       text: "SELECT user_id FROM users",
