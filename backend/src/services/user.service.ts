@@ -1,13 +1,9 @@
-import UserModel from "../models/user.model";
-import UserRepository from "../repositories/user.repository";
-import { hashPassword } from "./password.service";
+import { UserModel } from "@models";
+import { UserRepository } from "@repositories";
+import { PasswordService } from "@services";
 
 class UserService {
   private static instance: UserService | null = null;
-
-  constructor() {
-    // do something
-  }
 
   static getInstance(): UserService {
     if (UserService.instance === null) {
@@ -51,7 +47,8 @@ class UserService {
         throw new Error("Email already exist");
       }
 
-      const hashedPassword = await hashPassword(password);
+      const hashedPassword =
+        await PasswordService.getInstance().hashPassword(password);
 
       const user = await UserRepository.getInstance().addNewUser(
         email,
@@ -86,6 +83,15 @@ class UserService {
       throw new Error(`Error deleting user: ${(error as Error).message}`);
     }
   };
+  getAllUserIds = async (): Promise<number[]> => {
+    try {
+      const userIds = await UserRepository.getInstance().getAllUserIds();
+      return userIds;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
-export default UserService;
+export { UserService };

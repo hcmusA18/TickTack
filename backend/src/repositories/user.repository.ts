@@ -1,12 +1,9 @@
-import pool from "./db";
-import UserModel from "../models/user.model";
 import { QueryConfig } from "pg";
+import pool from "./db";
+import { UserModel } from "@models";
 
 class UserRepository {
   private static instance: UserRepository | null = null;
-  constructor() {
-    // do something
-  }
 
   static getInstance(): UserRepository {
     if (UserRepository.instance === null) {
@@ -103,6 +100,18 @@ class UserRepository {
       throw new Error(`Error deleting user: ${(error as Error).message}`);
     }
   };
+  getAllUserIds = async (): Promise<number[]> => {
+    const query = {
+      text: "SELECT user_id FROM users",
+    };
+    try {
+      const result = await pool.query(query);
+      return result.rows.map((user) => user.user_id);
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
-export default UserRepository;
+export { UserRepository };

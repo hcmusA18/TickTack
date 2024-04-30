@@ -38,6 +38,8 @@ const styles = StyleSheet.create({
   },
   description: {
     marginTop: 10,
+    width: 250,
+    textAlign: 'justify',
     color: colors.palette.neutral100
   },
   avatar: {
@@ -97,8 +99,8 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   // const navigation =
 
   // const currentUser = useAppSelector((state) => state.auth.currentUser)
-  const [likeState, setLikeState] = useState({ state: false, count: post.likesCount })
-  const [commentsCount] = useState(post.commentsCount)
+  const [likeState, setLikeState] = useState({ state: false, count: 100 })
+  const [commentsCount] = useState(100)
 
   // useEffect(() => {
   //   setLikeState({ state: post.isLiked, count: post.likesCount })
@@ -134,7 +136,9 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
     <View style={styles.container}>
       <View>
         <Text style={styles.displayName}>{user.displayName || user.email}</Text>
-        <Text style={styles.description}>{post.description}</Text>
+        <Text style={styles.description} numberOfLines={3} lineBreakMode="tail">
+          {post.text}
+        </Text>
       </View>
       <View style={styles.leftContainer}>
         <TouchableOpacity>
@@ -154,8 +158,11 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
           text={commentsCount}
           onPress={() => dispatch(openModal({ isOpen: true, data: post, modalType: 0 }))}
         />
-        <ActionButton iconName="paper-plane" text={post.sharesCount} />
-        <Animated.Image source={{ uri: post.musicThumbnail }} style={[styles.musicThumbnail, animationStyle]} />
+        <ActionButton iconName="paper-plane" text={100} />
+        <Animated.Image
+          source={{ uri: 'https://picsum.photos/200/300' }}
+          style={[styles.musicThumbnail, animationStyle]}
+        />
       </View>
     </View>
   )

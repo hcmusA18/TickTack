@@ -4,7 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { AppStackScreenProps } from 'navigators'
 import { TopBar } from '../Login/components/LoginTopBar'
 import { colors } from '../Login/components/MyColors'
+import { setAuthEmail } from 'libs/redux/sliceAuth'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import { useAppDispatch } from 'libs/redux'
 
 interface LoginByMailProps extends AppStackScreenProps<'LoginByMail'> {}
 
@@ -14,6 +16,8 @@ export const LoginByMail: FC<LoginByMailProps> = (props) => {
   const [isSubscribed, setIsSubscribed] = useState(false)
   const [activeTab, setActiveTab] = useState('email') // start with 'phone' or 'email'
   const [isValid, setIsValid] = useState(true)
+
+  const dispatch = useAppDispatch()
 
   const handleTabPress = (tab: React.SetStateAction<string>) => {
     setActiveTab(tab)
@@ -35,11 +39,12 @@ export const LoginByMail: FC<LoginByMailProps> = (props) => {
   }
 
   const actionLogin = () => {
-    if (isValid === true && email !== '') {
-      console.log('Email is valid')
-      return navigation.navigate('PassWordInput')
+    if (email !== '') {
+      dispatch(setAuthEmail(email))
+      navigation.navigate('PassWordInput')
+    } else {
+      console.error('Email is invalid')
     }
-    console.error('Email is invalid')
   }
 
   const getTopBarText = (activeTab: string) => {

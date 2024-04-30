@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { Screen } from 'components'
 import { MainTabScreenProps } from 'navigators'
 import { Topbar, Feed } from './components'

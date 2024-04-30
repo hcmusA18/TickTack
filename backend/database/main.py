@@ -71,9 +71,9 @@ try:
         if hashtags:
             hashtags = [h.get('name', '') for h in hashtags]
         
-        is_private = True if np.random.randint(0, 2) == 1 else False
+        privacy = np.random.choice(['public', 'private', 'friends'])
         view_count = video.get('playCount', 0)
-        cur.execute("INSERT INTO videos (user_id, text, create_time, video_url, duration, music_id, hashtags, is_private, view_count) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING video_id", (user_id, text, create_time, video_url, duration, music_id, hashtags, is_private, view_count))
+        cur.execute("INSERT INTO videos (user_id, text, create_time, video_url, duration, music_id, hashtags, privacy, view_count) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING video_id", (user_id, text, create_time, video_url, duration, music_id, hashtags, privacy, view_count))
     print('Video data inserted successfully')
 except Exception as e:
     print('Error inserting video data', e)

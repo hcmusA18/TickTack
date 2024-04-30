@@ -11,6 +11,7 @@ store.subscribe(() => {
   const { auth } = store.getState()
   storage.saveString('AUTH_TOKEN', auth.authToken ?? '')
   storage.saveString('AUTH_EMAIL', auth.authEmail ?? '')
+  storage.saveString('FIRST_OPEN', auth.firstOpen ? 'true' : 'false')
 })
 
 // Export the store type

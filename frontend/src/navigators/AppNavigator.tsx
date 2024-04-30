@@ -42,6 +42,8 @@ export type AppStackParamList = {
   SignUp: undefined
   LoginByMail: undefined
   PassWordInput: undefined
+  OnboardingPage: undefined
+  UsingGuide: undefined
   SearchResult: { searchQuery: string }
 }
 
@@ -64,6 +66,7 @@ const AppStack = () => {
         options={{
           headerShown: false
         }}
+        // first screen is the welcome screen
       />
       <Stack.Screen
         name="Login"
@@ -159,6 +162,20 @@ const AppStack = () => {
       <Stack.Screen
         name="PassWordInput"
         component={Pages.PassWordInput}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="OnboardingPage"
+        component={Pages.OnboardingPage}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="UsingGuide"
+        component={Pages.UsingGuide}
         options={{
           headerShown: false
         }}

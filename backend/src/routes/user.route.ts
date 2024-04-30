@@ -1,5 +1,5 @@
 import express from "express";
-import UserController from "../controllers/user.controller";
+import { UserController } from "@controllers";
 
 const router = express.Router();
 
@@ -11,4 +11,4 @@ router.patch("/:userId", (req, res) => {
   UserController.getInstance().updateUserProfile(req, res);
 });
 
-export default router;
+export { router as userRouter };
