@@ -2,6 +2,9 @@ import React from 'react'
 import { View, TouchableOpacity, Text } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 
+const focusColor = '#673ab7'
+const defaultColor = '#222'
+
 // Custom Tab Bar Component
 const CustomTabBar = ({ state, descriptors, navigation }) => {
   return (
@@ -29,9 +32,9 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
             accessibilityRole="button"
             onPress={onPress}
             style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            {label === 'Home' && <FontAwesome name="home" size={24} color={isFocused ? '#673ab7' : '#222'} />}
+            {label === 'Home' && <FontAwesome name="home" size={24} color={isFocused ? focusColor : defaultColor} />}
             {/* ... handle other icons similarly */}
-            <Text style={{ color: isFocused ? '#673ab7' : '#222' }}>{label}</Text>
+            <Text style={{ color: isFocused ? focusColor : defaultColor }}>{label}</Text>
           </TouchableOpacity>
         )
       })}
