@@ -8,7 +8,6 @@ import Toast from 'react-native-simple-toast'
 import { RadioButton } from 'react-native-paper'
 import { colors } from 'theme'
 import axiosInstance from 'libs/utils/axiosInstance'
-import axios from 'axios'
 
 interface SavePostPageProps extends AppStackScreenProps<'SavePost'> {}
 
@@ -20,7 +19,7 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
   const [privacy, setPrivacy] = useState('private')
   const [modalVisible, setModalVisible] = useState(false)
   const videoUrl = useAppSelector((state) => state.videoPost.videoUrl)
-  const musicId = useAppSelector((state) => state.videoPost.musicId)
+  const musicId = useAppSelector((state) => state.videoPost.music).music_id
   const duration = useAppSelector((state) => state.videoPost.duration)
 
   const addHashTag = () => {
@@ -44,7 +43,7 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
       type: 'video/mp4'
     })
 
-    const hashtags = textInput.match(/#[a-zA-Z0-9]+/g)
+    const hashtags = textInput.match(/#[a-zA-Z0-9]+/g).map((hashtag) => hashtag.replace('#', '').trim())
     const text = textInput.replace(/#[a-zA-Z0-9]+/g, '').trim()
     formData.append('text', text)
     forEach(hashtags, (hashtag) => {
@@ -52,7 +51,7 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
     })
     formData.append('privacy', privacy)
     formData.append('musicId', musicId || '')
-    formData.append('duration', duration.toString())
+    formData.append('duration', Math.floor(duration / 1000).toString())
 
     try {
       axiosInstance.setContentType('multipart/form-data')
@@ -62,6 +61,7 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
 
       if (response.status === 200) {
         Toast.show('Post uploaded', Toast.LONG)
+        navigation.navigate('Main', { screen: 'Camera' })
       } else {
         Toast.show('Error uploading post', Toast.LONG)
       }

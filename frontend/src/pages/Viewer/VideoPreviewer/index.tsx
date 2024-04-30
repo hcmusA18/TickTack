@@ -39,6 +39,7 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
   const handleNext = () => {
     // destroy the video previewer
     videoRef.current?.pauseAsync()
+    soundObject.unloadAsync()
     navigation.navigate('SavePost')
   }
 

@@ -48,6 +48,12 @@ class VideoController {
         }
 
         const video = req.body as VideoModel;
+
+        // convert video.hashtags to array if it is a string
+        if (typeof video.hashtags === "string") {
+          video.hashtags = [video.hashtags];
+        }
+
         video.userId = (req.user as UserModel)?.userId || 1;
 
         const response = await VideoService.getInstance().uploadVideo(

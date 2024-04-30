@@ -42,17 +42,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-/// allow from localhost:8051 and localhost:5000
-// app.use(
-//   cors({
-//     origin: [
-//       "http://localhost:8051",
-//       "http://localhost:5173",
-//       "https://8d2a-42-115-164-149.ngrok-free.app",
-//     ],
-//     credentials: true,
-//   }),
-// );
 app.use(cors());
 app.use(express.json());
 
