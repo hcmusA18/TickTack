@@ -71,6 +71,28 @@ class UserService {
       throw new Error(`${_error.message}`);
     }
   };
+
+  getUsersByKeyword = async (
+    keyword: string,
+    getFull: boolean | null = null,
+  ): Promise<UserModel[]> => {
+    try {
+      getFull = getFull === null ? false : getFull;
+      const users = await UserRepository.getInstance().getUsersByKeyword(
+        keyword,
+        getFull,
+      );
+
+      if (users.length === 0) {
+        throw new Error("No user found");
+      }
+
+      return users;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
 export { UserService };
