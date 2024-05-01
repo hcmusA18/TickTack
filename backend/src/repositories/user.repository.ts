@@ -112,6 +112,36 @@ class UserRepository {
       throw new Error(`${_error.message}`);
     }
   };
+
+  getUsersByKeyword = async (
+    keyword: string,
+    getFull: boolean,
+  ): Promise<UserModel[]> => {
+    const query = {
+      text: getFull
+        ? "SELECT * FROM users WHERE username ILIKE $1"
+        : "SELECT username FROM users WHERE username ILIKE $1",
+      values: [`%${keyword}%`],
+    };
+    try {
+      const result = await pool.query(query);
+      // map to UserModel
+      return result.rows.map((user) => {
+        return {
+          userId: user.user_id,
+          username: user.username,
+          email: user.email,
+          password: user.password,
+          avatar: user.avatar,
+          bio: user.bio,
+          regisDate: user.regis_date,
+        };
+      });
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
 export { UserRepository };
