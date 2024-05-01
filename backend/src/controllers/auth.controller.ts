@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { UserModel } from "@models";
 import passport from "passport";
 import jwt from "jsonwebtoken";
+import { log } from "console";
 
 class AuthController {
   private static instance: AuthController | null = null;
@@ -40,6 +41,7 @@ class AuthController {
   };
 
   signIn = async (req: Request, res: Response) => {
+    log("Sign in");
     passport.authenticate("local", (err: Error, user: UserModel, info: any) => {
       if (err) {
         return res.status(500).json({ message: err.message });
@@ -54,14 +56,15 @@ class AuthController {
 
         const token = jwt.sign(
           { user },
-          process.env.JWT_SECRET || "default_jwt_secret",
+          process.env.JWT_SECRET ?? "default_jwt_secret",
           { expiresIn: "1h" },
         );
 
         return res.status(200).json({ data: token });
       });
-
-      return;
+      return res
+        .status(404)
+        .json({ message: "Request not handled by authenticate service" });
     })(req, res);
   };
 }

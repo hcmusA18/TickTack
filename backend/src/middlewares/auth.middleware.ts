@@ -24,7 +24,7 @@ class AuthMiddleware {
     try {
       const decoded = jwt.verify(
         token,
-        process.env.JWT_SECRET || "default_jwt_secret",
+        process.env.JWT_SECRET ?? "default_jwt_secret",
       ) as { user: any };
       req.user = decoded.user;
       next();
