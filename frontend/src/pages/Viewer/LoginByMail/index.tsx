@@ -28,7 +28,6 @@ export const LoginByMail: FC<LoginByMailProps> = (props) => {
 
   const handleEmailChange = (text: string) => {
     setEmail(text)
-    // Check if the email is valid and update isValid state accordingly
     setIsValid(validateEmail(text))
   }
 

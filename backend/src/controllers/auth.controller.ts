@@ -30,7 +30,7 @@ class AuthController {
         password ?? "",
       )) as UserModel;
       res
-        .status(201)
+        .status(200)
         .json({ message: `Sign up successfully! Welcome ${user.email}!` });
     } catch (error) {
       const _error = error as Error;

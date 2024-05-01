@@ -5,6 +5,8 @@ import { AppStackScreenProps } from 'navigators'
 import { TopBar } from '../Login/components/LoginTopBar'
 import { colors } from '../Login/components/MyColors'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import { useAppDispatch } from 'libs/redux'
+import { setAuthEmail } from 'libs/redux/sliceAuth'
 
 interface SignUpByMailProps extends AppStackScreenProps<'SignUpByMail'> {}
 
@@ -14,6 +16,8 @@ export const SignUpByMail: FC<SignUpByMailProps> = (props) => {
   const [isSubscribed, setIsSubscribed] = useState(false)
   const [activeTab, setActiveTab] = useState('email') // start with 'phone' or 'email'
   const [isValid, setIsValid] = useState(true)
+
+  const dispatch = useAppDispatch()
 
   const handleTabPress = (tab: React.SetStateAction<string>) => {
     setActiveTab(tab)
@@ -37,6 +41,7 @@ export const SignUpByMail: FC<SignUpByMailProps> = (props) => {
   const actionLogin = () => {
     console.log(isValid)
     if (isValid && email !== '') {
+      dispatch(setAuthEmail(email))
       navigation.navigate('PasswordInputReg')
     }
   }

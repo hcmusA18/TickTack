@@ -8,6 +8,7 @@ import Toast from 'react-native-simple-toast'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { TopBar } from '../Login/components/LoginTopBar'
 import { colors } from '../Login/components/MyColors'
+import axios from 'axios'
 
 interface PasswordInputRegProps extends AppStackScreenProps<'PasswordInput'> {}
 
@@ -28,11 +29,16 @@ export const PassWordInputReg: FC<PasswordInputRegProps> = (props) => {
   const handlePasswordChange = (text: string) => {
     setPassword(text)
     setIsValid(validatePassword(text))
+    if (text !== confirmPassword) {
+      setIsPwdMatching(false)
+    } else {
+      setIsPwdMatching(true)
+    }
   }
 
   const handleConfirmPasswordChange = (text: string) => {
     setConfirmPassword(text)
-    if (password !== confirmPassword) {
+    if (password !== text) {
       setIsPwdMatching(false)
     } else {
       setIsPwdMatching(true)
@@ -43,30 +49,26 @@ export const PassWordInputReg: FC<PasswordInputRegProps> = (props) => {
     return pwd.length > 0
   }
 
-  const handleSignup = () => {
-    return async () => {
-      if (isValid && isPwdMatching) {
-        try {
-          await axiosInstance
-            .getAxios()
-            .post('/auth/register', {
-              email,
-              password
-            })
-            .then((response) => {
-              if (response.status === 200) {
-                Toast.show('Login successful', Toast.LONG)
-                navigation.navigate('OnboardingPage')
-              } else {
-                Toast.show(response.data.message, Toast.LONG)
-              }
-            })
-        } catch (error) {
-          Toast.show('Failed to register: ' + error.response.data.message, Toast.LONG)
-        }
-      } else {
-        Toast.show('Password is invalid', Toast.LONG)
+  const handleSignup = async () => {
+    if (isValid && isPwdMatching) {
+      try {
+        await axiosInstance
+          .getAxios()
+          .post('/signup', {
+            email,
+            password
+          })
+          .then((response) => {
+            Toast.show(response.data.message, Toast.LONG)
+            if (response.status === 200) {
+              navigation.navigate('Login')
+            }
+          })
+      } catch (error) {
+        Toast.show(error.response.data.message, Toast.LONG)
       }
+    } else {
+      Toast.show('Password is invalid', Toast.LONG)
     }
   }
 

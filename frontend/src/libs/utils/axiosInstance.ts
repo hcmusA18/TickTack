@@ -3,9 +3,9 @@ import axios, { AxiosInstance as Axios } from 'axios'
 class AxiosInstance {
   private static _instance: AxiosInstance | null = null
   private contentType = 'application/json'
-  private timeout = 3000
+  private timeout = 7000
   private token = ''
-  private baseURL = process.env.API_URL
+  private baseURL = process.env.EXPO_PUBLIC_API_URL
   private instance: Axios | null = null
 
   private constructor() {
