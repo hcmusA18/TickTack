@@ -44,9 +44,10 @@ class UserRepository {
     email: string,
     password: string,
   ): Promise<UserModel | null> => {
+    const regis_date = new Date().getTime().toString();
     const query = {
-      text: "INSERT INTO users(email, password) VALUES($1, $2) RETURNING *",
-      values: [email, password],
+      text: "INSERT INTO users(email, password, regis_date) VALUES($1, $2, $3) RETURNING *",
+      values: [email, password, regis_date],
     };
     try {
       const result = await pool.query(query);

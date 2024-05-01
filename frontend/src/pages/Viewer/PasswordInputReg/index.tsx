@@ -1,5 +1,4 @@
-import { useAppDispatch, useAppSelector } from 'libs/redux'
-import { setAuthToken } from 'libs/redux/sliceAuth'
+import { useAppSelector } from 'libs/redux'
 import axiosInstance from 'libs/utils/axiosInstance'
 import { AppStackScreenProps } from 'navigators'
 import React, { FC, useState } from 'react'
@@ -9,18 +8,19 @@ import Toast from 'react-native-simple-toast'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { TopBar } from '../Login/components/LoginTopBar'
 import { colors } from '../Login/components/MyColors'
-import { styles } from './styles'
+import { styles } from '../PasswordInput/styles'
 
-interface PassWordInputProps extends AppStackScreenProps<'PasswordInput'> {}
+interface PasswordInputRegProps extends AppStackScreenProps<'PasswordInput'> {}
 
-export const PasswordInput: FC<PassWordInputProps> = (props) => {
+export const PassWordInputReg: FC<PasswordInputRegProps> = (props) => {
   const navigation = props.navigation
   const [isPasswordHidden, setIsPasswordHidden] = useState(true) // State to track whether password is hidden or shown
   const [isValid, setIsValid] = useState(true)
+  const [isPwdMatching, setIsPwdMatching] = useState(true)
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
 
   const email = useAppSelector((state) => state.auth.authEmail)
-  const dispatch = useAppDispatch()
 
   const checkBoxClicked = () => {
     setIsPasswordHidden(!isPasswordHidden)
@@ -29,44 +29,51 @@ export const PasswordInput: FC<PassWordInputProps> = (props) => {
   const handlePasswordChange = (text: string) => {
     setPassword(text)
     setIsValid(validatePassword(text))
+    if (text !== confirmPassword) {
+      setIsPwdMatching(false)
+    } else {
+      setIsPwdMatching(true)
+    }
+  }
+
+  const handleConfirmPasswordChange = (text: string) => {
+    setConfirmPassword(text)
+    if (password !== text) {
+      setIsPwdMatching(false)
+    } else {
+      setIsPwdMatching(true)
+    }
   }
 
   const validatePassword = (pwd: string) => {
     return pwd.length > 0
   }
 
-  const verifyPassword = () => {
-    return async () => {
-      if (isValid) {
+  const handleSignup = async () => {
+    if (isValid && isPwdMatching) {
+      try {
         await axiosInstance
           .getAxios()
-          .post('/signin', {
+          .post('/signup', {
             email,
             password
           })
           .then((response) => {
+            Toast.show(response.data.message, Toast.LONG)
             if (response.status === 200) {
-              const token = response.data.data
-              dispatch(setAuthToken(token))
-              axiosInstance.setAuthToken(token)
-              navigation.navigate('Main')
-              Toast.show('Login successful', Toast.LONG)
-            } else {
-              Toast.show(response.data.message, Toast.LONG)
+              navigation.navigate('Login')
             }
           })
-          .catch((error) => {
-            Toast.show(error.message, Toast.LONG)
-            console.error(error)
-          })
-      } else {
-        console.error('Password is invalid')
+      } catch (error) {
+        Toast.show(error.response.data.message, Toast.LONG)
       }
+    } else {
+      Toast.show('Password is invalid', Toast.LONG)
     }
   }
 
-  const getTopBarText = () => {
-    return (
+  return (
+    <SafeAreaView style={styles.container}>
       <TopBar
         firstIcon="chevron-left"
         secondIcon=""
@@ -76,13 +83,6 @@ export const PasswordInput: FC<PassWordInputProps> = (props) => {
         }}
         onSecondIconPress={undefined}
       />
-    )
-  }
-
-  return (
-    <SafeAreaView style={styles.container}>
-      {getTopBarText()}
-      {/* Input part */}
       <View style={styles.tabContainer}>
         <Text style={styles.tabText}>Enter password</Text>
       </View>
@@ -91,11 +91,11 @@ export const PasswordInput: FC<PassWordInputProps> = (props) => {
           <View style={[styles.inputContainer, !isValid && styles.invalidInput]}>
             <TextInput
               style={styles.input}
-              value={password}
               onChangeText={handlePasswordChange}
-              placeholder="Enter your password"
-              secureTextEntry={isPasswordHidden} // Dynamically set secureTextEntry based on visibility state
               keyboardType="default"
+              secureTextEntry={isPasswordHidden}
+              placeholder="Enter your password"
+              value={password}
             />
             <TouchableOpacity onPress={checkBoxClicked}>
               <Icon name={!isPasswordHidden ? 'eye' : 'eye-slash'} size={20} color={colors.palette.ink200} />
@@ -104,15 +104,26 @@ export const PasswordInput: FC<PassWordInputProps> = (props) => {
           {!isValid && <Text style={styles.warningText}>Please enter a valid password</Text>}
         </View>
 
-        <TouchableOpacity style={styles.checkboxContainer}>
-          <Text style={styles.linkText}>Forgot your password?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.nextButton} onPress={verifyPassword()}>
-          <Text style={styles.nextButtonText}>Next</Text>
+        <View>
+          <View style={[styles.inputContainer, !isValid && styles.invalidInput]}>
+            <TextInput
+              style={styles.input}
+              value={confirmPassword}
+              onChangeText={handleConfirmPasswordChange}
+              placeholder="Confirm your password"
+              secureTextEntry={isPasswordHidden}
+              keyboardType="default"
+            />
+          </View>
+          {!isPwdMatching && <Text style={styles.warningText}> Passwords do not match</Text>}
+        </View>
+
+        <TouchableOpacity style={styles.nextButton} onPress={handleSignup}>
+          <Text style={styles.nextButtonText}>Sign up</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   )
 }
 
-export default PasswordInput
+export default PassWordInputReg

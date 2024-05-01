@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { colors } from 'theme'
-import { styles } from '../UsingGuide'
+import { styles } from '../UsingGuide/styles'
 import InterestGroup from './components/InterestGroup'
 
 interface OnboardingPageProps extends AppStackScreenProps<'OnboardingPage'> {}
