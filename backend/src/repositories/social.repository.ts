@@ -2,10 +2,6 @@ import pool from "./db";
 
 class SocialRepository {
   private static instance: SocialRepository | null = null;
-  private constructor() {
-    // do something
-  }
-
   static getInstance(): SocialRepository {
     if (SocialRepository.instance === null) {
       SocialRepository.instance = new SocialRepository();

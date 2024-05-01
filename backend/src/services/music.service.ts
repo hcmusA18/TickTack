@@ -2,11 +2,6 @@ import { MusicRepository } from "@repositories";
 
 class MusicService {
   private static instance: MusicService | null = null;
-
-  constructor() {
-    // do something
-  }
-
   static getInstance(): MusicService {
     if (MusicService.instance === null) {
       MusicService.instance = new MusicService();

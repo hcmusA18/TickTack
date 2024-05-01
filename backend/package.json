@@ -7,7 +7,7 @@
     "start": "ts-node --transpile-only src/index.ts",
     "precommit": "pretty-quick --staged",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "test": "jest --passWithNoTests",
+    "test": "jest --passWithNoTests --maxWorkers=50%",
     "lint": "eslint --ext .js,.ts src",
     "pretty": "prettier --check \"src/**/*.ts\"",
     "pretty:fix": "prettier --write \"src/**/*.ts\""

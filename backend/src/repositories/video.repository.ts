@@ -3,9 +3,6 @@ import pool from "./db";
 
 class VideoRepository {
   private static instance: VideoRepository | null = null;
-  constructor() {
-    // do something
-  }
   static getInstance(): VideoRepository {
     if (VideoRepository.instance === null) {
       VideoRepository.instance = new VideoRepository();
@@ -15,16 +12,16 @@ class VideoRepository {
 
   private stringArrayConverter = (value: string[]): string => {
     if (!value || value.length === 0) return `ARRAY[]::TEXT[]`;
-    return `ARRAY[${value.map((v) => `'${v}'`).join(", ")}]`;
+    return `ARRAY[${value.map(String).join(", ")}]`;
   };
 
   addNewVideo = async (video: VideoModel): Promise<VideoModel | null> => {
     if (!video.musicId) video.musicId = null;
     const query = {
       text: `INSERT INTO videos(user_id, text, create_time, video_url, duration, music_id, hashtags, privacy, view_count) 
-      VALUES($1, $2, $3, $4, $5, ${
-        video.musicId
-      }, ${this.stringArrayConverter(video.hashtags)}, $6, $7) RETURNING *`,
+      VALUES($1, $2, $3, $4, $5, ${video.musicId}, ${this.stringArrayConverter(
+        video.hashtags,
+      )}, $6, $7) RETURNING *`,
       values: [
         video.userId.toString(),
         video.text,
