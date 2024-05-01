@@ -76,7 +76,6 @@ class UserRepository {
     keyword: string,
     getFull: boolean,
   ): Promise<UserModel[]> => {
-    console.log(getFull);
     const query = {
       text: getFull
         ? "SELECT * FROM users WHERE username ILIKE $1"
@@ -85,7 +84,18 @@ class UserRepository {
     };
     try {
       const result = await pool.query(query);
-      return result.rows;
+      // map to UserModel
+      return result.rows.map((user) => {
+        return {
+          userId: user.user_id,
+          username: user.username,
+          email: user.email,
+          password: user.password,
+          avatar: user.avatar,
+          bio: user.bio,
+          regisDate: user.regis_date,
+        };
+      });
     } catch (error) {
       const _error = error as Error;
       throw new Error(`${_error.message}`);

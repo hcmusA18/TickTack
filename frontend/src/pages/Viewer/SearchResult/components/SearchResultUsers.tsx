@@ -8,11 +8,6 @@ import Toast from 'react-native-simple-toast'
 interface SearchResultUsersProps {
   searchQuery: string
 }
-// const accounts = Array.from({ length: 20 }, (_, i) => ({
-//   avatar: 'https://source.unsplash.com/random',
-//   name: 'Tran Gia Thinh',
-//   followers: '23M'
-// }))
 export const SearchResultUsers: FC<SearchResultUsersProps> = ({ searchQuery }) => {
   const [accounts, setAccounts] = useState([])
   const [loading, setLoading] = useState(false)
@@ -20,19 +15,27 @@ export const SearchResultUsers: FC<SearchResultUsersProps> = ({ searchQuery }) =
   const searchAccounts = async () => {
     try {
       setLoading(true)
-      await axiosInstance
-        .getAxios()
-        .get(`/user/search/Jane?getFull=true`)
-        .then((response) => {
-          if (response.status === 200) {
-            setAccounts(response.data.users)
-            setLoading(false)
-          } else {
-            Toast.show(response.data.message, Toast.LONG)
-          }
-        })
+
+      const response = await axiosInstance.getAxios().get(`/user/search/${searchQuery}?getFull=true`)
+
+      if (response.status !== 200) {
+        Toast.show(response.data.message, Toast.LONG)
+        return
+      }
+
+      const { users, numFollowers } = response.data
+
+      const transformedAccounts = users.map((user, i) => ({
+        ...user,
+        followers: numFollowers[i] || 0
+      }))
+
+      setAccounts(transformedAccounts)
     } catch (error) {
-      console.error(error)
+      console.error('Error fetching accounts:', error)
+      Toast.show('Error fetching accounts', Toast.LONG)
+    } finally {
+      setLoading(false)
     }
   }
 

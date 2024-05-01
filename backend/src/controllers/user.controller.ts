@@ -1,4 +1,4 @@
-import { UserService } from "@services";
+import { UserService, SocialService } from "@services";
 import { Request, Response } from "express";
 
 class UserController {
@@ -32,6 +32,7 @@ class UserController {
   };
 
   getUsersByKeyword = async (req: Request, res: Response) => {
+    // TODO: Search users by keyword and count the number of followers
     const keyword = req.params.keyword;
     const getFull = req.query.getFull === "true";
     try {
@@ -39,6 +40,23 @@ class UserController {
         keyword,
         getFull,
       );
+
+      if (getFull) {
+        // Count the number of followers for each user and add it to the response by an array
+        const numFollowers: number[] = [];
+
+        for (const user of users) {
+          const userId = user.userId || 0; // Provide a default value for user.userId if it is undefined
+
+          numFollowers.push(
+            await SocialService.getInstance().countFollowers(userId),
+          );
+        }
+
+        res.status(200).json({ users, numFollowers });
+        return;
+      }
+
       res.status(200).json({ users });
     } catch (error) {
       const _error = error as Error;
