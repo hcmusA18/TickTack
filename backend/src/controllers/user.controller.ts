@@ -35,6 +35,7 @@ class UserController {
       res.status(200).send(userId);
     }
   };
+
   getAllUserIds = async (_req: Request, res: Response) => {
     try {
       const userIds = await UserService.getInstance().getAllUserIds();

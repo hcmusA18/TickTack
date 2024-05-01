@@ -64,6 +64,7 @@ class VideoController {
       }
     });
   };
+
   getVideoById = async (req: Request, res: Response) => {
     try {
       const video_id = parseInt(req.params.video_id);

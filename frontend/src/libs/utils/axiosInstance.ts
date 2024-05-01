@@ -5,7 +5,7 @@ class AxiosInstance {
   private contentType = 'application/json'
   private timeout = 3000
   private token = ''
-  private baseURL = process.env.API_URL
+  private baseURL = '172.168.98.33'
   private instance: Axios | null = null
 
   private constructor() {
