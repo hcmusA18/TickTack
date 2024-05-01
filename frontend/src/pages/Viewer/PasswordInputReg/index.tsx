@@ -2,13 +2,13 @@ import { useAppSelector } from 'libs/redux'
 import axiosInstance from 'libs/utils/axiosInstance'
 import { AppStackScreenProps } from 'navigators'
 import React, { FC, useState } from 'react'
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Toast from 'react-native-simple-toast'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { TopBar } from '../Login/components/LoginTopBar'
 import { colors } from '../Login/components/MyColors'
-import axios from 'axios'
+import { styles } from '../PasswordInput'
 
 interface PasswordInputRegProps extends AppStackScreenProps<'PasswordInput'> {}
 
@@ -72,8 +72,8 @@ export const PassWordInputReg: FC<PasswordInputRegProps> = (props) => {
     }
   }
 
-  const getTopBarText = () => {
-    return (
+  return (
+    <SafeAreaView style={styles.container}>
       <TopBar
         firstIcon="chevron-left"
         secondIcon=""
@@ -83,13 +83,6 @@ export const PassWordInputReg: FC<PasswordInputRegProps> = (props) => {
         }}
         onSecondIconPress={undefined}
       />
-    )
-  }
-
-  return (
-    <SafeAreaView style={styles.container}>
-      {getTopBarText()}
-      {/* Input part */}
       <View style={styles.tabContainer}>
         <Text style={styles.tabText}>Enter password</Text>
       </View>
@@ -98,11 +91,11 @@ export const PassWordInputReg: FC<PasswordInputRegProps> = (props) => {
           <View style={[styles.inputContainer, !isValid && styles.invalidInput]}>
             <TextInput
               style={styles.input}
-              value={password}
               onChangeText={handlePasswordChange}
-              placeholder="Enter your password"
-              secureTextEntry={isPasswordHidden} // Dynamically set secureTextEntry based on visibility state
               keyboardType="default"
+              secureTextEntry={isPasswordHidden}
+              placeholder="Enter your password"
+              value={password}
             />
             <TouchableOpacity onPress={checkBoxClicked}>
               <Icon name={!isPasswordHidden ? 'eye' : 'eye-slash'} size={20} color={colors.palette.ink200} />
@@ -132,69 +125,5 @@ export const PassWordInputReg: FC<PasswordInputRegProps> = (props) => {
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.palette.pjWhite
-  },
-  scrollView: {
-    paddingHorizontal: '5%',
-    paddingTop: 24
-  },
-  warningText: {
-    color: colors.palette.UIRed,
-    fontSize: 12,
-    marginBottom: 8
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    borderBottomColor: colors.palette.ink100,
-    borderBottomWidth: 1,
-    paddingVertical: 6,
-    alignItems: 'center',
-    marginBottom: 6
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    marginBottom: 6
-  },
-  invalidInput: {
-    borderColor: colors.palette.UIRed
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 24,
-    marginTop: 16
-  },
-  linkText: {
-    color: colors.palette.ink300,
-    fontWeight: 'bold'
-  },
-  nextButton: {
-    backgroundColor: colors.palette.UIRed,
-    borderRadius: 4,
-    paddingVertical: 16,
-    alignItems: 'center',
-    marginBottom: 24,
-    marginTop: 24
-  },
-  nextButtonText: {
-    color: colors.palette.pjWhite,
-    fontSize: 16,
-    fontWeight: '600'
-  },
-  tabContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: '5%'
-  },
-  tabText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.palette.pjBlack
-  }
-})
 
 export default PassWordInputReg

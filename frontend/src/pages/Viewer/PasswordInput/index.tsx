@@ -114,7 +114,7 @@ export const PasswordInput: FC<PassWordInputProps> = (props) => {
   )
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.palette.pjWhite
@@ -133,7 +133,8 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.palette.ink100,
     borderBottomWidth: 1,
     paddingVertical: 8,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 6
   },
   input: {
     flex: 1,
@@ -158,7 +159,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingVertical: 16,
     alignItems: 'center',
-    marginBottom: 24
+    marginBottom: 24,
+    marginTop: 16
   },
   nextButtonText: {
     color: colors.palette.pjWhite,
