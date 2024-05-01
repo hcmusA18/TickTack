@@ -37,7 +37,7 @@ export const SignUpByMail: FC<SignUpByMailProps> = (props) => {
   const actionLogin = () => {
     console.log(isValid)
     if (isValid && email !== '') {
-      navigation.navigate('Home')
+      navigation.navigate('PasswordInputReg')
     }
   }
 

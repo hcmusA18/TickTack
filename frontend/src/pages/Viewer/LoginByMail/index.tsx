@@ -41,7 +41,7 @@ export const LoginByMail: FC<LoginByMailProps> = (props) => {
   const actionLogin = () => {
     if (email !== '') {
       dispatch(setAuthEmail(email))
-      navigation.navigate('PassWordInput')
+      navigation.navigate('PasswordInput')
     } else {
       console.error('Email is invalid')
     }

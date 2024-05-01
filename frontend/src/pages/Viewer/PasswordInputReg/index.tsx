@@ -1,25 +1,25 @@
-import React, { FC, useState } from 'react'
-import { StyleSheet, View, TextInput, Text, TouchableOpacity, ScrollView } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { useAppSelector } from 'libs/redux'
+import axiosInstance from 'libs/utils/axiosInstance'
 import { AppStackScreenProps } from 'navigators'
+import React, { FC, useState } from 'react'
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import Toast from 'react-native-simple-toast'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import { TopBar } from '../Login/components/LoginTopBar'
 import { colors } from '../Login/components/MyColors'
-import { useAppSelector, useAppDispatch } from 'libs/redux'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import axiosInstance from 'libs/utils/axiosInstance'
-import { setAuthToken } from 'libs/redux/sliceAuth'
-import Toast from 'react-native-simple-toast'
 
-interface PassWordInputProps extends AppStackScreenProps<'PasswordInput'> {}
+interface PasswordInputRegProps extends AppStackScreenProps<'PasswordInput'> {}
 
-export const PasswordInput: FC<PassWordInputProps> = (props) => {
+export const PassWordInputReg: FC<PasswordInputRegProps> = (props) => {
   const navigation = props.navigation
   const [isPasswordHidden, setIsPasswordHidden] = useState(true) // State to track whether password is hidden or shown
   const [isValid, setIsValid] = useState(true)
+  const [isPwdMatching, setIsPwdMatching] = useState(true)
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
 
   const email = useAppSelector((state) => state.auth.authEmail)
-  const dispatch = useAppDispatch()
 
   const checkBoxClicked = () => {
     setIsPasswordHidden(!isPasswordHidden)
@@ -30,36 +30,42 @@ export const PasswordInput: FC<PassWordInputProps> = (props) => {
     setIsValid(validatePassword(text))
   }
 
+  const handleConfirmPasswordChange = (text: string) => {
+    setConfirmPassword(text)
+    if (password !== confirmPassword) {
+      setIsPwdMatching(false)
+    } else {
+      setIsPwdMatching(true)
+    }
+  }
+
   const validatePassword = (pwd: string) => {
     return pwd.length > 0
   }
 
-  const verifyPassword = () => {
+  const handleSignup = () => {
     return async () => {
-      if (isValid) {
-        await axiosInstance
-          .getAxios()
-          .post('/signin', {
-            email,
-            password
-          })
-          .then((response) => {
-            if (response.status === 200) {
-              const token = response.data.data
-              dispatch(setAuthToken(token))
-              axiosInstance.setAuthToken(token)
-              navigation.navigate('Main')
-              Toast.show('Login successful', Toast.LONG)
-            } else {
-              Toast.show(response.data.message, Toast.LONG)
-            }
-          })
-          .catch((error) => {
-            Toast.show(error.message, Toast.LONG)
-            console.error(error)
-          })
+      if (isValid && isPwdMatching) {
+        try {
+          await axiosInstance
+            .getAxios()
+            .post('/auth/register', {
+              email,
+              password
+            })
+            .then((response) => {
+              if (response.status === 200) {
+                Toast.show('Login successful', Toast.LONG)
+                navigation.navigate('OnboardingPage')
+              } else {
+                Toast.show(response.data.message, Toast.LONG)
+              }
+            })
+        } catch (error) {
+          Toast.show('Failed to register: ' + error.response.data.message, Toast.LONG)
+        }
       } else {
-        console.error('Password is invalid')
+        Toast.show('Password is invalid', Toast.LONG)
       }
     }
   }
@@ -103,11 +109,22 @@ export const PasswordInput: FC<PassWordInputProps> = (props) => {
           {!isValid && <Text style={styles.warningText}>Please enter a valid password</Text>}
         </View>
 
-        <TouchableOpacity style={styles.checkboxContainer}>
-          <Text style={styles.linkText}>Forgot your password?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.nextButton} onPress={verifyPassword()}>
-          <Text style={styles.nextButtonText}>Next</Text>
+        <View>
+          <View style={[styles.inputContainer, !isValid && styles.invalidInput]}>
+            <TextInput
+              style={styles.input}
+              value={confirmPassword}
+              onChangeText={handleConfirmPasswordChange}
+              placeholder="Confirm your password"
+              secureTextEntry={isPasswordHidden}
+              keyboardType="default"
+            />
+          </View>
+          {!isPwdMatching && <Text style={styles.warningText}> Passwords do not match</Text>}
+        </View>
+
+        <TouchableOpacity style={styles.nextButton} onPress={handleSignup}>
+          <Text style={styles.nextButtonText}>Sign up</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -132,8 +149,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderBottomColor: colors.palette.ink100,
     borderBottomWidth: 1,
-    paddingVertical: 8,
-    alignItems: 'center'
+    paddingVertical: 6,
+    alignItems: 'center',
+    marginBottom: 6
   },
   input: {
     flex: 1,
@@ -158,7 +176,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingVertical: 16,
     alignItems: 'center',
-    marginBottom: 24
+    marginBottom: 24,
+    marginTop: 24
   },
   nextButtonText: {
     color: colors.palette.pjWhite,
@@ -176,4 +195,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default PasswordInput
+export default PassWordInputReg
