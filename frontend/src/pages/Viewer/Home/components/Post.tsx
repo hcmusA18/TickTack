@@ -14,7 +14,7 @@ const styles = {
 export const PostSingle = ({ item, shouldPlay }: { item: Post; shouldPlay: boolean }) => {
   const video = useRef<Video | null>(null)
   const [status, setStatus] = useState<any>({})
-  const user = useUser(item.user_id.toString())
+  const user = useUser(item.user_id?.toString())
   useEffect(() => {
     if (!video.current) return
     if (shouldPlay) {

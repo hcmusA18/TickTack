@@ -28,7 +28,6 @@ export const LoginByMail: FC<LoginByMailProps> = (props) => {
 
   const handleEmailChange = (text: string) => {
     setEmail(text)
-    // Check if the email is valid and update isValid state accordingly
     setIsValid(validateEmail(text))
   }
 
@@ -41,7 +40,7 @@ export const LoginByMail: FC<LoginByMailProps> = (props) => {
   const actionLogin = () => {
     if (email !== '') {
       dispatch(setAuthEmail(email))
-      navigation.navigate('PassWordInput')
+      navigation.navigate('PasswordInput')
     } else {
       console.error('Email is invalid')
     }

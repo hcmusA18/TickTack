@@ -15,6 +15,7 @@ import passportConfig from "./config/passport";
 import passport from "passport";
 import session from "express-session";
 import dotenv from "dotenv";
+import logger from "morgan";
 
 dotenv.config({ path: __dirname + "/.env" });
 
@@ -44,6 +45,7 @@ app.use(passport.session());
 
 app.use(cors());
 app.use(express.json());
+app.use(logger("dev"));
 
 // signup and signin routes
 app.post("/signup", (req, res) => {

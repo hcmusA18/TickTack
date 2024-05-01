@@ -38,8 +38,9 @@ CREATE TABLE videos (
 );
 
 CREATE TABLE socials (
-    user_id INTEGER PRIMARY KEY,
-    following_id INTEGER[]
+    user_id INTEGER REFERENCES "users"(user_id),
+    following_id INTEGER REFERENCES "users"(user_id),
+    PRIMARY KEY (user_id, following_id)
 );
 
 CREATE TABLE likes (

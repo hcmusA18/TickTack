@@ -41,10 +41,11 @@ export type AppStackParamList = {
   SignUpByMail: undefined
   SignUp: undefined
   LoginByMail: undefined
-  PassWordInput: undefined
+  PasswordInput: undefined
   OnboardingPage: undefined
   UsingGuide: undefined
   SearchResult: { searchQuery: string }
+  PasswordInputReg: undefined
 }
 
 /**
@@ -160,8 +161,8 @@ const AppStack = () => {
         }}
       />
       <Stack.Screen
-        name="PassWordInput"
-        component={Pages.PassWordInput}
+        name="PasswordInput"
+        component={Pages.PasswordInput}
         options={{
           headerShown: false
         }}
@@ -183,6 +184,13 @@ const AppStack = () => {
       <Stack.Screen
         name="SearchResult"
         component={Pages.SearchResultPage}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="PasswordInputReg"
+        component={Pages.PassWordInputReg}
         options={{
           headerShown: false
         }}
