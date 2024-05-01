@@ -26,12 +26,12 @@ CREATE TYPE privacy_level AS ENUM ('public', 'private', 'friends');
 
 CREATE TABLE videos (
     video_id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES "users"(user_id),
+    user_id INTEGER REFERENCES "users"(user_id) ON DELETE CASCADE,
     text TEXT,
     create_time BIGINT,
     video_url TEXT,
     duration INTEGER,
-    music_id TEXT REFERENCES musics(music_id),
+    music_id TEXT REFERENCES musics(music_id) ON DELETE CASCADE,
     hashtags TEXT[],
     privacy privacy_level,
     view_count INTEGER
@@ -44,33 +44,34 @@ CREATE TABLE socials (
 );
 
 CREATE TABLE likes (
-    user_id INTEGER REFERENCES "users"(user_id),
+    user_id INTEGER REFERENCES "users"(user_id) ON DELETE CASCADE,
     video_id INTEGER REFERENCES videos(video_id) ON DELETE CASCADE,
     time BIGINT,
     PRIMARY KEY (user_id, video_id)
 );
 
 CREATE TABLE dislikes (
-    user_id INTEGER REFERENCES "users"(user_id),
+    user_id INTEGER REFERENCES "users"(user_id) ON DELETE CASCADE,
     video_id INTEGER REFERENCES videos(video_id) ON DELETE CASCADE,
     time BIGINT,
     PRIMARY KEY (user_id, video_id)
 );
 
 CREATE TABLE saves (
-    user_id INTEGER REFERENCES "users"(user_id),
+    user_id INTEGER REFERENCES "users"(user_id) ON DELETE CASCADE,
     video_id INTEGER REFERENCES videos(video_id) ON DELETE CASCADE,
     time BIGINT,
     PRIMARY KEY (user_id, video_id)
 );
 
 CREATE TABLE comments (
-    user_id INTEGER REFERENCES "users"(user_id),
+    user_id INTEGER REFERENCES "users"(user_id) ON DELETE CASCADE,
     video_id INTEGER REFERENCES videos(video_id) ON DELETE CASCADE,
     comment_text TEXT,
     time BIGINT,
     PRIMARY KEY (user_id, video_id, time)
 );
+
 CREATE TABLE watched (
     user_id INTEGER REFERENCES "users"(user_id) ON DELETE CASCADE,
     video_id INTEGER REFERENCES videos(video_id) ON DELETE CASCADE,
@@ -78,3 +79,15 @@ CREATE TABLE watched (
     time BIGINT,
     PRIMARY KEY (user_id, video_id)
 );
+
+insert into "users" (username, email, password, avatar, bio, regis_date) values
+('John Doe', 'johndoe@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am John', 1709900870272),
+('Jane Doe', 'janedoe@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am Jane', 1709900870272),
+('Daniel Smith', 'johnsmith@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am John', 1709900870272),
+('Emily Johnson', 'emilyjohnson@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am Emily', 1709900870272),
+('Michael Brown', 'michaelbrown@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am Michael', 1709900870272),
+('Olivia Williams', 'oliviawilliams@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am Olivia', 1709900870272),
+('William Jones', 'williamjones@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am William', 1709900870272),
+('Sophia Martinez', 'sophiamartinez@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am Sophia', 1709900870272),
+('James Taylor', 'jamestaylor@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am James', 1709900870272),
+('Ava Anderson', 'avaanderson@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am Ava', 1709900870272);

@@ -83,9 +83,9 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
           <View style={styles.optionTextContainer}>
             <Text style={styles.headerText}>Login{'\n'}to TikTok</Text>
           </View>
-          {LogInOptionsData.map((option, index) => (
+          {LogInOptionsData.map((option, _) => (
             <SignupOption
-              key={index}
+              key={option.text}
               icon={option.icon}
               text={option.text}
               onPress={() => {

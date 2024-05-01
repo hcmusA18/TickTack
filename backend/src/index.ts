@@ -8,7 +8,9 @@ import {
   apiRouter,
   recsysRouter,
   LikeRouter,
+  musicRouter,
 } from "@routes";
+
 import authMiddleware from "./middlewares/auth.middleware";
 import { AuthController } from "@controllers";
 import pool from "./repositories/db";
@@ -36,7 +38,7 @@ pool.connect((err: Error | undefined) => {
 passportConfig(passport);
 app.use(
   session({
-    secret: process.env.PASSPORT_SECRET || "default-secret",
+    secret: process.env.PASSPORT_SECRET ?? "default-secret",
     resave: false,
     saveUninitialized: true,
   }),
@@ -54,6 +56,7 @@ app.post("/signup", (req, res) => {
 });
 
 app.post("/signin", (req, res) => {
+  console.log(req.body);
   AuthController.getInstance().signIn(req, res);
 });
 
@@ -61,11 +64,12 @@ app.use("/api", apiRouter);
 app.use("/recsys", recsysRouter);
 
 // auth middleware
-app.use(authMiddleware.authenticate);
+// app.use(authMiddleware.authenticate);
 
 app.use("/user", userRouter);
 app.use("/video", videoRouter);
 app.use("/interaction", LikeRouter);
+app.use("/music", musicRouter);
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}!`));
 

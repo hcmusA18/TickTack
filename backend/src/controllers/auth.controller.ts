@@ -40,30 +40,37 @@ class AuthController {
   };
 
   signIn = async (req: Request, res: Response) => {
-    passport.authenticate("local", (err: Error, user: UserModel, info: any) => {
-      if (err) {
-        return res.status(500).json({ message: err.message });
-      }
-      if (!user) {
-        return res.status(401).json({ message: info.message });
-      }
-      req.logIn(user, (err) => {
+    passport.authenticate(
+      "local",
+      (err: Error, user: UserModel, info: { message: string }) => {
         if (err) {
           return res.status(500).json({ message: err.message });
         }
+        if (!user) {
+          return res.status(401).json({ message: info.message });
+        }
+        try {
+          req.logIn(user, (err) => {
+            if (err) {
+              return res.status(500).json({ message: err.message });
+            }
 
-        const token = jwt.sign(
-          { user },
-          process.env.JWT_SECRET ?? "default_jwt_secret",
-          { expiresIn: "1h" },
-        );
+            const token = jwt.sign(
+              { user },
+              process.env.JWT_SECRET ?? "default_jwt_secret",
+              { expiresIn: "7d" },
+            );
 
-        return res.status(200).json({ data: token });
-      });
-      return res
-        .status(404)
-        .json({ message: "Request not handled by authenticate service" });
-    })(req, res);
+            return res.status(200).json({ data: token });
+          });
+        } catch (error) {
+          return res.status(404).json({
+            message: `Error when signing in: ${(error as Error).message}`,
+          });
+        }
+        return res.status(500).json({ message: "Unknown error" });
+      },
+    )(req, res);
   };
 }
 

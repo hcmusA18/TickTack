@@ -14,24 +14,25 @@ class VideoRepository {
   }
 
   private stringArrayConverter = (value: string[]): string => {
+    if (!value || value.length === 0) return `ARRAY[]::TEXT[]`;
     return `ARRAY[${value.map((v) => `'${v}'`).join(", ")}]`;
   };
 
   addNewVideo = async (video: VideoModel): Promise<VideoModel | null> => {
-    if (!video.music_id) video.music_id = null;
+    if (!video.musicId) video.musicId = null;
     const query = {
       text: `INSERT INTO videos(user_id, text, create_time, video_url, duration, music_id, hashtags, privacy, view_count) 
       VALUES($1, $2, $3, $4, $5, ${
-        video.music_id || null
+        video.musicId
       }, ${this.stringArrayConverter(video.hashtags)}, $6, $7) RETURNING *`,
       values: [
-        video.user_id.toString(),
+        video.userId.toString(),
         video.text,
-        video.create_time.toString(),
-        video.video_url,
+        video.createTime.toString(),
+        video.videoUrl,
         video.duration.toString(),
         (video.privacy || "public").toString(),
-        (video.view_count || 0).toString(),
+        (video.viewCount || 0).toString(),
       ],
     };
     try {

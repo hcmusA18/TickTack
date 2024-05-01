@@ -57,7 +57,7 @@ class VideoService {
         },
       });
 
-      video.video_url =
+      video.videoUrl =
         "https://drive.google.com/uc?export=view&id=" + response.data.id;
       const newVideo = await this.storeVideo(video);
 
@@ -70,8 +70,8 @@ class VideoService {
 
   storeVideo = async (video: VideoModel): Promise<VideoModel | null> => {
     try {
-      if (!video.create_time) {
-        video.create_time = Date.now();
+      if (!video.createTime) {
+        video.createTime = Date.now();
       }
       const newVideo = await VideoRepository.getInstance().addNewVideo(video);
       return newVideo;

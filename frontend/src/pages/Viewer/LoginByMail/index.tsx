@@ -10,6 +10,12 @@ import { useAppDispatch } from 'libs/redux'
 
 interface LoginByMailProps extends AppStackScreenProps<'LoginByMail'> {}
 
+const checkBoxIcon = {
+  name: 'check',
+  color: colors.palette.pjWhite,
+  size: 12
+}
+
 export const LoginByMail: FC<LoginByMailProps> = (props) => {
   const navigation = props.navigation
   const [email, setEmail] = useState('')
@@ -102,9 +108,7 @@ export const LoginByMail: FC<LoginByMailProps> = (props) => {
         </View>
         <View style={styles.checkboxContainer}>
           <TouchableOpacity style={[styles.checkbox, isSubscribed && styles.checkedCheckbox]} onPress={checkBoxClicked}>
-            {isSubscribed && (
-              <Icon name={styles.checkBoxIcon.name} size={styles.checkBoxIcon.size} color={styles.checkBoxIcon.color} />
-            )}
+            {isSubscribed && <Icon name={checkBoxIcon.name} size={checkBoxIcon.size} color={checkBoxIcon.color} />}
           </TouchableOpacity>
           <Text style={styles.checkboxText}>
             Get trending content, newsletters, promotions, recommendations, and account updates sent to your email
@@ -169,11 +173,6 @@ const styles = StyleSheet.create({
     flex: 1,
     color: colors.palette.ink300
     // Add your text styling
-  },
-  checkBoxIcon: {
-    name: 'check',
-    color: colors.palette.pjWhite,
-    size: 12
   },
   agreementText: {
     color: colors.palette.ink300,
