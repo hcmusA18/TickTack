@@ -51,7 +51,9 @@ export const SearchBar: FC<SearchBarProps> = ({ searchQuery, navigation }) => {
         selectionColor={tiktokPink}
         placeholderTextColor={colors.palette.overlay20}
       />
-      <Text style={styles.searchBarText}>Search</Text>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Text style={styles.searchBarText}>Search</Text>
+      </TouchableOpacity>
     </View>
   )
 }

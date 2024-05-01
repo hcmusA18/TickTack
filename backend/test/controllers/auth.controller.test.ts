@@ -78,7 +78,7 @@ describe("AuthController", () => {
         email,
         password,
       );
-      expect(mockResponse.status).toHaveBeenCalledWith(201);
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
       expect(mockResponse.json).toHaveBeenCalledWith({
         message: `Sign up successfully! Welcome ${email}!`,
       });

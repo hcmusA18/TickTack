@@ -7,6 +7,9 @@ router.get("/", (req, res) => {
   UserController.getInstance().getUserDetail(req, res);
 });
 
+router.get("/search/:keyword", (req, res) => {
+  UserController.getInstance().getUsersByKeyword(req, res);
+});
 router.patch("/:userId", (req, res) => {
   UserController.getInstance().updateUserProfile(req, res);
 });

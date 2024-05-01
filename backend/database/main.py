@@ -17,9 +17,18 @@ conn = psycopg2.connect(
 )
 cur = conn.cursor()
 
+# read music_links.csv
+music_links = []
+with open('./backend/database/music_links.csv', encoding='utf-8') as f:
+    links = f.readlines()
+    links = [link.strip() for link in links]
+    music_links = links
+
+i = 0
+
 # Read music.csv
 try:
-    with open('./backend/dataabase/music.csv', encoding='utf-8') as f:
+    with open('./backend/database/music.csv', encoding='utf-8') as f:
         music = f.readlines()
         music = [m.strip() for m in music]
         music = music[1:]
@@ -27,7 +36,10 @@ try:
             music_id = m.split(',')[0]
             music_author = m.split(',')[1]
             music_name = m.split(',')[2]
-            music_url = m.split(',')[7]
+            music_url = m.split(',')[-3]
+            if i < len(music_links):
+                music_url = music_links[i]
+                i += 1
             cur.execute("INSERT INTO musics (music_id, music_author, music_name, music_url) VALUES (%s, %s, %s, %s) ON CONFLICT (music_id) DO NOTHING", (music_id, music_author, music_name, music_url))
     print('Music data inserted successfully')
 except Exception as e:
@@ -53,8 +65,11 @@ with open('./backend/database/video_links.csv', encoding='utf-8') as f:
 
 # Insert data into database
 try:
+    seed = 12345
+    generator = np.random.default_rng(seed=seed)
     for video in collector:
-        user_id = np.random.randint(1, 11)
+        # Random user_id between 1 and 10
+        user_id = int(generator.integers(1, 11, size=1, dtype=int)[0])
         text = video.get('text', '')
         create_time = video.get('createTime', '')
         video_url = video_hash_map.get(video.get('id', ''), '')
@@ -71,7 +86,8 @@ try:
         if hashtags:
             hashtags = [h.get('name', '') for h in hashtags]
         
-        privacy = np.random.choice(['public', 'private', 'friends'])
+        # Random privacy between public, private, friends
+        privacy = generator.choice(['public', 'private', 'friends'])
         view_count = video.get('playCount', 0)
         cur.execute("INSERT INTO videos (user_id, text, create_time, video_url, duration, music_id, hashtags, privacy, view_count) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING video_id", (user_id, text, create_time, video_url, duration, music_id, hashtags, privacy, view_count))
     print('Video data inserted successfully')

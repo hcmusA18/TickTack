@@ -100,8 +100,8 @@ describe("UserRepository", () => {
 
       expect(result).toEqual(newUser);
       expect(pool.query).toHaveBeenCalledWith({
-        text: "INSERT INTO users(email, password) VALUES($1, $2) RETURNING *",
-        values: [email, password],
+        text: "INSERT INTO users(email, password, regis_date) VALUES($1, $2, $3) RETURNING *",
+        values: [email, password, new Date().getTime().toString()],
       });
     });
 

@@ -44,9 +44,10 @@ class UserRepository {
     email: string,
     password: string,
   ): Promise<UserModel | null> => {
+    const regis_date = new Date().getTime().toString();
     const query = {
-      text: "INSERT INTO users(email, password) VALUES($1, $2) RETURNING *",
-      values: [email, password],
+      text: "INSERT INTO users(email, password, regis_date) VALUES($1, $2, $3) RETURNING *",
+      values: [email, password, regis_date],
     };
     try {
       const result = await pool.query(query);
@@ -107,6 +108,36 @@ class UserRepository {
     try {
       const result = await pool.query(query);
       return result.rows.map((user) => user.user_id);
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
+  getUsersByKeyword = async (
+    keyword: string,
+    getFull: boolean,
+  ): Promise<UserModel[]> => {
+    const query = {
+      text: getFull
+        ? "SELECT * FROM users WHERE username ILIKE $1"
+        : "SELECT username FROM users WHERE username ILIKE $1",
+      values: [`%${keyword}%`],
+    };
+    try {
+      const result = await pool.query(query);
+      // map to UserModel
+      return result.rows.map((user) => {
+        return {
+          userId: user.user_id,
+          username: user.username,
+          email: user.email,
+          password: user.password,
+          avatar: user.avatar,
+          bio: user.bio,
+          regisDate: user.regis_date,
+        };
+      });
     } catch (error) {
       const _error = error as Error;
       throw new Error(`${_error.message}`);
