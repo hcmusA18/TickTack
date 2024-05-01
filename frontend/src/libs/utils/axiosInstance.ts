@@ -7,6 +7,7 @@ class AxiosInstance {
   private token = ''
   private baseURL = process.env.EXPO_PUBLIC_API_URL
   private instance: Axios | null = null
+  private contentType = 'application/json'
 
   private constructor() {
     this.instance = axios.create({

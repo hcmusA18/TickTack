@@ -4,7 +4,6 @@ import { PasswordService } from "@services";
 
 class UserService {
   private static instance: UserService | null = null;
-
   static getInstance(): UserService {
     if (UserService.instance === null) {
       UserService.instance = new UserService();
@@ -87,6 +86,28 @@ class UserService {
     try {
       const userIds = await UserRepository.getInstance().getAllUserIds();
       return userIds;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
+  getUsersByKeyword = async (
+    keyword: string,
+    getFull: boolean | null = null,
+  ): Promise<UserModel[]> => {
+    try {
+      getFull = getFull ?? false;
+      const users = await UserRepository.getInstance().getUsersByKeyword(
+        keyword,
+        getFull,
+      );
+
+      if (users.length === 0) {
+        throw new Error("No user found");
+      }
+
+      return users;
     } catch (error) {
       const _error = error as Error;
       throw new Error(`${_error.message}`);
