@@ -2,7 +2,13 @@ import "dotenv/config";
 import "module-alias/register";
 import cors from "cors";
 import express from "express";
-import { userRouter, videoRouter, apiRouter, recsysRouter } from "@routes";
+import {
+  userRouter,
+  videoRouter,
+  apiRouter,
+  recsysRouter,
+  LikeRouter,
+} from "@routes";
 import authMiddleware from "./middlewares/auth.middleware";
 import { AuthController } from "@controllers";
 import pool from "./repositories/db";
@@ -59,6 +65,7 @@ app.use(authMiddleware.authenticate);
 
 app.use("/user", userRouter);
 app.use("/video", videoRouter);
+app.use("/interaction", LikeRouter);
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}!`));
 

@@ -17,6 +17,8 @@ import { Post, User } from 'libs/types'
 import { throttle } from 'lodash'
 import { Avatar } from 'react-native-paper'
 
+import axiosInstance from 'libs/utils/axiosInstance'
+
 const styles = StyleSheet.create({
   container: {
     width: Dimensions.get('window').width,
@@ -85,6 +87,11 @@ interface ActionButtonsProps {
   post: Post
 }
 
+interface LikeState {
+  state: boolean
+  count: number
+}
+
 const ActionButton = ({ iconName, text, onPress }: ActionButtonProps) => {
   return (
     <TouchableOpacity style={styles.actionButton} onPress={onPress}>
@@ -96,11 +103,37 @@ const ActionButton = ({ iconName, text, onPress }: ActionButtonProps) => {
 
 export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   const dispatch = useAppDispatch()
+
   // const navigation =
+  const userId = parseInt(user.uid, 10)
+  let videoId = parseInt(post.video_id, 10)
+  if (isNaN(videoId)) {
+    videoId = 0
+  }
 
   // const currentUser = useAppSelector((state) => state.auth.currentUser)
-  const [likeState, setLikeState] = useState({ state: false, count: 100 })
+  const [likeState, setLikeState] = useState<LikeState>({ state: false, count: 0 })
   const [commentsCount] = useState(100)
+
+  const getTotalLike = async (videoId: number) => {
+    try {
+      const response = await axiosInstance.getAxios().get(`/likes/count/${videoId}`)
+      let { like_count: likeCount } = response.data
+
+      if (isNaN(likeCount)) {
+        likeCount = 0
+      }
+      setLikeState((prevState) => ({ ...prevState, count: likeCount }))
+    } catch (error) {
+      console.error('Error fetching likes:', error)
+      // Optionally handle error state in UI
+    }
+  }
+
+  useEffect(() => {
+    // Replace 123 with your actual initial video ID
+    getTotalLike(videoId)
+  }, [])
 
   // useEffect(() => {
   //   setLikeState({ state: post.isLiked, count: post.likesCount })
