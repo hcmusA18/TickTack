@@ -1,14 +1,15 @@
-import React, { FC, useState } from 'react'
-import { StyleSheet, View, TextInput, Text, TouchableOpacity, ScrollView } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { useAppDispatch, useAppSelector } from 'libs/redux'
+import { setAuthToken } from 'libs/redux/sliceAuth'
+import axiosInstance from 'libs/utils/axiosInstance'
 import { AppStackScreenProps } from 'navigators'
+import React, { FC, useState } from 'react'
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import Toast from 'react-native-simple-toast'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import { TopBar } from '../Login/components/LoginTopBar'
 import { colors } from '../Login/components/MyColors'
-import { useAppSelector, useAppDispatch } from 'libs/redux'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import axiosInstance from 'libs/utils/axiosInstance'
-import { setAuthToken } from 'libs/redux/sliceAuth'
-import Toast from 'react-native-simple-toast'
+import { styles } from './styles'
 
 interface PassWordInputProps extends AppStackScreenProps<'PasswordInput'> {}
 
@@ -113,69 +114,5 @@ export const PasswordInput: FC<PassWordInputProps> = (props) => {
     </SafeAreaView>
   )
 }
-
-export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.palette.pjWhite
-  },
-  scrollView: {
-    paddingHorizontal: '5%',
-    paddingTop: 24
-  },
-  warningText: {
-    color: colors.palette.UIRed,
-    fontSize: 12,
-    marginBottom: 8
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    borderBottomColor: colors.palette.ink100,
-    borderBottomWidth: 1,
-    paddingVertical: 8,
-    alignItems: 'center',
-    marginBottom: 6
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    marginBottom: 6
-  },
-  invalidInput: {
-    borderColor: colors.palette.UIRed
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 24,
-    marginTop: 16
-  },
-  linkText: {
-    color: colors.palette.ink300,
-    fontWeight: 'bold'
-  },
-  nextButton: {
-    backgroundColor: colors.palette.UIRed,
-    borderRadius: 4,
-    paddingVertical: 16,
-    alignItems: 'center',
-    marginBottom: 24,
-    marginTop: 16
-  },
-  nextButtonText: {
-    color: colors.palette.pjWhite,
-    fontSize: 16,
-    fontWeight: '600'
-  },
-  tabContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: '5%'
-  },
-  tabText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.palette.pjBlack
-  }
-})
 
 export default PasswordInput

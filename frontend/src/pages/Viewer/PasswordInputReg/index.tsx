@@ -8,7 +8,7 @@ import Toast from 'react-native-simple-toast'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { TopBar } from '../Login/components/LoginTopBar'
 import { colors } from '../Login/components/MyColors'
-import { styles } from '../PasswordInput'
+import { styles } from '../PasswordInput/styles'
 
 interface PasswordInputRegProps extends AppStackScreenProps<'PasswordInput'> {}
 

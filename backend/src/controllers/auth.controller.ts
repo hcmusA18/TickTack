@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import { UserModel } from "@models";
 import passport from "passport";
 import jwt from "jsonwebtoken";
-import { log } from "console";
 
 class AuthController {
   private static instance: AuthController | null = null;
@@ -41,7 +40,6 @@ class AuthController {
   };
 
   signIn = async (req: Request, res: Response) => {
-    log("Sign in");
     passport.authenticate("local", (err: Error, user: UserModel, info: any) => {
       if (err) {
         return res.status(500).json({ message: err.message });
