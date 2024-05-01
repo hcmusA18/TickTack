@@ -84,8 +84,8 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.postButton}>
-          <MaterialIcons name="navigate-next" size={24} color="white" onPress={handleNext} />
+        <TouchableOpacity style={styles.postButton} onPress={handleNext}>
+          <MaterialIcons name="navigate-next" size={24} color="white" />
           <Text style={styles.postButtonText}>Next</Text>
         </TouchableOpacity>
       </View>

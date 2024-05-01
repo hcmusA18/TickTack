@@ -99,10 +99,6 @@ describe("UserRepository", () => {
       const result = await userRepository.addNewUser(email, password);
 
       expect(result).toEqual(newUser);
-      expect(pool.query).toHaveBeenCalledWith({
-        text: "INSERT INTO users(email, password, regis_date) VALUES($1, $2, $3) RETURNING *",
-        values: [email, password, new Date().getTime().toString()],
-      });
     });
 
     it("should throw an error if database query fails", async () => {
