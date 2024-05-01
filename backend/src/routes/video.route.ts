@@ -23,4 +23,8 @@ router.delete("/remove/:videoId", (req, res) => {
   VideoController.getInstance().removeVideo(req, res);
 });
 
+router.get("/search/:keyword", (req, res) => {
+  VideoController.getInstance().getVideosByKeyword(req, res);
+});
+
 export { router as videoRouter };

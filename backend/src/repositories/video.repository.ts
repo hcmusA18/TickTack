@@ -86,6 +86,47 @@ class VideoRepository {
       throw new Error(`${_error.message}`);
     }
   };
+
+  getVideosByKeyword = async (
+    keyword: string,
+    getFull: boolean,
+  ): Promise<VideoModel[]> => {
+    const query = {
+      text: getFull
+        ? `
+        SELECT *, REGEXP_REPLACE(REGEXP_REPLACE(text, '[^a-zA-Z0-9\\s]', '', 'g'), '\\s+', ' ', 'g') AS text_cleaned
+        FROM videos
+        WHERE REGEXP_REPLACE(REGEXP_REPLACE(text, '[^a-zA-Z0-9\\s]', '', 'g'), '\\s+', ' ', 'g') ILIKE $1;
+      `
+        : `
+        SELECT REGEXP_REPLACE(REGEXP_REPLACE(text, '[^a-zA-Z0-9\\s]', '', 'g'), '\\s+', ' ', 'g') AS text_cleaned
+        FROM videos
+        WHERE REGEXP_REPLACE(REGEXP_REPLACE(text, '[^a-zA-Z0-9\\s]', '', 'g'), '\\s+', ' ', 'g') ILIKE $1;
+      `,
+      values: [`%${keyword}%`],
+    };
+    try {
+      const result = await pool.query(query);
+
+      return result.rows.map((video) => {
+        return {
+          video_id: video.video_id,
+          user_id: video.user_id,
+          text: video.text_cleaned,
+          create_time: video.create_time,
+          video_url: video.video_url,
+          duration: video.duration,
+          music_id: video.music_id,
+          hashtags: video.hashtags,
+          privacy: video.privacy,
+          view_count: video.view_count,
+        };
+      });
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
 export { VideoRepository };

@@ -127,5 +127,23 @@ class VideoController {
         .json({ message: `Error removing video: ${_error.message}` });
     }
   };
+
+  getVideosByKeyword = async (req: Request, res: Response) => {
+    const keyword = req.params.keyword;
+    const getFull = req.query.getFull === "true";
+    try {
+      const users = await VideoService.getInstance().getVideosByKeyword(
+        keyword,
+        getFull,
+      );
+
+      res.status(200).json({ users });
+    } catch (error) {
+      const _error = error as Error;
+      res.status(500).json({
+        message: `Error when getting users by keyword: ${_error.message}`,
+      });
+    }
+  };
 }
 export { VideoController };

@@ -116,6 +116,28 @@ class VideoService {
       throw new Error(`${_error.message}`);
     }
   };
+
+  getVideosByKeyword = async (
+    keyword: string,
+    getFull: boolean | null = null,
+  ): Promise<VideoModel[]> => {
+    try {
+      getFull = getFull ?? false;
+      const videos = await VideoRepository.getInstance().getVideosByKeyword(
+        keyword,
+        getFull,
+      );
+
+      if (videos.length === 0) {
+        throw new Error("No video found");
+      }
+
+      return videos;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
 export { VideoService };
