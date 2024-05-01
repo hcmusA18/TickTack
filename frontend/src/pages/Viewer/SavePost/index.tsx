@@ -1,9 +1,13 @@
-import { View, Text, TouchableOpacity, TextInput, Image, Modal, StyleSheet } from 'react-native'
-import { Feather, AntDesign } from '@expo/vector-icons'
+import { AntDesign, Feather } from '@expo/vector-icons'
+import { useAppSelector } from 'libs/redux'
+import { forEach } from 'lodash'
 import { AppStackScreenProps } from 'navigators'
-import React, { FC, useState, useRef } from 'react'
+import React, { FC, useRef, useState } from 'react'
+import { Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import Toast from 'react-native-simple-toast'
 import { RadioButton } from 'react-native-paper'
 import { colors } from 'theme'
+import axiosInstance from 'libs/utils/axiosInstance'
 
 interface SavePostPageProps extends AppStackScreenProps<'SavePost'> {}
 
@@ -14,6 +18,9 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
   const textInputRef = useRef<TextInput>(null)
   const [privacy, setPrivacy] = useState('private')
   const [modalVisible, setModalVisible] = useState(false)
+  const videoUrl = useAppSelector((state) => state.videoPost.videoUrl)
+  const musicId = useAppSelector((state) => state.videoPost.music?.music_id)
+  const duration = useAppSelector((state) => state.videoPost.duration)
 
   const addHashTag = () => {
     setTextInput((prev) => prev + '#')
@@ -25,7 +32,47 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
     // setModalVisible(false)
   }
 
-  const videoSrc = props.route?.params?.source
+  const handlePost = async () => {
+    const formData = new FormData()
+    // get the string before .mp4 to use as the name of the file
+    const videoName = videoUrl.split('/')[videoUrl.split('/').length - 1]
+
+    formData.append('video', {
+      uri: videoUrl,
+      name: videoName,
+      type: 'video/mp4'
+    })
+
+    const hashtags = textInput.match(/#[a-zA-Z0-9]+/g).map((hashtag) => hashtag.replace('#', '').trim())
+    const text = textInput.replace(/#[a-zA-Z0-9]+/g, '').trim()
+    formData.append('text', text)
+    forEach(hashtags, (hashtag) => {
+      formData.append('hashtags', hashtag)
+    })
+    formData.append('privacy', privacy)
+    formData.append('musicId', musicId || '')
+    formData.append('duration', Math.floor(duration / 1000).toString())
+
+    try {
+      axiosInstance.setContentType('multipart/form-data')
+      const response = await axiosInstance.getAxios().post('/video/upload', formData)
+
+      axiosInstance.setContentType('application/json')
+
+      if (response.status === 200) {
+        Toast.show('Post uploaded', Toast.LONG)
+        navigation.navigate('Main', { screen: 'Camera' })
+      } else {
+        Toast.show('Error uploading post', Toast.LONG)
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.data)
+      }
+      console.error(error)
+      Toast.show('Error uploading post', Toast.LONG)
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -46,8 +93,8 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
             <Text style={{ color: colors.palette.neutral900, fontSize: 12, fontWeight: 'bold' }}>Hashtags</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate('VideoPreviewer', { source: videoSrc })}>
-          <Image style={styles.mediaPreview} source={{ uri: videoSrc }} />
+        <TouchableOpacity onPress={() => navigation.navigate('VideoPreviewer')}>
+          <Image style={styles.mediaPreview} source={{ uri: videoUrl }} />
         </TouchableOpacity>
       </View>
 
@@ -85,7 +132,7 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.postButton}>
+        <TouchableOpacity style={styles.postButton} onPress={handlePost}>
           <Feather name="corner-left-up" size={24} color="white" />
           <Text style={styles.postButtonText}>Post</Text>
         </TouchableOpacity>
@@ -123,9 +170,6 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
                 <RadioButton.Item label="Friends" value="friends" color={postBackgroundColor} />
                 <RadioButton.Item label="Only you" value="private" color={postBackgroundColor} />
               </RadioButton.Group>
-              {/* <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.saveButton}>
-                <Text style={{ color: colors.palette.neutral100 }}>Save</Text>
-              </TouchableOpacity> */}
             </View>
           </View>
         </View>

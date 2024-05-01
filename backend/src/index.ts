@@ -2,8 +2,13 @@ import "dotenv/config";
 import "module-alias/register";
 import cors from "cors";
 import express from "express";
-import { userRouter, videoRouter, apiRouter, recsysRouter } from "@routes";
-import authMiddleware from "./middlewares/auth.middleware";
+import {
+  userRouter,
+  videoRouter,
+  apiRouter,
+  recsysRouter,
+  musicRouter,
+} from "@routes";
 import { AuthController } from "@controllers";
 import pool from "./repositories/db";
 import passportConfig from "./config/passport";
@@ -30,7 +35,7 @@ pool.connect((err: Error | undefined) => {
 passportConfig(passport);
 app.use(
   session({
-    secret: process.env.PASSPORT_SECRET || "default-secret",
+    secret: process.env.PASSPORT_SECRET ?? "default-secret",
     resave: false,
     saveUninitialized: true,
   }),
@@ -48,6 +53,7 @@ app.post("/signup", (req, res) => {
 });
 
 app.post("/signin", (req, res) => {
+  console.log(req.body);
   AuthController.getInstance().signIn(req, res);
 });
 
@@ -55,10 +61,11 @@ app.use("/api", apiRouter);
 app.use("/recsys", recsysRouter);
 
 // auth middleware
-app.use(authMiddleware.authenticate);
+// app.use(authMiddleware.authenticate);
 
 app.use("/user", userRouter);
 app.use("/video", videoRouter);
+app.use("/music", musicRouter);
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}!`));
 

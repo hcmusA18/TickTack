@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   title: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold'
   },
   details: {
@@ -35,15 +35,16 @@ interface MusicItemProps {
 }
 
 export const SoundItem: FC<MusicItemProps> = ({ item, sound }) => {
-  const containerColor = sound === item.name ? colors.palette.overlay50 : colors.palette.overlay20
   return (
-    <View style={[styles.container, { backgroundColor: containerColor }]}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: sound === item.music_name ? colors.palette.overlay50 : colors.palette.overlay20 }
+      ]}>
       <FontAwesome5 name="music" size={19} />
       <View style={styles.content}>
-        <Text style={styles.title}>{item.name}</Text>
-        <Text style={styles.details}>
-          {item.artist} - {item.duration}
-        </Text>
+        <Text style={styles.title}>{item.music_name}</Text>
+        <Text style={styles.details}>{item.music_author}</Text>
       </View>
     </View>
   )
