@@ -19,7 +19,7 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
   const [privacy, setPrivacy] = useState('private')
   const [modalVisible, setModalVisible] = useState(false)
   const videoUrl = useAppSelector((state) => state.videoPost.videoUrl)
-  const musicId = useAppSelector((state) => state.videoPost.music).music_id
+  const musicId = useAppSelector((state) => state.videoPost.music?.music_id)
   const duration = useAppSelector((state) => state.videoPost.duration)
 
   const addHashTag = () => {

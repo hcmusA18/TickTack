@@ -35,33 +35,30 @@ export const PasswordInput: FC<PassWordInputProps> = (props) => {
     return pwd.length > 0
   }
 
-  const verifyPassword = () => {
-    return async () => {
-      if (isValid) {
-        await axiosInstance
-          .getAxios()
-          .post('/signin', {
-            email,
-            password
-          })
-          .then((response) => {
-            if (response.status === 200) {
-              const token = response.data.data
-              dispatch(setAuthToken(token))
-              axiosInstance.setAuthToken(token)
-              navigation.navigate('Main')
-              Toast.show('Login successful', Toast.LONG)
-            } else {
-              Toast.show(response.data.message, Toast.LONG)
-            }
-          })
-          .catch((error) => {
-            Toast.show(error.message, Toast.LONG)
-            console.error(error)
-          })
+  const verifyPassword = async () => {
+    if (!isValid) {
+      console.error('Password is invalid')
+      Toast.show('Please enter a valid password', Toast.LONG)
+      return
+    }
+    try {
+      const response = await axiosInstance.getAxios().post('/signin', {
+        email,
+        password
+      })
+      if (response.status === 200) {
+        const token = response.data.data
+        dispatch(setAuthToken(token))
+        axiosInstance.setAuthToken(token)
+        console.log('Login successful')
+        navigation.navigate('Main')
+        Toast.show('Login successful', Toast.LONG)
       } else {
-        console.error('Password is invalid')
+        Toast.show(response.data.message, Toast.LONG)
       }
+    } catch (error) {
+      console.error('Error while logging in:', error)
+      Toast.show('Error while logging in', Toast.LONG)
     }
   }
 
@@ -107,7 +104,7 @@ export const PasswordInput: FC<PassWordInputProps> = (props) => {
         <TouchableOpacity style={styles.checkboxContainer}>
           <Text style={styles.linkText}>Forgot your password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.nextButton} onPress={verifyPassword()}>
+        <TouchableOpacity style={styles.nextButton} onPress={() => verifyPassword()}>
           <Text style={styles.nextButtonText}>Next</Text>
         </TouchableOpacity>
       </ScrollView>

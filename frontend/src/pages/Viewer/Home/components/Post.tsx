@@ -18,7 +18,6 @@ export const PostSingle = ({ item, shouldPlay }: { item: Post; shouldPlay: boole
   useEffect(() => {
     if (!video.current) return
     if (shouldPlay) {
-      console.log(item.video_id, 'playing')
       video.current.playAsync()
     } else {
       video.current.pauseAsync()

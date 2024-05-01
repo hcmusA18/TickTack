@@ -28,3 +28,4 @@ package-lock.json
 frontend/package-lock.json
 backend/package-lock.json
 .env
+frontend/%ProgramData%/Microsoft/Windows/UUS/State/_active.uusver

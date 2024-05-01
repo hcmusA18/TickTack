@@ -35,7 +35,7 @@ pool.connect((err: Error | undefined) => {
 passportConfig(passport);
 app.use(
   session({
-    secret: process.env.PASSPORT_SECRET || "default-secret",
+    secret: process.env.PASSPORT_SECRET ?? "default-secret",
     resave: false,
     saveUninitialized: true,
   }),
@@ -53,6 +53,7 @@ app.post("/signup", (req, res) => {
 });
 
 app.post("/signin", (req, res) => {
+  console.log(req.body);
   AuthController.getInstance().signIn(req, res);
 });
 
