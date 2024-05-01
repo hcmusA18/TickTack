@@ -28,7 +28,7 @@ i = 0
 
 # Read music.csv
 try:
-    with open('./backend/dataabase/music.csv', encoding='utf-8') as f:
+    with open('./backend/database/music.csv', encoding='utf-8') as f:
         music = f.readlines()
         music = [m.strip() for m in music]
         music = music[1:]
@@ -65,8 +65,11 @@ with open('./backend/database/video_links.csv', encoding='utf-8') as f:
 
 # Insert data into database
 try:
+    seed = 12345
+    generator = np.random.default_rng(seed=seed)
     for video in collector:
-        user_id = np.random.randint(1, 11)
+        # Random user_id between 1 and 10
+        user_id = int(generator.integers(1, 11, size=1, dtype=int)[0])
         text = video.get('text', '')
         create_time = video.get('createTime', '')
         video_url = video_hash_map.get(video.get('id', ''), '')
@@ -83,7 +86,8 @@ try:
         if hashtags:
             hashtags = [h.get('name', '') for h in hashtags]
         
-        privacy = np.random.choice(['public', 'private', 'friends'])
+        # Random privacy between public, private, friends
+        privacy = generator.choice(['public', 'private', 'friends'])
         view_count = video.get('playCount', 0)
         cur.execute("INSERT INTO videos (user_id, text, create_time, video_url, duration, music_id, hashtags, privacy, view_count) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING video_id", (user_id, text, create_time, video_url, duration, music_id, hashtags, privacy, view_count))
     print('Video data inserted successfully')
