@@ -4,7 +4,7 @@ import { PasswordService } from "@services";
 
 class UserService {
   private static instance: UserService | null = null;
-  constructor() {
+  private constructor() {
     // do something
   }
   static getInstance(): UserService {
@@ -77,7 +77,7 @@ class UserService {
     getFull: boolean | null = null,
   ): Promise<UserModel[]> => {
     try {
-      getFull = getFull === null ? false : getFull;
+      getFull = getFull ?? false;
       const users = await UserRepository.getInstance().getUsersByKeyword(
         keyword,
         getFull,

@@ -1,7 +1,6 @@
-import React, { FC } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import { View, Text, FlatList } from 'react-native'
 import { AccountItem } from 'components'
-import { useState, useEffect } from 'react'
 import axiosInstance from 'libs/utils/axiosInstance'
 import Toast from 'react-native-simple-toast'
 
@@ -10,12 +9,9 @@ interface SearchResultUsersProps {
 }
 export const SearchResultUsers: FC<SearchResultUsersProps> = ({ searchQuery }) => {
   const [accounts, setAccounts] = useState([])
-  const [loading, setLoading] = useState(false)
 
   const searchAccounts = async () => {
     try {
-      setLoading(true)
-
       const response = await axiosInstance.getAxios().get(`/user/search/${searchQuery}?getFull=true`)
 
       if (response.status !== 200) {
@@ -34,8 +30,6 @@ export const SearchResultUsers: FC<SearchResultUsersProps> = ({ searchQuery }) =
     } catch (error) {
       console.error('Error fetching accounts:', error)
       Toast.show('Error fetching accounts', Toast.LONG)
-    } finally {
-      setLoading(false)
     }
   }
 

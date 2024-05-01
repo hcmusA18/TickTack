@@ -32,7 +32,6 @@ class UserController {
   };
 
   getUsersByKeyword = async (req: Request, res: Response) => {
-    // TODO: Search users by keyword and count the number of followers
     const keyword = req.params.keyword;
     const getFull = req.query.getFull === "true";
     try {
@@ -46,7 +45,7 @@ class UserController {
         const numFollowers: number[] = [];
 
         for (const user of users) {
-          const userId = user.userId || 0; // Provide a default value for user.userId if it is undefined
+          const userId = user.userId ?? 0; // Provide a default value for user.userId if it is undefined
 
           numFollowers.push(
             await SocialService.getInstance().countFollowers(userId),

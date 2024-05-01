@@ -63,7 +63,7 @@ app.use("/api", apiRouter);
 app.use("/recsys", recsysRouter);
 
 // auth middleware
-// app.use(authMiddleware.authenticate);
+app.use(authMiddleware.authenticate);
 
 app.use("/user", userRouter);
 app.use("/video", videoRouter);

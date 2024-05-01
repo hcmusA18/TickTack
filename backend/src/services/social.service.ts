@@ -2,7 +2,7 @@ import { SocialRepository } from "@repositories";
 
 class SocialService {
   private static instance: SocialService | null = null;
-  constructor() {
+  private constructor() {
     // do something
   }
   static getInstance(): SocialService {

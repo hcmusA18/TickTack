@@ -2,7 +2,7 @@ import pool from "./db";
 
 class SocialRepository {
   private static instance: SocialRepository | null = null;
-  constructor() {
+  private constructor() {
     // do something
   }
 

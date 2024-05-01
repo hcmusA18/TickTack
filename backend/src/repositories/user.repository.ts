@@ -3,7 +3,7 @@ import { UserModel } from "@models";
 
 class UserRepository {
   private static instance: UserRepository | null = null;
-  constructor() {
+  private constructor() {
     // do something
   }
 
