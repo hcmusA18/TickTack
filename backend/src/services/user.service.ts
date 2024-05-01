@@ -4,15 +4,14 @@ import { PasswordService } from "@services";
 
 class UserService {
   private static instance: UserService | null = null;
-  constructor() {
-    // do something
-  }
+
   static getInstance(): UserService {
     if (UserService.instance === null) {
       UserService.instance = new UserService();
     }
     return UserService.instance;
   }
+
   getUserByUsername = async (username: string): Promise<UserModel | null> => {
     try {
       const user =
@@ -62,6 +61,28 @@ class UserService {
     }
   };
 
+  // Update: Update user details
+  updateUser = async (
+    id: string,
+    updateData: Partial<UserModel>,
+  ): Promise<UserModel | null> => {
+    try {
+      // Assuming updateData can include any user fields such as email, username, etc.
+      return await UserRepository.getInstance().updateUser(id, updateData);
+    } catch (error) {
+      throw new Error(`Error updating user: ${(error as Error).message}`);
+    }
+  };
+
+  // Delete: Remove a user by ID
+  deleteUser = async (id: string): Promise<boolean> => {
+    try {
+      await UserRepository.getInstance().deleteUser(id);
+      return true;
+    } catch (error) {
+      throw new Error(`Error deleting user: ${(error as Error).message}`);
+    }
+  };
   getAllUserIds = async (): Promise<number[]> => {
     try {
       const userIds = await UserRepository.getInstance().getAllUserIds();
