@@ -1,8 +1,12 @@
-import React, { FC } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { Post } from 'libs/types'
 import Feather from '@expo/vector-icons/Feather'
 import { colors } from 'theme'
+import axiosInstance from 'libs/utils/axiosInstance'
+import Toast from 'react-native-simple-toast'
+import { User } from 'libs/types'
+import { convertTime } from 'libs/utils/convertTime'
 
 const styles = StyleSheet.create({
   container: {
@@ -64,7 +68,40 @@ interface VideoItemProps {
 }
 
 export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
-  const { user_id: userId, text, create_time: createTime } = video
+  const { user_id: userId, text: text, create_time: createTime } = video
+
+  const [user, setUser] = useState<User>({} as User)
+
+  // get the user from user id
+  const getUser = async () => {
+    try {
+      const response = await axiosInstance.getAxios().get(`/user/${userId}`)
+      if (response.status !== 200) {
+        Toast.show(response.data.message, Toast.LONG)
+        return
+      }
+
+      const res = {
+        uid: response.data.user_id,
+        email: response.data.email,
+        displayName: response.data.username,
+        photoURL: response.data.avatar,
+        followingCount: 0,
+        followersCount: 0,
+        likesCount: 0
+      }
+
+      setUser(res)
+    } catch (error) {
+      console.error('Error fetching user:', error)
+      Toast.show('Error fetching user', Toast.LONG)
+    }
+  }
+
+  useEffect(() => {
+    getUser()
+  }, [userId])
+
   const handlePress = () => navigation.navigate('Main', { screen: 'Home', params: { userId, profile: true } })
   return (
     <TouchableOpacity onPress={handlePress} style={{ flex: 1, width: '50%' }}>
@@ -72,7 +109,7 @@ export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
         {/* Video Thumbnail */}
         <View style={styles.videoContainer}>
           <Image source={{ uri: 'https://source.unsplash.com/random' }} style={{ width: 180, height: 293 }} />
-          <Text style={styles.date}>{createTime}</Text>
+          <Text style={styles.date}>{convertTime(createTime)}</Text>
           <Text style={styles.description} numberOfLines={2}>
             {text}
           </Text>
@@ -80,8 +117,8 @@ export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
         {/* Account info */}
         <View style={styles.accountContainer}>
           <View style={styles.info}>
-            <Image source={{ uri: 'https://source.unsplash.com/random' }} style={styles.avatar} />
-            <Text style={styles.name}>{userId}</Text>
+            <Image source={{ uri: user.photoURL }} style={styles.avatar} />
+            <Text style={styles.name}>{user.displayName}</Text>
           </View>
           <Text style={styles.follower}>
             <Feather name="heart" size={12} color="gray" style={{ fontWeight: 'bold' }} />

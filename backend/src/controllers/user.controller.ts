@@ -19,6 +19,22 @@ class UserController {
     res.send("Getting users from database");
   };
 
+  getUserById = async (req: Request, res: Response) => {
+    const userId = req.params.userId;
+
+    if (userId === undefined || userId === "") {
+      res.status(400).send("User ID is required");
+    }
+
+    const user = await UserService.getInstance().getUserById(userId);
+
+    if (user === null) {
+      res.status(500).send("Internal Server Error");
+    } else {
+      res.status(200).json(user);
+    }
+  };
+
   updateUserProfile = async (req: Request, res: Response) => {
     const userId = req.params.userId;
     const userData = req.body;

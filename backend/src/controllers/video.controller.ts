@@ -141,12 +141,12 @@ class VideoController {
     const keyword = req.params.keyword;
     const getFull = req.query.getFull === "true";
     try {
-      const users = await VideoService.getInstance().getVideosByKeyword(
+      const videos = await VideoService.getInstance().getVideosByKeyword(
         keyword,
         getFull,
       );
 
-      res.status(200).json({ users });
+      res.status(200).json({ videos });
     } catch (error) {
       const _error = error as Error;
       res.status(500).json({

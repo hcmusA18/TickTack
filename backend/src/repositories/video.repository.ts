@@ -108,16 +108,16 @@ class VideoRepository {
 
       return result.rows.map((video) => {
         return {
-          video_id: video.video_id,
-          user_id: video.user_id,
+          videoId: video.video_id,
+          userId: video.user_id,
           text: video.text_cleaned,
-          create_time: video.create_time,
-          video_url: video.video_url,
+          createTime: video.create_time,
+          videoUrl: video.video_url,
           duration: video.duration,
-          music_id: video.music_id,
+          musicId: video.music_id,
           hashtags: video.hashtags,
           privacy: video.privacy,
-          view_count: video.view_count,
+          viewCount: video.view_count,
         };
       });
     } catch (error) {
