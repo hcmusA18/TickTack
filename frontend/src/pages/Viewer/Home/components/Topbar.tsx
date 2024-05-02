@@ -68,9 +68,8 @@ export const Topbar = ({
     <View style={styles.tabBar}>
       {tabName.map((tab, index) => {
         return (
-          <View style={{ alignSelf: 'center', position: 'relative' }} key={index}>
+          <View style={{ alignSelf: 'center', position: 'relative' }} key={tab}>
             <TouchableOpacity
-              key={index}
               onPress={() => changeTab(tab)}
               style={{ flex: 1, display: 'flex', flexDirection: 'row', gap: 10 }}>
               <Animated.Text style={[styles.tabBarText, currentTab === tab ? styles.tabBarTextSelected : {}]}>

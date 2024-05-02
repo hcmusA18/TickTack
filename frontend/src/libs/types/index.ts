@@ -1,6 +1,6 @@
 export interface Post {
   video_id: string
-  user_id: number // creator
+  user_id: string // creator
   text: string // description
   create_time: string // creation
   video_url: string // media
@@ -9,6 +9,10 @@ export interface Post {
   hashtags: string[]
   privacy: 'public' | 'private' | 'friends'
   view_count: number
+  likes_count?: number
+  comments_count?: number
+  shares_count?: number
+  music_thumbnail?: string
 }
 
 export interface Sound {

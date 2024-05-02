@@ -64,24 +64,24 @@ interface VideoItemProps {
 }
 
 export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
-  const { id, creator, description, creation } = video
-  const handlePress = () => navigation.navigate('Main', { screen: 'Home', params: { creator, profile: true } })
+  const { user_id: userId, text, create_time: createTime } = video
+  const handlePress = () => navigation.navigate('Main', { screen: 'Home', params: { userId, profile: true } })
   return (
     <TouchableOpacity onPress={handlePress} style={{ flex: 1, width: '50%' }}>
       <View style={styles.container}>
         {/* Video Thumbnail */}
         <View style={styles.videoContainer}>
           <Image source={{ uri: 'https://source.unsplash.com/random' }} style={{ width: 180, height: 293 }} />
-          <Text style={styles.date}>{creation}</Text>
+          <Text style={styles.date}>{createTime}</Text>
           <Text style={styles.description} numberOfLines={2}>
-            {description}
+            {text}
           </Text>
         </View>
         {/* Account info */}
         <View style={styles.accountContainer}>
           <View style={styles.info}>
             <Image source={{ uri: 'https://source.unsplash.com/random' }} style={styles.avatar} />
-            <Text style={styles.name}>{creator}</Text>
+            <Text style={styles.name}>{userId}</Text>
           </View>
           <Text style={styles.follower}>
             <Feather name="heart" size={12} color="gray" style={{ fontWeight: 'bold' }} />

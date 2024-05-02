@@ -149,7 +149,7 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
       if (!result.canceled) {
         dispatch(setFile(result.assets[0]))
         dispatch(setVideoUrl(result.assets[0].uri))
-        dispatch(setDuration(result.assets[0].duration as number))
+        dispatch(setDuration(result.assets[0].duration))
 
         navigation.navigate('VideoPreviewer')
       }

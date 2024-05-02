@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native'
 import { colors } from 'theme'
 
@@ -27,9 +27,9 @@ export const DurationSelector = ({ durationOptions, selectedDuration, onDuration
         scrollEventThrottle={16}
         ref={scrollViewRef}
         contentContainerStyle={styles.durationContainer}>
-        {durationOptions.map((duration, index) => (
+        {durationOptions.map((duration: number, _) => (
           <TouchableOpacity
-            key={index}
+            key={duration.toString()}
             style={[styles.durationOption, duration === selectedDuration && styles.selectedDurationOption]}
             onPress={() => onDurationSelect(duration)}>
             {duration === selectedDuration ? (

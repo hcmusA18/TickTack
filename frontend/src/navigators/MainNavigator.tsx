@@ -5,9 +5,8 @@ import { Text, View } from 'react-native'
 // import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { AppStackParamList, AppStackScreenProps } from './AppNavigator'
 import * as Pages from '../pages'
-import { MaterialCommunityIcons, AntDesign, FontAwesome, Feather } from '@expo/vector-icons'
-import CameraButton from '../components/CameraButton'
 import { colors } from 'theme'
+import { TabBarIcon } from './IconConfig'
 
 export type MainTabParamList = {
   Home: { creator: string | null; profile: boolean }
@@ -59,7 +58,11 @@ export const MainNavigator = ({ route }) => {
           primary: navigatorColor
         }
       }}
-      labeled={false}>
+      labeled={false}
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color }) => <TabBarIcon route={route} color={color} home={home} />,
+        tabBarLabel: route.name
+      })}>
       <Tab.Screen
         name="Home"
         component={Pages.HomePage}
@@ -71,19 +74,8 @@ export const MainNavigator = ({ route }) => {
             navigation.setParams({ creator: null, profile: false })
           }
         })}
-        options={{
-          tabBarLabel: 'Home',
-          tabBarIcon: ({ color }) => <FontAwesome name="home" size={24} color={color} />
-        }}
       />
-      <Tab.Screen
-        name="Friend"
-        component={EmptyPage}
-        options={{
-          tabBarLabel: 'Friends',
-          tabBarIcon: ({ color }) => <Feather name="users" size={24} color={color} />
-        }}
-      />
+      <Tab.Screen name="Friend" component={EmptyPage} />
       <Tab.Screen
         name="Camera"
         component={Pages.CameraPage}
@@ -93,27 +85,9 @@ export const MainNavigator = ({ route }) => {
             navigation.navigate('Camera')
           }
         })}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: () => <CameraButton home={home} />
-        }}
       />
-      <Tab.Screen
-        name="Notification"
-        component={EmptyPage}
-        options={{
-          tabBarLabel: 'Notification',
-          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="bell-outline" size={24} color={color} />
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={Pages.PersonalProfile}
-        options={{
-          tabBarLabel: 'Profile',
-          tabBarIcon: ({ color }) => <AntDesign name="user" size={24} color={color} />
-        }}
-      />
+      <Tab.Screen name="Notification" component={EmptyPage} />
+      <Tab.Screen name="Profile" component={Pages.PersonalProfile} />
     </Tab.Navigator>
   )
 }

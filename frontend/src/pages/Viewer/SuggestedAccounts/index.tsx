@@ -4,7 +4,6 @@ import { AppStackScreenProps } from 'navigators'
 import { Text } from 'react-native-paper'
 import { Screen } from 'components'
 import { colors } from 'theme'
-import { Feather } from '@expo/vector-icons'
 import { Navbar } from './components/Navbar'
 import { ListAccounts } from './components/ListAccounts'
 
@@ -33,10 +32,11 @@ export const SuggestedAccounts: FC<SuggestedAccounsProps> = (props) => {
   const { navigation } = props
   const [activeTab, setActiveTab] = useState<TabType>('Following')
 
+  const followingAccounts = []
+  const followerAccounts = []
   const renderContent = () => {
     switch (activeTab) {
       case 'Following':
-        const followingAccounts = []
         for (let i = 0; i < 10; i++) {
           followingAccounts.push({
             avatar: 'https://source.unsplash.com/random',
@@ -46,7 +46,6 @@ export const SuggestedAccounts: FC<SuggestedAccounsProps> = (props) => {
         }
         return <ListAccounts accounts={followingAccounts} />
       case 'Followers':
-        const followerAccounts = []
         for (let i = 0; i < 10; i++) {
           followerAccounts.push({
             avatar: 'https://source.unsplash.com/random',
