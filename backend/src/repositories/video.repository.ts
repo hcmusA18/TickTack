@@ -3,9 +3,7 @@ import pool from "./db";
 
 class VideoRepository {
   private static instance: VideoRepository | null = null;
-  constructor() {
-    // do something
-  }
+
   static getInstance(): VideoRepository {
     if (VideoRepository.instance === null) {
       VideoRepository.instance = new VideoRepository();

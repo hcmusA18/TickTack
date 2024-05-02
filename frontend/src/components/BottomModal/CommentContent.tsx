@@ -97,7 +97,7 @@ export const CommentContent = ({ post }: { post: Post }) => {
         style={{ flex: 1 }}
       />
       <View style={styles.inputContainer}>
-        {currentUser && currentUser.photoURL ? (
+        {currentUser?.photoURL ? (
           <Image source={{ uri: currentUser.photoURL }} style={styles.avatarSmall} />
         ) : (
           <Avatar.Icon size={32} icon={'account'} />

@@ -157,16 +157,12 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   const getCommentCount = async (videoId: number) => {
     try {
       const response = await axiosInstance.getAxios().get(`/comments/comments/count/${videoId}`)
-      // console.debug(videoId, ' + ', userId, ' + ', response.data)
 
       if (response.status >= 200 && response.status <= 399) {
         const resComments = response.data.count
         console.debug('comments:', resComments) // comments
         setCommentsCount(resComments)
       }
-      // console.log(response.data);
-      // const isLiked = response.data.status
-      // setLikeState((prevState) => ({ ...prevState, state: isLiked }))
     } catch (error) {
       console.error('Error fetching likes:', error)
       // Optionally handle error state in UI
@@ -214,8 +210,6 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   useEffect(() => {
     animation.value = withRepeat(withTiming(360, { duration: 4000, easing }), -1)
   }, [])
-
-  // console.debug('comments:', comments);
 
   return (
     <View style={styles.container}>

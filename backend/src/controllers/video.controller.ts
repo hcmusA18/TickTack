@@ -54,7 +54,7 @@ class VideoController {
           video.hashtags = [video.hashtags];
         }
 
-        video.userId = (req.user as UserModel)?.userId || 1;
+        video.userId = (req.user as UserModel)?.userId ?? 1;
 
         const response = await VideoService.getInstance().uploadVideo(
           file,

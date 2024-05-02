@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   }
 })
 
-interface userProps {
+interface UserProps {
   userId: number
   email: string
   displayName: string
@@ -61,7 +61,7 @@ export const CommentItem = ({ item }: { item: Comment }) => {
     return user
   }
 
-  const [user, setUser] = useState<userProps>()
+  const [user, setUser] = useState<UserProps>()
 
   useEffect(() => {
     getUserInfo(parseInt(item.creator, 10)).then((res) => setUser(res))
@@ -87,7 +87,7 @@ export const CommentItem = ({ item }: { item: Comment }) => {
 
   return (
     <View style={styles.commentContainer}>
-      {user && user.photoURL ? (
+      {user?.photoURL ? (
         <Image style={styles.avatarSmall} source={{ uri: user.photoURL }} />
       ) : (
         <Avatar.Icon size={32} icon={'account'} />
