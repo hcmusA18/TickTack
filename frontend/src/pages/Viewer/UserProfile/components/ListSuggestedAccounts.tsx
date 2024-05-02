@@ -1,8 +1,6 @@
 import React from 'react'
-import { View, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native'
-import { Text, Button } from 'react-native-paper'
+import { View, StyleSheet, ScrollView } from 'react-native'
 import { colors } from 'theme'
-import { Feather } from '@expo/vector-icons'
 import { AccountItem } from 'components/AccountItem'
 
 const styles = StyleSheet.create({
@@ -16,12 +14,18 @@ const styles = StyleSheet.create({
   }
 })
 
-export const HorizontalScrollable = ({ accounts }) => {
+type Account = {
+  avatar: string
+  name: string
+  followers: string
+}
+
+export const HorizontalScrollable = ({ accounts }: { accounts: Account[] }) => {
   return (
     <View style={styles.container}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
-        {accounts.map((account, index) => (
-          <View key={index}>
+        {accounts.map((account, _) => (
+          <View key={account.name}>
             <AccountItem {...account} isHorizontal={true} />
           </View>
         ))}

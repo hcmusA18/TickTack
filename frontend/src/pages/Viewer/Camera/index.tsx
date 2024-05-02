@@ -9,6 +9,8 @@ import { useIsFocused } from '@react-navigation/core'
 import { Feather, AntDesign } from '@expo/vector-icons'
 import { colors } from 'theme'
 import * as Components from './components'
+import { useAppDispatch } from 'libs/redux'
+import { setVideoUrl, setFile, setDuration } from 'libs/redux/sliceVideoPost'
 
 interface CameraPageProps extends MainTabScreenProps<'Camera'> {}
 
@@ -29,6 +31,7 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
   const [selectedDuration, setSelectedDuration] = useState(15)
 
   const durationOptions = [15, 30, 60]
+  const dispatch = useAppDispatch()
 
   const handleDurationSelect = (duration) => {
     setSelectedDuration(duration)
@@ -110,9 +113,13 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
         maxDuration: selectedDuration
       })
       if (video) {
-        const data = await video
-        const source = data.uri ?? ('' as string)
-        navigation.navigate('VideoPreviewer', { source })
+        const source = video.uri ?? ('' as string)
+
+        dispatch(setDuration(recordingTime))
+
+        dispatch(setFile(video))
+        dispatch(setVideoUrl(source))
+        navigation.navigate('VideoPreviewer')
       }
     } catch (error) {
       console.error('Error while recording video:', error)
@@ -140,8 +147,11 @@ export const CameraPage: FC<CameraPageProps> = (props) => {
         quality: 1
       })
       if (!result.canceled) {
-        const source = result.assets[0].uri ?? ''
-        navigation.navigate('VideoPreviewer', { source })
+        dispatch(setFile(result.assets[0]))
+        dispatch(setVideoUrl(result.assets[0].uri))
+        dispatch(setDuration(result.assets[0].duration))
+
+        navigation.navigate('VideoPreviewer')
       }
     } catch (error) {
       console.error('Error while picking image:', error)

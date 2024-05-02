@@ -1,13 +1,13 @@
-import React, { FC } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import { Feather } from '@expo/vector-icons'
-import { colors } from 'theme'
-import { clearModal } from 'libs/redux/sliceModal'
+import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import { useAppDispatch, useAppSelector } from 'libs/redux'
-import { setSound } from 'libs/redux/sliceSoundSelect'
-import { SoundItem } from './SoundItem'
+import { clearModal } from 'libs/redux/sliceModal'
+import { setMusic } from 'libs/redux/sliceVideoPost'
 import { Sound } from 'libs/types'
+import React, { FC, useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { colors } from 'theme'
+import { SoundItem } from './SoundItem'
 
 const styles = StyleSheet.create({
   modalContent: {
@@ -24,8 +24,9 @@ interface MusicContentProps {
 
 export const MusicContent: FC<MusicContentProps> = ({ sounds }) => {
   const dispatch = useAppDispatch()
-  const sound = useAppSelector((state) => state.soundSelect.sound)
-  console.log('sound', sound)
+  const music = useAppSelector((state) => state.videoPost.music)
+  const [sound, setSound] = useState(sounds.find((item) => item.music_id === music?.music_id)?.music_name || null)
+
   return (
     <View style={{ backgroundColor: colors.white, padding: 16, height: '100%' }}>
       <View
@@ -49,12 +50,16 @@ export const MusicContent: FC<MusicContentProps> = ({ sounds }) => {
           data={sounds}
           renderItem={({ item }) => {
             return (
-              <TouchableOpacity onPress={() => dispatch(setSound(item.name))}>
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(setMusic(item))
+                  setSound(item.music_name)
+                }}>
                 <SoundItem item={item} sound={sound} />
               </TouchableOpacity>
             )
           }}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.music_id}
           style={{ flex: 1 }}
         />
       </View>

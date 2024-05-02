@@ -1,17 +1,20 @@
-import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native'
-import { StyleSheet } from 'react-native'
-import { Feather } from '@expo/vector-icons'
+import React from 'react'
+import { View, ScrollView, StyleSheet } from 'react-native'
 import { colors } from 'theme'
-import { useNavigation } from '@react-navigation/native'
 import { AccountItem } from 'components/AccountItem'
 
-export const ListAccounts = ({ accounts }) => {
+type Account = {
+  avatar: string
+  name: string
+  followers: string
+}
+
+export const ListAccounts = ({ accounts }: { accounts: Account[] }) => {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
-        {accounts.map((account, index) => (
-          <AccountItem key={index} {...account} isHorizontal={false} />
+        {accounts.map((account, _) => (
+          <AccountItem key={account.name} {...account} isHorizontal={false} />
         ))}
       </ScrollView>
     </View>

@@ -20,11 +20,6 @@ const drive = google.drive({
 
 class VideoService {
   private static instance: VideoService | null = null;
-
-  private constructor() {
-    // do something
-  }
-
   static getInstance(): VideoService {
     if (VideoService.instance === null) {
       VideoService.instance = new VideoService();
@@ -50,14 +45,14 @@ class VideoService {
       } as any);
 
       await drive.permissions.create({
-        fileId: response.data.id || "",
+        fileId: response.data.id ?? "",
         requestBody: {
           role: "reader",
           type: "anyone",
         },
       });
 
-      video.video_url =
+      video.videoUrl =
         "https://drive.google.com/uc?export=view&id=" + response.data.id;
       const newVideo = await this.storeVideo(video);
 
@@ -70,8 +65,8 @@ class VideoService {
 
   storeVideo = async (video: VideoModel): Promise<VideoModel | null> => {
     try {
-      if (!video.create_time) {
-        video.create_time = Date.now();
+      if (!video.createTime) {
+        video.createTime = Date.now();
       }
       const newVideo = await VideoRepository.getInstance().addNewVideo(video);
       return newVideo;

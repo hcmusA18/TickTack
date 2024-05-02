@@ -1,7 +1,3 @@
-// TODO: write documentation for colors and palette in own markdown file and add links from here
-
-import { rgbaColor } from 'react-native-reanimated/lib/typescript/reanimated2/Colors'
-
 const palette = {
   neutral100: '#FFFFFF',
   neutral200: '#F4F2F1',

@@ -47,7 +47,7 @@ export const LoginPage: FC<LoginPageProps> = (props) => {
     setAttemptCount(attemptCount + 1)
     if (!inputEmail || !password || isSubmitted) return
     if (inputEmail && password) {
-      dispatch(setAuth({ authEmail: inputEmail, authToken: String(Date.now) }))
+      dispatch(setAuth({ authEmail: inputEmail, authToken: String(Date.now), firstOpen: false }))
       navigation.navigate('Main')
     }
     setIsSubmitted(false)

@@ -4,12 +4,13 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import { colors } from './MyColors'
 
 export interface AuthenOptionProps {
+  type: string
   icon: string
   text: string
   onPress: () => void
 }
 
-const AuthenOption: FC<AuthenOptionProps> = ({ icon, text, onPress }) => {
+const AuthenOption: FC<AuthenOptionProps> = ({ type: _type, icon, text, onPress }) => {
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
       <Icon name={icon} size={20} color="#000" style={styles.icon} />

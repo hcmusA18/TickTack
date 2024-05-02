@@ -43,7 +43,7 @@ export const CategoryBar: FC<CategoryBarProps> = ({ categories, currentTab, setC
     <View style={styles.categoryBarContainer}>
       {categories.map((category, index) => (
         <TouchableOpacity
-          key={index}
+          key={category.toLowerCase()}
           onPress={() => setCurrentTab(index)}
           style={{ flex: 1, display: 'flex', flexDirection: 'row', gap: 10, justifyContent: 'center' }}>
           <Animated.Text style={[styles.tabBarText, currentTab === index ? styles.tabBarTextSelected : {}]}>

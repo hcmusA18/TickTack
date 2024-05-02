@@ -25,7 +25,6 @@ export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
   }
   const onViewableItemsChanged = ({ viewableItems }) => {
     if (viewableItems.length > 0) {
-      console.log(viewableItems[0].index)
       setCurrentViewableItemIndex(viewableItems[0].index)
     }
   }
@@ -72,7 +71,7 @@ export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
         maxToRenderPerBatch={2}
         removeClippedSubviews
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.video_id}
         pagingEnabled
         snapToAlignment="start"
         decelerationRate={'fast'}
