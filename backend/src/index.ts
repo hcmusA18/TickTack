@@ -34,17 +34,17 @@ pool.connect((err: Error | undefined) => {
   }
 });
 
-// Passport configuration
-passportConfig(passport);
-app.use(
-  session({
-    secret: process.env.PASSPORT_SECRET ?? "default-secret",
-    resave: false,
-    saveUninitialized: true,
-  }),
-);
-app.use(passport.initialize());
-app.use(passport.session());
+// // Passport configuration
+// passportConfig(passport);
+// app.use(
+//   session({
+//     secret: process.env.PASSPORT_SECRET ?? "default-secret",
+//     resave: false,
+//     saveUninitialized: true,
+//   }),
+// );
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 app.use(cors());
 app.use(express.json());

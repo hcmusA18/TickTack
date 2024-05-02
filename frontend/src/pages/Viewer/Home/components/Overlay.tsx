@@ -18,6 +18,8 @@ import { throttle } from 'lodash'
 import { Avatar } from 'react-native-paper'
 
 import axiosInstance from 'libs/utils/axiosInstance'
+import { Console, debug, error } from 'console'
+import { debuglog } from 'util'
 
 const styles = StyleSheet.create({
   container: {
@@ -107,23 +109,68 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   // const navigation =
   const userId = parseInt(user.uid, 10)
   let videoId = parseInt(post.video_id, 10)
+
+  // console.debug('userId', userId, ' + videoId', videoId)
   if (isNaN(videoId)) {
+    // console.error(post);
+
     videoId = 0
   }
 
   // const currentUser = useAppSelector((state) => state.auth.currentUser)
   const [likeState, setLikeState] = useState<LikeState>({ state: false, count: 0 })
-  const [commentsCount] = useState(100)
+  const [commentsCount, setCommentsCount] = useState<number>(0)
+
+  const getLikeState = async (userId: number, videoId: number) => {
+    try {
+      const response = await axiosInstance.getAxios().get(`/interaction/likes/count/${videoId}`)
+      let { like_count: likeCount } = response.data
+
+      // console.debug(response.data)
+
+      if (isNaN(likeCount)) {
+        console.error('Like Count is NaN')
+        likeCount = 0
+      }
+
+      // console.debug(videoId, likeCount);
+
+      setLikeState((prevState) => ({ ...prevState, count: likeCount }))
+    } catch (error) {
+      console.error('Error fetching likes:', error)
+      // Optionally handle error state in UI
+    }
+  }
 
   const getTotalLike = async (videoId: number) => {
     try {
-      const response = await axiosInstance.getAxios().get(`/likes/count/${videoId}`)
+      const response = await axiosInstance.getAxios().get(`/interaction/likes/count/${videoId}`)
       let { like_count: likeCount } = response.data
 
+      // console.debug(response.data)
+
       if (isNaN(likeCount)) {
+        console.error('Like Count is NaN')
         likeCount = 0
       }
+
+      // console.debug(videoId, likeCount);
+
       setLikeState((prevState) => ({ ...prevState, count: likeCount }))
+    } catch (error) {
+      console.error('Error fetching likes:', error)
+      // Optionally handle error state in UI
+    }
+  }
+
+  const getInitLikeState = async (videoId, userId) => {
+    try {
+      const response = await axiosInstance
+        .getAxios()
+        .get(`/interaction/likes/check`, { video_id: videoId, user_id: userId, time: 1 })
+      console.debug(videoId, ' + ', userId, ' + ', response.data)
+      const isLiked = response.data.status
+      setLikeState((prevState) => ({ ...prevState, state: isLiked }))
     } catch (error) {
       console.error('Error fetching likes:', error)
       // Optionally handle error state in UI
@@ -133,19 +180,33 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   useEffect(() => {
     // Replace 123 with your actual initial video ID
     getTotalLike(videoId)
+    getInitLikeState(videoId, userId)
   }, [])
 
   // useEffect(() => {
   //   setLikeState({ state: post.isLiked, count: post.likesCount })
   // }, [post])
 
-  const handleUpdateLike = useMemo(
-    () =>
-      throttle((liked: boolean) => {
-        setLikeState((prev) => ({ state: liked, count: prev.count + (liked ? 1 : -1) }))
-      }, 1000),
-    []
-  )
+  const handleUpdateLike = async (state: boolean) => {
+    try {
+      const cnt = state ? 1 : -1
+
+      // Make the like/unlike request
+      if (state) {
+        await axiosInstance
+          .getAxios()
+          .post('/interaction/likes', { video_id: videoId, user_id: userId, time: Date.now() })
+      } else {
+        await axiosInstance.getAxios().delete('/interaction/likes', { data: { video_id: videoId, user_id: userId } })
+      }
+
+      // If the request is successful, update the like count in the state
+      setLikeState((prevState) => ({ state, count: prevState.count + cnt }))
+    } catch (error) {
+      console.error('Error updating like:', error)
+      // Optionally handle error state in UI
+    }
+  }
 
   // const handleUpdateCommentCount = () => {
   //   setCommentsCount((prev) => prev + 1)

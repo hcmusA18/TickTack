@@ -11,6 +11,34 @@ class LikeRepository {
     return LikeRepository.instance;
   }
 
+  existsLike = async (user_id: number, video_id: number): Promise<boolean> => {
+    console.debug(user_id, video_id);
+
+    // Query to check if a like exists for the given user and video
+    const checkQuery = {
+      text: "SELECT user_id FROM likes WHERE user_id = $1 AND video_id = $2",
+      values: [user_id, video_id],
+    };
+
+    try {
+      // Execute the check query to see if a like exists
+      const result = await pool.query(checkQuery);
+
+      console.error(result);
+      // If a like exists, return true
+      if (result.rows.length > 0) {
+        return true;
+      } else {
+        // If a like does not exist, return false
+        return false;
+      }
+    } catch (error) {
+      const _error = error as Error;
+      console.error("Error checking like:", _error);
+      throw new Error(`Error checking like: ${_error.message}`);
+    }
+  };
+
   addLike = async (like: LikeModel): Promise<LikeModel> => {
     const { user_id, video_id, time } = like;
     const query = {

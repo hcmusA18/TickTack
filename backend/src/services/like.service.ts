@@ -11,6 +11,23 @@ class LikeService {
     return LikeService.instance;
   }
 
+  checkLike = async (user_id: number, video_id: number): Promise<boolean> => {
+    try {
+      // Check if the like already exists
+      const likeExists = await LikeRepository.getInstance().existsLike(
+        user_id,
+        video_id,
+      );
+
+      // If the like exists, return null (indicating that the like was not added)
+      return likeExists;
+    } catch (error) {
+      console.error("Failed to check and add like:", error);
+    }
+
+    return false;
+  };
+
   addLike = async (like: LikeModel): Promise<LikeModel | null> => {
     try {
       return await LikeRepository.getInstance().addLike(like);

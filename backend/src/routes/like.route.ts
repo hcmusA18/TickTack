@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { LikeService } from "@services"; // Adjust the path as necessary
+import { user } from "firebase-functions/v1/auth";
 
 const LikeRouter = express.Router();
 const likeService = LikeService.getInstance();
@@ -52,6 +53,18 @@ LikeRouter.post("/dislikes", async (req: Request, res: Response) => {
   try {
     const dislike = await likeService.addDisLike(req.body);
     res.status(201).json(dislike);
+  } catch (error) {
+    const _error = error as Error;
+    res.status(500).json({ error: _error.message });
+  }
+});
+
+LikeRouter.get("/likes/check", async (req: Request, res: Response) => {
+  try {
+    const { user_id, video_id } = req.body;
+    const isLiked = await likeService.checkLike(user_id, video_id);
+    console.debug(isLiked);
+    res.status(201).json({ status: isLiked });
   } catch (error) {
     const _error = error as Error;
     res.status(500).json({ error: _error.message });
