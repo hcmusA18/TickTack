@@ -1,9 +1,9 @@
-import { useUser } from 'libs/hooks'
 import { Comment } from 'libs/types'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, View, Image, Text } from 'react-native'
 import { Avatar } from 'react-native-paper'
 import { colors } from 'theme'
+import axiosInstance from 'libs/utils/axiosInstance'
 
 const styles = StyleSheet.create({
   avatarSmall: {
@@ -37,8 +37,35 @@ const styles = StyleSheet.create({
   }
 })
 
+interface userProps {
+  userId: number
+  email: string
+  displayName: string
+  photoURL: string
+}
+
 export const CommentItem = ({ item }: { item: Comment }) => {
-  const user = useUser(item.creator)
+  const getUserInfo = async (userId: number) => {
+    const response = await axiosInstance.getAxios().get(`/user/comments/${userId}`)
+    const data = response.data.result
+    // console.debug('data', data)
+
+    const user = {
+      userId: data.user_id,
+      email: data.email,
+      displayName: data.username,
+      photoURL: data.avatar
+    }
+
+    // console.debug('user', user)
+    return user
+  }
+
+  const [user, setUser] = useState<userProps>()
+
+  useEffect(() => {
+    getUserInfo(parseInt(item.creator, 10)).then((res) => setUser(res))
+  }, [])
   const convertTime = (time: string) => {
     const date = new Date(parseInt(time) * 1000)
     const diff = Date.now() - date.getTime()

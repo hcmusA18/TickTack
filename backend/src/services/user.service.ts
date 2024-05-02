@@ -11,6 +11,17 @@ class UserService {
     return UserService.instance;
   }
 
+  getUserCommentInfo = async (userId: number): Promise<UserModel | null> => {
+    try {
+      const user =
+        await UserRepository.getInstance().getUserInfoCommentInfo(userId);
+      return user;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
   getUserByUsername = async (username: string): Promise<UserModel | null> => {
     try {
       const user =

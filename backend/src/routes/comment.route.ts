@@ -72,7 +72,7 @@ commentRouter.get(
   async (req: Request, res: Response) => {
     try {
       const videoId = parseInt(req.params.videoId);
-      const count = await commentService.getCommentsByVideoId(videoId);
+      const count = await commentService.countCommentsByVideoId(videoId);
       res.status(200).json({ videoId, count });
     } catch (error) {
       const _error = error as Error;

@@ -12,6 +12,20 @@ class CommentRepository {
     return CommentRepository.instance;
   }
 
+  countCommentsByVideoId = async (videoId: number): Promise<number> => {
+    const query: QueryConfig = {
+      text: "SELECT COUNT(1) FROM comments WHERE video_id = $1",
+      values: [videoId],
+    };
+    try {
+      const result = await pool.query(query);
+      return parseInt(result.rows[0].count);
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`Error counting comments: ${_error.message}`);
+    }
+  };
+
   // Create a new comment
   createComment = async (
     userId: number,

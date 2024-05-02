@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native'
 import { colors } from 'theme'
 import { Ionicons } from '@expo/vector-icons'
@@ -107,7 +107,6 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   // const navigation =
   const userId = parseInt(user.uid, 10)
   let videoId = parseInt(post.video_id, 10)
-  const [comments, setComments] = useState<string>('')
 
   // console.debug('userId', userId, ' + videoId', videoId)
   if (isNaN(videoId)) {
@@ -160,10 +159,10 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
       const response = await axiosInstance.getAxios().get(`/comments/comments/count/${videoId}`)
       // console.debug(videoId, ' + ', userId, ' + ', response.data)
 
-      if (response.status >= 200 && response.status <= 299) {
+      if (response.status >= 200 && response.status <= 399) {
         const resComments = response.data.count
-        setComments(resComments)
-        setCommentsCount(resComments.length)
+        console.debug('comments:', resComments) // comments
+        setCommentsCount(resComments)
       }
       // console.log(response.data);
       // const isLiked = response.data.status
@@ -178,15 +177,8 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
     // Replace 123 with your actual initial video ID
     getTotalLike(videoId)
     getInitLikeState(videoId, userId)
-  }, [])
-
-  useEffect(() => {
     getCommentCount(videoId)
   }, [])
-
-  // useEffect(() => {
-  //   setLikeState({ state: post.isLiked, count: post.likesCount })
-  // }, [post])
 
   const handleUpdateLike = async (state: boolean) => {
     try {
@@ -209,10 +201,6 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
     }
   }
 
-  // const handleUpdateCommentCount = () => {
-  //   setCommentsCount((prev) => prev + 1)
-  // }
-
   const animation = useSharedValue(0)
   const rotatingDeg = useDerivedValue(() => {
     return interpolate(animation.value, [0, 360], [0, 360])
@@ -226,6 +214,8 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   useEffect(() => {
     animation.value = withRepeat(withTiming(360, { duration: 4000, easing }), -1)
   }, [])
+
+  // console.debug('comments:', comments);
 
   return (
     <View style={styles.container}>

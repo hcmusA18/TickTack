@@ -12,6 +12,23 @@ class UserRepository {
     return UserRepository.instance;
   }
 
+  getUserInfoCommentInfo = async (
+    userId: number,
+  ): Promise<UserModel | null> => {
+    const query = {
+      text: "select user_id , username, email , avatar  from users u where user_id = $1",
+      values: [userId],
+    };
+    try {
+      const result = await pool.query(query);
+      const res = result.rows[0];
+      return res;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
   getUserByUsername = async (username: string): Promise<UserModel | null> => {
     const query = {
       text: "SELECT * FROM users WHERE username = $1",

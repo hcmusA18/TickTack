@@ -11,6 +11,21 @@ class CommentService {
     return CommentService.instance;
   }
 
+  countCommentsByVideoId = async (videoId: number): Promise<number> => {
+    if (isNaN(videoId) || videoId === undefined) {
+      return 0;
+    }
+
+    try {
+      const count =
+        await CommentRepository.getInstance().countCommentsByVideoId(videoId);
+      return count;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`Error counting comments: ${_error.message}`);
+    }
+  };
+
   // Add a new comment
   addComment = async (
     userId: number,
