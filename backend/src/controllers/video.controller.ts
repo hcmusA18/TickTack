@@ -177,11 +177,9 @@ class VideoController {
       res.status(200).json({ count });
     } catch (error) {
       const _error = error as Error;
-      res
-        .status(500)
-        .json({
-          message: `Error when counting likes of video: ${_error.message}`,
-        });
+      res.status(500).json({
+        message: `Error when counting likes of video: ${_error.message}`,
+      });
     }
   };
 }
