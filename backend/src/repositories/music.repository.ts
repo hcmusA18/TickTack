@@ -3,10 +3,6 @@ import { MusicModel } from "@models";
 
 class MusicRepository {
   private static instance: MusicRepository | null = null;
-  constructor() {
-    // do something
-  }
-
   static getInstance(): MusicRepository {
     if (MusicRepository.instance === null) {
       MusicRepository.instance = new MusicRepository();

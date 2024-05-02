@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react'
-import { View, Text, FlatList } from 'react-native'
+import { View, FlatList } from 'react-native'
 import { AccountItem } from 'components'
 import axiosInstance from 'libs/utils/axiosInstance'
 import Toast from 'react-native-simple-toast'

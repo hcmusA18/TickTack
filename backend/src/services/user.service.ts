@@ -33,6 +33,16 @@ class UserService {
     }
   };
 
+  getUserById = async (id: string): Promise<UserModel | null> => {
+    try {
+      const user = await UserRepository.getInstance().getUserById(id);
+      return user;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
   getUserByEmail = async (email: string): Promise<UserModel | null> => {
     try {
       const user = await UserRepository.getInstance().getUserByEmail(email);

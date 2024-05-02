@@ -11,6 +11,21 @@ import axiosInstance from 'libs/utils/axiosInstance'
 
 interface SavePostPageProps extends AppStackScreenProps<'SavePost'> {}
 
+const PrivacyItemMap = {
+  public: {
+    icon: 'globe',
+    description: 'Everyone can see your post'
+  },
+  friends: {
+    icon: 'users',
+    description: 'Friends can see your post'
+  },
+  private: {
+    icon: 'lock',
+    description: 'Only you can see your post'
+  }
+}
+
 export const SavePostPage: FC<SavePostPageProps> = (props) => {
   const { navigation } = props
 
@@ -102,22 +117,12 @@ export const SavePostPage: FC<SavePostPageProps> = (props) => {
         <TouchableOpacity onPress={() => setModalVisible(true)}>
           <View style={styles.privacyContainer}>
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-              {privacy === 'public' ? (
+              {
                 <>
-                  <Feather name="globe" size={24} />
-                  <Text style={{ marginLeft: 10 }}>Everyone can see your post</Text>
+                  <Feather name={PrivacyItemMap[privacy].icon} size={24} />
+                  <Text style={{ marginLeft: 10 }}>{PrivacyItemMap[privacy].description}</Text>
                 </>
-              ) : privacy === 'friends' ? (
-                <>
-                  <Feather name="users" size={24} />
-                  <Text style={{ marginLeft: 10 }}>Friends can see your post</Text>
-                </>
-              ) : (
-                <>
-                  <Feather name="lock" size={24} />
-                  <Text style={{ marginLeft: 10 }}>Only you can see your post</Text>
-                </>
-              )}
+              }
             </View>
             <AntDesign name="right" size={24} color="black" />
           </View>

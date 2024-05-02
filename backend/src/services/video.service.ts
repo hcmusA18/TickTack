@@ -20,11 +20,6 @@ const drive = google.drive({
 
 class VideoService {
   private static instance: VideoService | null = null;
-
-  private constructor() {
-    // do something
-  }
-
   static getInstance(): VideoService {
     if (VideoService.instance === null) {
       VideoService.instance = new VideoService();
@@ -50,7 +45,7 @@ class VideoService {
       } as any);
 
       await drive.permissions.create({
-        fileId: response.data.id || "",
+        fileId: response.data.id ?? "",
         requestBody: {
           role: "reader",
           type: "anyone",
@@ -111,6 +106,39 @@ class VideoService {
     try {
       const deleted = await VideoRepository.getInstance().removeVideo(videoId);
       return deleted;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
+  getVideosByKeyword = async (
+    keyword: string,
+    getFull: boolean | null = null,
+  ): Promise<VideoModel[]> => {
+    try {
+      getFull = getFull ?? false;
+      const videos = await VideoRepository.getInstance().getVideosByKeyword(
+        keyword,
+        getFull,
+      );
+
+      if (videos.length === 0) {
+        throw new Error("No video found");
+      }
+
+      return videos;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
+  countLikesOfVideo = async (videoId: number): Promise<number> => {
+    try {
+      const count =
+        await VideoRepository.getInstance().countLikesOfVideo(videoId);
+      return count;
     } catch (error) {
       const _error = error as Error;
       throw new Error(`${_error.message}`);

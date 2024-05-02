@@ -69,6 +69,77 @@ const styles = StyleSheet.create({
   }
 })
 
+interface AccountItemProps {
+  avatar: string
+  name: string
+  followers: number
+  isHorizontal: boolean
+  isFollowed: boolean
+  toggleFollow: () => void
+}
+
+interface FollowButtonProps {
+  isFollowed: boolean
+  toggleFollow: () => void
+  isHorizontal: boolean
+}
+
+const FollowButton = ({ isFollowed, toggleFollow, isHorizontal }: FollowButtonProps) => {
+  const horizontalFollowedButtonStyle = isHorizontal ? styles.followedButtonStyleHori : styles.followedButtonStyle // followed
+  const horizontalFollowButtonTextStyle = isHorizontal ? styles.followButtonStyleHori : styles.followButtonStyle // not follow
+  const followButtonStyle = isFollowed ? horizontalFollowedButtonStyle : horizontalFollowButtonTextStyle
+  const followButtonTextStyle = isFollowed ? styles.followedButtonText : styles.followButtonText
+  const followButtonContent = isFollowed ? 'Following' : 'Follow'
+  return (
+    <TouchableOpacity style={followButtonStyle} onPress={() => toggleFollow()}>
+      <Text style={followButtonTextStyle}>{followButtonContent}</Text>
+    </TouchableOpacity>
+  )
+}
+
+const AccountInfo = ({ name, followers }) => {
+  return (
+    <View style={styles.textContainer}>
+      <Text style={styles.textName}>{name}</Text>
+      <Text>{followers} Followers</Text>
+    </View>
+  )
+}
+
+const HorizontalAccountItem = ({
+  avatar,
+  name,
+  followers,
+  isHorizontal,
+  isFollowed,
+  toggleFollow
+}: AccountItemProps) => {
+  return (
+    <View style={[styles.accountItem, { marginRight: 10, width: 150 }]}>
+      <Image source={{ uri: avatar }} style={{ width: 100, height: 100, borderRadius: 100, marginBottom: 5 }} />
+      <AccountInfo name={name} followers={followers} />
+      <FollowButton isFollowed={isFollowed} toggleFollow={toggleFollow} isHorizontal={isHorizontal} />
+    </View>
+  )
+}
+
+const VerticalAccountItem = ({ avatar, name, followers, isHorizontal, isFollowed, toggleFollow }: AccountItemProps) => {
+  return (
+    <View style={[styles.accountItem, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+      <View style={styles.leftContainer}>
+        <Image source={{ uri: avatar }} style={{ width: 60, height: 60, borderRadius: 100 }} />
+        <AccountInfo name={name} followers={followers} />
+      </View>
+      <View style={styles.rightContainer}>
+        <FollowButton isFollowed={isFollowed} toggleFollow={toggleFollow} isHorizontal={isHorizontal} />
+        <TouchableOpacity>
+          <Feather name={'x'} size={20} color={colors.textGray}></Feather>
+        </TouchableOpacity>
+      </View>
+    </View>
+  )
+}
+
 export const AccountItem = ({ avatar, name, followers, isHorizontal }) => {
   const [isFollowed, setIsFollowed] = useState(false)
 
@@ -78,50 +149,23 @@ export const AccountItem = ({ avatar, name, followers, isHorizontal }) => {
     // update the followr count
   }
 
-  let followButtonStyle
-  if (isFollowed) {
-    followButtonStyle = isHorizontal ? styles.followedButtonStyleHori : styles.followedButtonStyle
-  } else {
-    followButtonStyle = isHorizontal ? styles.followButtonStyleHori : styles.followButtonStyle
-  }
-
-  const followButtonTextStyle = isFollowed ? styles.followedButtonText : styles.followButtonText
-  const followButtonContent = isFollowed ? 'Following' : 'Follow'
-
-  const HorizontalAccountItem = () => {
-    return (
-      <View style={[styles.accountItem, { marginRight: 10, width: 150 }]}>
-        <Image source={{ uri: avatar }} style={{ width: 100, height: 100, borderRadius: 100, marginBottom: 5 }} />
-        <Text style={styles.textName}>{name}</Text>
-        <Text>{followers} Followers</Text>
-        <TouchableOpacity style={followButtonStyle} onPress={() => toggleFollow()}>
-          <Text style={followButtonTextStyle}>{followButtonContent}</Text>
-        </TouchableOpacity>
-      </View>
-    )
-  }
-
-  const VerticalAccountItem = () => {
-    return (
-      <View style={[styles.accountItem, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-        <View style={styles.leftContainer}>
-          <Image source={{ uri: avatar }} style={{ width: 60, height: 60, borderRadius: 100 }} />
-          <View style={styles.textContainer}>
-            <Text style={styles.textName}>{name}</Text>
-            <Text>{followers} Followers</Text>
-          </View>
-        </View>
-        <View style={styles.rightContainer}>
-          <TouchableOpacity style={followButtonStyle} onPress={() => toggleFollow()}>
-            <Text style={followButtonTextStyle}>{followButtonContent}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Feather name={'x'} size={20} color={colors.textGray}></Feather>
-          </TouchableOpacity>
-        </View>
-      </View>
-    )
-  }
-
-  return isHorizontal ? <HorizontalAccountItem /> : <VerticalAccountItem />
+  return isHorizontal ? (
+    <HorizontalAccountItem
+      avatar={avatar}
+      name={name}
+      followers={followers}
+      isHorizontal={isHorizontal}
+      isFollowed={isFollowed}
+      toggleFollow={toggleFollow}
+    />
+  ) : (
+    <VerticalAccountItem
+      avatar={avatar}
+      name={name}
+      followers={followers}
+      isHorizontal={isHorizontal}
+      isFollowed={isFollowed}
+      toggleFollow={toggleFollow}
+    />
+  )
 }
