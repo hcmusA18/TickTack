@@ -1,7 +1,6 @@
 import "module-alias/register";
-import { UserService } from "@services";
+import { UserService, PasswordService } from "@services";
 import { UserRepository } from "@repositories";
-import { PasswordService } from "@services";
 
 jest.mock("@repositories/user.repository", () => ({
   UserRepository: {

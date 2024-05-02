@@ -2,9 +2,6 @@ import { SocialRepository } from "@repositories";
 
 class SocialService {
   private static instance: SocialService | null = null;
-  private constructor() {
-    // do something
-  }
   static getInstance(): SocialService {
     if (SocialService.instance === null) {
       SocialService.instance = new SocialService();

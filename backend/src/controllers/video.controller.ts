@@ -137,5 +137,51 @@ class VideoController {
         .json({ message: `Error removing video: ${_error.message}` });
     }
   };
+
+  getVideosByKeyword = async (req: Request, res: Response) => {
+    const keyword = req.params.keyword;
+    const getFull = req.query.getFull === "true";
+    try {
+      const results = await VideoService.getInstance().getVideosByKeyword(
+        keyword,
+        getFull,
+      );
+
+      const videos = results.map((video) => {
+        return {
+          video_id: video.videoId,
+          user_id: video.userId,
+          text: video.text,
+          create_time: video.createTime,
+          video_url: video.videoUrl,
+          duration: video.duration,
+          music_id: video.musicId,
+          hashtags: video.hashtags,
+          privacy: video.privacy,
+          view_count: video.viewCount,
+        };
+      });
+
+      res.status(200).json({ videos });
+    } catch (error) {
+      const _error = error as Error;
+      res.status(500).json({
+        message: `Error when getting users by keyword: ${_error.message}`,
+      });
+    }
+  };
+
+  countLikesOfVideo = async (req: Request, res: Response) => {
+    try {
+      const videoId = parseInt(req.params.videoId);
+      const count = await VideoService.getInstance().countLikesOfVideo(videoId);
+      res.status(200).json({ count });
+    } catch (error) {
+      const _error = error as Error;
+      res.status(500).json({
+        message: `Error when counting likes of video: ${_error.message}`,
+      });
+    }
+  };
 }
 export { VideoController };

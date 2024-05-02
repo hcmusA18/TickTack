@@ -10,28 +10,28 @@ class VideoModel {
   privacy: "public" | "private" | "friends";
   viewCount: number;
 
-  constructor(
-    userId: number,
-    createTime: number,
-    videoUrl: string,
-    duration: number,
-    hashtags: string[],
-    privacy: "public" | "private" | "friends" = "public",
-    viewCount = 0,
-    musicId = null,
-    videoId?: number,
-    text = "",
-  ) {
-    this.videoId = videoId;
-    this.userId = userId;
-    this.text = text;
-    this.createTime = createTime;
-    this.videoUrl = videoUrl;
-    this.duration = duration;
-    this.musicId = musicId;
-    this.hashtags = hashtags;
-    this.privacy = privacy;
-    this.viewCount = viewCount;
+  constructor(params: {
+    userId: number;
+    createTime: number;
+    videoUrl: string;
+    duration: number;
+    hashtags: string[];
+    privacy?: "public" | "private" | "friends";
+    viewCount?: number;
+    musicId?: string | null;
+    videoId?: number;
+    text?: string;
+  }) {
+    this.videoId = params.videoId;
+    this.userId = params.userId;
+    this.text = params.text ?? "";
+    this.createTime = params.createTime;
+    this.videoUrl = params.videoUrl;
+    this.duration = params.duration;
+    this.musicId = params.musicId ?? null;
+    this.hashtags = params.hashtags;
+    this.privacy = params.privacy ?? "public";
+    this.viewCount = params.viewCount ?? 0;
   }
 }
 

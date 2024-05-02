@@ -50,7 +50,7 @@ class AuthController {
           return res.status(401).json({ message: info.message });
         }
         try {
-          req.logIn(user, (err) => {
+          return req.logIn(user, (err) => {
             if (err) {
               return res.status(500).json({ message: err.message });
             }
@@ -68,7 +68,6 @@ class AuthController {
             message: `Error when signing in: ${(error as Error).message}`,
           });
         }
-        return res.status(500).json({ message: "Unknown error" });
       },
     )(req, res);
   };

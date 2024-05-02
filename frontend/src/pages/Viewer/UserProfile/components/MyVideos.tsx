@@ -1,10 +1,12 @@
 import React from 'react'
-import { View, TouchableOpacity, StyleSheet } from 'react-native'
-import { Text, Avatar } from 'react-native-paper'
+import { View, StyleSheet } from 'react-native'
+import { Text } from 'react-native-paper'
+
+const bgColor = 'red'
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'red'
+    backgroundColor: bgColor
   }
 })
 

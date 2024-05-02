@@ -4,6 +4,8 @@ import { StyleSheet, View, Image, Text } from 'react-native'
 import { Avatar } from 'react-native-paper'
 import { colors } from 'theme'
 import axiosInstance from 'libs/utils/axiosInstance'
+import { convertTime } from 'libs/utils/convertTime'
+
 
 const styles = StyleSheet.create({
   avatarSmall: {
@@ -45,6 +47,7 @@ interface UserProps {
 }
 
 export const CommentItem = ({ item }: { item: Comment }) => {
+
   const getUserInfo = async (userId: number) => {
     const response = await axiosInstance.getAxios().get(`/user/comments/${userId}`)
     const data = response.data.result
