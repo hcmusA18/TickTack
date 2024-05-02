@@ -120,14 +120,10 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
       const response = await axiosInstance.getAxios().get(`/interaction/likes/count/${videoId}`)
       let { like_count: likeCount } = response.data
 
-      // console.debug(response.data)
-
       if (isNaN(likeCount)) {
         console.error('Like Count is NaN')
         likeCount = 0
       }
-
-      // console.debug(videoId, likeCount);
 
       setLikeState((prevState) => ({ ...prevState, count: likeCount }))
     } catch (error) {
@@ -141,12 +137,11 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
       const response = await axiosInstance
         .getAxios()
         .get(`/interaction/likes/check`, { video_id: videoId, user_id: userId, time: 1 })
-      // console.debug("response:", response.data)
+
       const isLiked = response.data.status
       setLikeState((prevState) => ({ ...prevState, state: isLiked }))
     } catch (error) {
       console.error('Error fetching likes:', error)
-      // Optionally handle error state in UI
     }
   }
 
