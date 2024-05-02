@@ -108,14 +108,10 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   const userId = parseInt(user.uid, 10)
   let videoId = parseInt(post.video_id, 10)
 
-  // console.debug('userId', userId, ' + videoId', videoId)
   if (isNaN(videoId)) {
-    // console.error(post);
-
     videoId = 0
   }
 
-  // const currentUser = useAppSelector((state) => state.auth.currentUser)
   const [likeState, setLikeState] = useState<LikeState>({ state: false, count: 0 })
   const [commentsCount, setCommentsCount] = useState<number>(0)
 

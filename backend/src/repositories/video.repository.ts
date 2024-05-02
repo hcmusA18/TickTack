@@ -12,8 +12,15 @@ class VideoRepository {
   }
 
   private stringArrayConverter = (value: string[]): string => {
-    if (!value || value.length === 0) return `ARRAY[]::TEXT[]`;
-    return `ARRAY[${value.map((v) => `'${v}'`).join(", ")}]`;
+    if (!value || value.length === 0) return "ARRAY[]::TEXT[]";
+
+    const formattedValues = value
+      .map((v) => {
+        return "'" + v.replace(/'/g, "''") + "'"; // Safely escape single quotes in SQL
+      })
+      .join(", ");
+
+    return "ARRAY[" + formattedValues + "]::TEXT[]";
   };
 
   addNewVideo = async (video: VideoModel): Promise<VideoModel | null> => {
