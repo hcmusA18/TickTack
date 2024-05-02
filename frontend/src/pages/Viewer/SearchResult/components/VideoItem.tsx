@@ -68,7 +68,10 @@ interface VideoItemProps {
 }
 
 export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
-  const { user_id: userId, text: text, create_time: createTime } = video
+  const { user_id: userId, text: text, create_time: createTime, video_url: videoUrl } = video
+
+  const videoId = videoUrl.split('id=')[1]
+  const videoThumbnail = `https://drive.google.com/thumbnail?id=${videoId}`
 
   const [user, setUser] = useState<User>({} as User)
 
@@ -108,7 +111,7 @@ export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
       <View style={styles.container}>
         {/* Video Thumbnail */}
         <View style={styles.videoContainer}>
-          <Image source={{ uri: 'https://source.unsplash.com/random' }} style={{ width: 180, height: 293 }} />
+          <Image source={{ uri: videoThumbnail }} style={{ width: 180, height: 293 }} />
           <Text style={styles.date}>{convertTime(createTime)}</Text>
           <Text style={styles.description} numberOfLines={2}>
             {text}
