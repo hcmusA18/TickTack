@@ -20,11 +20,6 @@ const drive = google.drive({
 
 class VideoService {
   private static instance: VideoService | null = null;
-
-  private constructor() {
-    // do something
-  }
-
   static getInstance(): VideoService {
     if (VideoService.instance === null) {
       VideoService.instance = new VideoService();
@@ -50,7 +45,7 @@ class VideoService {
       } as any);
 
       await drive.permissions.create({
-        fileId: response.data.id || "",
+        fileId: response.data.id ?? "",
         requestBody: {
           role: "reader",
           type: "anyone",

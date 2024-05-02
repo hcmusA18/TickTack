@@ -12,90 +12,116 @@ interface SearchResultVideosProps {
 export const SearchResultVideos: FC<SearchResultVideosProps> = ({ searchQuery, top, navigation }) => {
   const posts: Post[] = [
     {
-      id: '1',
-      creator: 'usr1',
-      media: ['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4'],
-      description: 'desc1',
-      likesCount: 1,
-      commentsCount: 1,
-      sharesCount: 1,
-      creation: '11/11/2021',
+      video_id: '1',
+      user_id: 'usr1',
+      video_url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+      text: 'desc1',
+      likes_count: 1,
+      comments_count: 1,
+      shares_count: 1,
+      create_time: '11/11/2021',
       hashtags: ['hashtag1', 'hashtag2'],
-      musicThumbnail: 'https://reactnative.dev/img/tiny_logo.png'
+      music_thumbnail: 'https://reactnative.dev/img/tiny_logo.png',
+      duration: 60,
+      music_id: 'music1',
+      privacy: 'public',
+      view_count: 1
     },
     {
-      id: '2',
-      creator: 'usr2',
-      media: ['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'],
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-      likesCount: 2,
-      commentsCount: 2,
-      sharesCount: 2,
-      creation: '16/11/2021',
+      video_id: '2',
+      user_id: 'usr2',
+      video_url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim video_ est laborum',
+      likes_count: 2,
+      comments_count: 2,
+      shares_count: 2,
+      create_time: '16/11/2021',
       hashtags: ['hashtag1', 'hashtag2'],
-      musicThumbnail: 'https://reactnative.dev/img/tiny_logo.png'
+      music_thumbnail: 'https://reactnative.dev/img/tiny_logo.png',
+      duration: 60,
+      music_id: 'music2',
+      privacy: 'public',
+      view_count: 1
     },
     {
-      id: '3',
-      creator: 'usr3',
-      media: ['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'],
-      description: 'desc3',
-      likesCount: 3,
-      commentsCount: 3,
-      sharesCount: 3,
-      creation: '15/11/2021',
+      video_id: '3',
+      user_id: 'usr3',
+      video_url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      text: 'desc3',
+      likes_count: 3,
+      comments_count: 3,
+      shares_count: 3,
+      create_time: '15/11/2021',
       hashtags: ['hashtag1', 'hashtag2'],
-      musicThumbnail: 'https://reactnative.dev/img/tiny_logo.png'
+      music_thumbnail: 'https://reactnative.dev/img/tiny_logo.png',
+      duration: 60,
+      music_id: 'music3',
+      privacy: 'public',
+      view_count: 1
     },
     {
-      id: '4',
-      creator: 'usr4',
-      media: ['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4'],
-      description: 'desc4',
-      likesCount: 4,
-      commentsCount: 4,
-      sharesCount: 4,
-      creation: '14/11/2021',
+      video_id: '4',
+      user_id: 'usr4',
+      video_url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+      text: 'desc4',
+      likes_count: 4,
+      comments_count: 4,
+      shares_count: 4,
+      create_time: '14/11/2021',
       hashtags: ['hashtag1', 'hashtag2'],
-      musicThumbnail: 'https://reactnative.dev/img/tiny_logo.png'
+      music_thumbnail: 'https://reactnative.dev/img/tiny_logo.png',
+      duration: 60,
+      music_id: 'music4',
+      privacy: 'public',
+      view_count: 1
     },
     {
-      id: '5',
-      creator: 'usr5',
-      media: ['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4'],
-      description: 'desc5',
-      likesCount: 5,
-      commentsCount: 5,
-      sharesCount: 5,
-      creation: '11/11/2021',
+      video_id: '5',
+      user_id: 'usr5',
+      video_url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+      text: 'desc5',
+      likes_count: 5,
+      comments_count: 5,
+      shares_count: 5,
+      create_time: '11/11/2021',
       hashtags: ['hashtag1', 'hashtag2'],
-      musicThumbnail: 'https://reactnative.dev/img/tiny_logo.png'
+      music_thumbnail: 'https://reactnative.dev/img/tiny_logo.png',
+      duration: 60,
+      music_id: 'music5',
+      privacy: 'public',
+      view_count: 1
     },
     {
-      id: '6',
-      creator: 'usr6',
-      media: ['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'],
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-      likesCount: 6,
-      commentsCount: 6,
-      sharesCount: 6,
-      creation: '12/11/2021',
+      video_id: '6',
+      user_id: 'usr6',
+      video_url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
+      likes_count: 6,
+      comments_count: 6,
+      shares_count: 6,
+      create_time: '12/11/2021',
       hashtags: ['hashtag1', 'hashtag2'],
-      musicThumbnail: 'https://reactnative.dev/img/tiny_logo.png'
+      music_thumbnail: 'https://reactnative.dev/img/tiny_logo.png',
+      duration: 60,
+      music_id: 'music6',
+      privacy: 'public',
+      view_count: 1
     },
     {
-      id: '7',
-      creator: 'usr7',
-      media: ['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'],
-      description: 'desc7',
-      likesCount: 7,
-      commentsCount: 7,
-      sharesCount: 7,
-      creation: '13/11/2021',
+      video_id: '7',
+      user_id: 'usr7',
+      video_url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      text: 'desc7',
+      likes_count: 7,
+      comments_count: 7,
+      shares_count: 7,
+      create_time: '13/11/2021',
       hashtags: ['hashtag1', 'hashtag2'],
-      musicThumbnail: 'https://reactnative.dev/img/tiny_logo.png'
+      music_thumbnail: 'https://reactnative.dev/img/tiny_logo.png',
+      duration: 60,
+      music_id: 'music7',
+      privacy: 'public',
+      view_count: 1
     }
   ]
   const groups = ['All', 'Watched', 'Unwatched']
@@ -104,9 +130,9 @@ export const SearchResultVideos: FC<SearchResultVideosProps> = ({ searchQuery, t
     <View style={{ flex: 1 }}>
       {top && (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', padding: 10, gap: 10 }}>
-          {groups.map((group, index) => (
+          {groups.map((group, _) => (
             <TouchableOpacity
-              key={index}
+              key={group.toLowerCase()}
               style={{ padding: 8, backgroundColor: colors.palette.neutral300, borderRadius: 4 }}
               onPress={() => setSelectedGroup(group)}>
               <Text

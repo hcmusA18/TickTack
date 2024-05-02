@@ -1,10 +1,6 @@
 class RecSysService {
   private static instance: RecSysService | null = null;
 
-  private constructor() {
-    // do something
-  }
-
   static getInstance(): RecSysService {
     if (RecSysService.instance === null) {
       RecSysService.instance = new RecSysService();

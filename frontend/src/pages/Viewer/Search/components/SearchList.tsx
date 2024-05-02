@@ -96,7 +96,7 @@ const SearchItem: FC<SearchItemProps> = ({ searched, text, onRemove, onClick }) 
 export const SearchList: FC<SearchListProps> = ({ searchQuery, navigation }) => {
   const [queryData, setQueryData] = useState<string[]>([])
   useEffect(() => {
-    setQueryData(searchQuery.trim().length === 0 ? previousSearches : (previousSearches.concat(neverMeets) as string[]))
+    setQueryData(searchQuery.trim().length === 0 ? previousSearches : previousSearches.concat(neverMeets))
   }, [searchQuery])
 
   const onRemove = (item: string) => {

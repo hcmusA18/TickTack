@@ -37,10 +37,20 @@ export const SignUpPage: FC<SignUpPageProps> = (props) => {
   )
 
   const signUpOptionsData: AuthenOptionProps[] = [
-    { icon: 'user', text: 'Sign up by phone or email', onPress: () => navigation.navigate('SignUpByMail') },
-    { icon: 'facebook', text: 'Continue with Facebook', onPress: () => console.log('Continue with Facebook') },
-    { icon: 'apple', text: 'Continue with Apple', onPress: () => console.log('Continue with Apple') },
-    { icon: 'google', text: 'Continue with Google', onPress: () => console.log('Continue with Google') }
+    {
+      type: 'basic',
+      icon: 'user',
+      text: 'Sign up by phone or email',
+      onPress: () => navigation.navigate('SignUpByMail')
+    },
+    {
+      type: 'facebook',
+      icon: 'facebook',
+      text: 'Continue with Facebook',
+      onPress: () => console.log('Continue with Facebook')
+    },
+    { type: 'apple', icon: 'apple', text: 'Continue with Apple', onPress: () => console.log('Continue with Apple') },
+    { type: 'google', icon: 'google', text: 'Continue with Google', onPress: () => console.log('Continue with Google') }
   ]
 
   const handleSheetChange = (index: number) => {
@@ -75,7 +85,7 @@ export const SignUpPage: FC<SignUpPageProps> = (props) => {
           onFirstIconPress={() => console.log('Help Button Pressed')}
           onSecondIconPress={() => {
             sheetRef.current?.close?.()
-            navigation.navigate('Home')
+            navigation.navigate('Main', { screen: 'Home', params: { creator: null, profile: false } })
           }}
         />
         {/* Body content */}
@@ -83,9 +93,10 @@ export const SignUpPage: FC<SignUpPageProps> = (props) => {
           <View style={styles.optionTextContainer}>
             <Text style={styles.headerText}>Sign up{'\n'}for TikTok</Text>
           </View>
-          {signUpOptionsData.map((option, index) => (
+          {signUpOptionsData.map((option, _) => (
             <SignupOption
-              key={index}
+              key={option.type}
+              type={option.type}
               icon={option.icon}
               text={option.text}
               onPress={() => {

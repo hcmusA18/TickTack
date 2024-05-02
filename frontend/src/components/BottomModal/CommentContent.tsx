@@ -52,7 +52,7 @@ export const CommentContent = ({ post }: { post: Post }) => {
       ...commentList,
       {
         id: (commentList.length + 1).toString(),
-        creator: post.creator,
+        creator: post.user_id.toString(),
         comment,
         time: Math.floor(Date.now() / 1000).toString()
       }
@@ -72,7 +72,7 @@ export const CommentContent = ({ post }: { post: Post }) => {
         style={{ flex: 1 }}
       />
       <View style={styles.inputContainer}>
-        {currentUser && currentUser.photoURL ? (
+        {currentUser?.photoURL ? (
           <Image source={{ uri: currentUser.photoURL }} style={styles.avatarSmall} />
         ) : (
           <Avatar.Icon size={32} icon={'account'} />

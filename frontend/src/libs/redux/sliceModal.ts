@@ -2,13 +2,13 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { ModalType, Post, Sound } from 'libs/types'
 import { merge } from 'lodash'
 
-type ModalState = {
+type ModalState<T> = {
   isOpen: boolean
-  data: any | Post | Sound[]
+  data: T | Post | Sound[]
   modalType: ModalType
 }
 
-const initialState: ModalState = {
+const initialState: ModalState<Post | Sound[]> = {
   isOpen: false,
   data: null,
   modalType: ModalType.NONE
@@ -18,7 +18,7 @@ export const ModalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    openModal(state, action: PayloadAction<ModalState>) {
+    openModal(state, action: PayloadAction<ModalState<Post | Sound[]>>) {
       merge(state, action.payload)
     },
     clearModal() {

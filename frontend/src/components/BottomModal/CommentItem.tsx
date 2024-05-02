@@ -60,7 +60,7 @@ export const CommentItem = ({ item }: { item: Comment }) => {
 
   return (
     <View style={styles.commentContainer}>
-      {user && user.photoURL ? (
+      {user?.photoURL ? (
         <Image style={styles.avatarSmall} source={{ uri: user.photoURL }} />
       ) : (
         <Avatar.Icon size={32} icon={'account'} />

@@ -61,7 +61,6 @@ class AuthController {
               { expiresIn: "7d" },
             );
 
-
             return res.status(200).json({ data: token });
           });
         } catch (error) {
