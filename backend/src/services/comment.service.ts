@@ -41,9 +41,7 @@ class CommentService {
     try {
       const comments =
         await CommentRepository.getInstance().getCommentsByVideoId(videoId);
-      if (comments.length === 0) {
-        throw new Error("No comments found");
-      }
+
       return comments;
     } catch (error) {
       const _error = error as Error;
@@ -80,7 +78,7 @@ class CommentService {
   deleteComment = async (
     userId: number,
     videoId: number,
-    time: bigint,
+    time: number,
   ): Promise<boolean> => {
     try {
       const success = await CommentRepository.getInstance().deleteComment(

@@ -22,9 +22,9 @@ class VideoRepository {
     if (!video.musicId) video.musicId = null;
     const query = {
       text: `INSERT INTO videos(user_id, text, create_time, video_url, duration, music_id, hashtags, privacy, view_count) 
-      VALUES($1, $2, $3, $4, $5, ${
-        video.musicId
-      }, ${this.stringArrayConverter(video.hashtags)}, $6, $7) RETURNING *`,
+      VALUES($1, $2, $3, $4, $5, ${video.musicId}, ${this.stringArrayConverter(
+        video.hashtags,
+      )}, $6, $7) RETURNING *`,
       values: [
         video.userId.toString(),
         video.text,

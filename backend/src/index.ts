@@ -9,6 +9,7 @@ import {
   recsysRouter,
   LikeRouter,
   musicRouter,
+  commentRouter,
 } from "@routes";
 
 import authMiddleware from "./middlewares/auth.middleware";
@@ -56,7 +57,6 @@ app.post("/signup", (req, res) => {
 });
 
 app.post("/signin", (req, res) => {
-  console.log(req.body);
   AuthController.getInstance().signIn(req, res);
 });
 
@@ -69,6 +69,8 @@ app.use("/recsys", recsysRouter);
 app.use("/user", userRouter);
 app.use("/video", videoRouter);
 app.use("/interaction", LikeRouter);
+app.use("/comments", commentRouter);
+
 app.use("/music", musicRouter);
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}!`));

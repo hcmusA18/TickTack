@@ -71,7 +71,7 @@ class CommentRepository {
   deleteComment = async (
     userId: number,
     videoId: number,
-    time: bigint,
+    time: number,
   ): Promise<boolean> => {
     const query: QueryConfig = {
       text: "DELETE FROM comments WHERE user_id = $1 AND video_id = $2 AND time = $3",

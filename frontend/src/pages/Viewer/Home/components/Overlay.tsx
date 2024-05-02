@@ -14,12 +14,10 @@ import Animated, {
 import { useAppDispatch } from 'libs/redux'
 import { openModal } from 'libs/redux/sliceModal'
 import { Post, User } from 'libs/types'
-import { throttle } from 'lodash'
+
 import { Avatar } from 'react-native-paper'
 
 import axiosInstance from 'libs/utils/axiosInstance'
-import { Console, debug, error } from 'console'
-import { debuglog } from 'util'
 
 const styles = StyleSheet.create({
   container: {
@@ -109,6 +107,7 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   // const navigation =
   const userId = parseInt(user.uid, 10)
   let videoId = parseInt(post.video_id, 10)
+  const [comments, setComments] = useState<string>('')
 
   // console.debug('userId', userId, ' + videoId', videoId)
   if (isNaN(videoId)) {
@@ -120,27 +119,6 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   // const currentUser = useAppSelector((state) => state.auth.currentUser)
   const [likeState, setLikeState] = useState<LikeState>({ state: false, count: 0 })
   const [commentsCount, setCommentsCount] = useState<number>(0)
-
-  const getLikeState = async (userId: number, videoId: number) => {
-    try {
-      const response = await axiosInstance.getAxios().get(`/interaction/likes/count/${videoId}`)
-      let { like_count: likeCount } = response.data
-
-      // console.debug(response.data)
-
-      if (isNaN(likeCount)) {
-        console.error('Like Count is NaN')
-        likeCount = 0
-      }
-
-      // console.debug(videoId, likeCount);
-
-      setLikeState((prevState) => ({ ...prevState, count: likeCount }))
-    } catch (error) {
-      console.error('Error fetching likes:', error)
-      // Optionally handle error state in UI
-    }
-  }
 
   const getTotalLike = async (videoId: number) => {
     try {
@@ -168,9 +146,28 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
       const response = await axiosInstance
         .getAxios()
         .get(`/interaction/likes/check`, { video_id: videoId, user_id: userId, time: 1 })
-      console.debug(videoId, ' + ', userId, ' + ', response.data)
+      // console.debug("response:", response.data)
       const isLiked = response.data.status
       setLikeState((prevState) => ({ ...prevState, state: isLiked }))
+    } catch (error) {
+      console.error('Error fetching likes:', error)
+      // Optionally handle error state in UI
+    }
+  }
+
+  const getCommentCount = async (videoId: number) => {
+    try {
+      const response = await axiosInstance.getAxios().get(`/comments/comments/count/${videoId}`)
+      // console.debug(videoId, ' + ', userId, ' + ', response.data)
+
+      if (response.status >= 200 && response.status <= 299) {
+        const resComments = response.data.count
+        setComments(resComments)
+        setCommentsCount(resComments.length)
+      }
+      // console.log(response.data);
+      // const isLiked = response.data.status
+      // setLikeState((prevState) => ({ ...prevState, state: isLiked }))
     } catch (error) {
       console.error('Error fetching likes:', error)
       // Optionally handle error state in UI
@@ -181,6 +178,10 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
     // Replace 123 with your actual initial video ID
     getTotalLike(videoId)
     getInitLikeState(videoId, userId)
+  }, [])
+
+  useEffect(() => {
+    getCommentCount(videoId)
   }, [])
 
   // useEffect(() => {

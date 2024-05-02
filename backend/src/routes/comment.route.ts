@@ -1,64 +1,84 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import { CommentService } from "@services";
 
-const CommentRouter = express.Router();
+const commentRouter = express.Router();
+const commentService = CommentService.getInstance();
 
-// Post a new comment
-CommentRouter.post("/comments", async (req, res) => {
+// Add a comment
+commentRouter.post("/comments", async (req: Request, res: Response) => {
   try {
     const { userId, videoId, commentText, time } = req.body;
-    const result = await CommentService.addComment(
+    const comment = await commentService.addComment(
       userId,
       videoId,
       commentText,
-      time,
+      BigInt(time),
     );
-    res.status(201).json(result);
+    res.status(201).json(comment);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    const _error = error as Error;
+    res.status(500).json({ error: _error.message });
   }
 });
 
 // Get comments for a video
-CommentRouter.get("/comments/:videoId", async (req, res) => {
+commentRouter.get("/comments/:videoId", async (req: Request, res: Response) => {
   try {
     const videoId = parseInt(req.params.videoId);
-    const comments = await CommentService.getVideoComments(videoId);
-    res.json(comments);
+    const comments = await commentService.getCommentsByVideoId(videoId);
+    res.status(200).json(comments);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    const _error = error as Error;
+    res.status(500).json({ error: _error.message });
   }
 });
 
-// Update a comment
-CommentRouter.put("/comments", async (req, res) => {
-  try {
-    const { userId, videoId, time, commentText } = req.body;
-    const result = await CommentService.updateComment(
-      userId,
-      videoId,
-      time,
-      commentText,
-    );
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+// // Update a comment
+// router.put('/comments/:commentId', async (req: Request, res: Response) => {
+//   try {
+//     const commentId = parseInt(req.params.commentId);
+//     const { commentText } = req.body;
+//     const updatedComment = await commentService.updateComment(commentId, commentText);
+//     if (updatedComment) {
+//       res.status(200).json(updatedComment);
+//     } else {
+//       res.status(404).json({ message: 'Comment not found' });
+//     }
+//   } catch (error) {
+//     const _error = error as Error;
+//     res.status(500).json({ error: _error.message });
+//   }
+// });
 
 // Delete a comment
-CommentRouter.delete("/comments", async (req, res) => {
+commentRouter.delete("/comments", async (req: Request, res: Response) => {
   try {
-    const { userId, videoId, time } = req.body;
-    const success = await CommentService.deleteComment(userId, videoId, time);
+    const { user_id, video_id } = req.body;
+    const success = await commentService.deleteComment(user_id, video_id, 1);
     if (success) {
       res.status(204).send();
     } else {
-      res.status(404).send();
+      res.status(404).json({ message: "Comment not found" });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    const _error = error as Error;
+    res.status(500).json({ error: _error.message });
   }
 });
 
-export { CommentRouter };
+// Count comments for a video
+commentRouter.get(
+  "/comments/count/:videoId",
+  async (req: Request, res: Response) => {
+    try {
+      const videoId = parseInt(req.params.videoId);
+      const count = await commentService.getCommentsByVideoId(videoId);
+      res.status(200).json({ videoId, count });
+    } catch (error) {
+      const _error = error as Error;
+      res.status(500).json({ error: _error.message });
+    }
+  },
+);
+
+export { commentRouter };

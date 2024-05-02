@@ -12,8 +12,6 @@ class LikeRepository {
   }
 
   existsLike = async (user_id: number, video_id: number): Promise<boolean> => {
-    console.debug(user_id, video_id);
-
     // Query to check if a like exists for the given user and video
     const checkQuery = {
       text: "SELECT user_id FROM likes WHERE user_id = $1 AND video_id = $2",
@@ -23,8 +21,6 @@ class LikeRepository {
     try {
       // Execute the check query to see if a like exists
       const result = await pool.query(checkQuery);
-
-      console.error(result);
       // If a like exists, return true
       if (result.rows.length > 0) {
         return true;
