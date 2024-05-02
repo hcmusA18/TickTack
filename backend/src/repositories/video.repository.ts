@@ -125,6 +125,21 @@ class VideoRepository {
       throw new Error(`${_error.message}`);
     }
   };
+
+  countLikesOfVideo = async (videoId: number): Promise<number> => {
+    const query = {
+      text: `SELECT COUNT(*) FROM likes WHERE video_id = $1`,
+      values: [videoId],
+    };
+    try {
+      const result = await pool.query(query);
+
+      return parseInt(result.rows[0].count);
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
 export { VideoRepository };

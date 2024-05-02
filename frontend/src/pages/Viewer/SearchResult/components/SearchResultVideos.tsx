@@ -15,15 +15,12 @@ export const SearchResultVideos: FC<SearchResultVideosProps> = ({ searchQuery, t
 
   const searchPosts = async () => {
     try {
-      // const reponse = await axiosInstance.getAxios().get(`/video/search/${searchQuery}?getFull=true`)
-      const reponse = await axiosInstance.getAxios().get(`/video/search/follow?getFull=true`)
+      const reponse = await axiosInstance.getAxios().get(`/video/search/${searchQuery}?getFull=true`)
 
       if (reponse.status !== 200) {
         Toast.show(reponse.data.message, Toast.LONG)
         return
       }
-      console.log(reponse.data.videos[0])
-
       setPosts(reponse.data.videos)
     } catch (error) {
       console.error('Error fetching posts:', error)

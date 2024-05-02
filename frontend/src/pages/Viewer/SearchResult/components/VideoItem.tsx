@@ -68,14 +68,14 @@ interface VideoItemProps {
 }
 
 export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
-  const { user_id: userId, text: text, create_time: createTime, video_url: videoUrl } = video
+  const { user_id: userId, text: text, create_time: createTime, video_url: videoUrl, video_id: videoId } = video
 
-  const videoId = videoUrl.split('id=')[1]
-  const videoThumbnail = `https://drive.google.com/thumbnail?id=${videoId}`
+  const videoUrlToGetThumbnail = videoUrl.split('id=')[1]
+  const videoThumbnail = `https://drive.google.com/thumbnail?id=${videoUrlToGetThumbnail}`
 
   const [user, setUser] = useState<User>({} as User)
+  const [likesCount, setLikesCount] = useState<number>(0)
 
-  // get the user from user id
   const getUser = async () => {
     try {
       const response = await axiosInstance.getAxios().get(`/user/${userId}`)
@@ -105,6 +105,24 @@ export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
     getUser()
   }, [userId])
 
+  const getLikesCount = async () => {
+    try {
+      const response = await axiosInstance.getAxios().get(`/video/likes/${videoId}`)
+      if (response.status !== 200) {
+        Toast.show(response.data.message, Toast.LONG)
+        return
+      }
+      setLikesCount(response.data.count)
+    } catch (error) {
+      console.error('Error fetching likes:', error)
+      Toast.show('Error fetching likes', Toast.LONG)
+    }
+  }
+
+  useEffect(() => {
+    getLikesCount()
+  }, [videoId])
+
   const handlePress = () => navigation.navigate('Main', { screen: 'Home', params: { userId, profile: true } })
   return (
     <TouchableOpacity onPress={handlePress} style={{ flex: 1, width: '50%' }}>
@@ -125,7 +143,7 @@ export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
           </View>
           <Text style={styles.follower}>
             <Feather name="heart" size={12} color="gray" style={{ fontWeight: 'bold' }} />
-            100
+            {likesCount}
           </Text>
         </View>
       </View>
