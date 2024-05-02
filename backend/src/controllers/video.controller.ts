@@ -141,10 +141,25 @@ class VideoController {
     const keyword = req.params.keyword;
     const getFull = req.query.getFull === "true";
     try {
-      const videos = await VideoService.getInstance().getVideosByKeyword(
+      const results = await VideoService.getInstance().getVideosByKeyword(
         keyword,
         getFull,
       );
+
+      const videos = results.map((video) => {
+        return {
+          video_id: video.videoId,
+          user_id: video.userId,
+          text: video.text,
+          create_time: video.createTime,
+          video_url: video.videoUrl,
+          duration: video.duration,
+          music_id: video.musicId,
+          hashtags: video.hashtags,
+          privacy: video.privacy,
+          view_count: video.viewCount,
+        };
+      });
 
       res.status(200).json({ videos });
     } catch (error) {
