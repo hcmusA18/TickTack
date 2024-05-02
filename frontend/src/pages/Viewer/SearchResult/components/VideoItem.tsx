@@ -1,11 +1,10 @@
 import React, { FC, useState, useEffect } from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
-import { Post } from 'libs/types'
+import { Post, User } from 'libs/types'
 import Feather from '@expo/vector-icons/Feather'
 import { colors } from 'theme'
 import axiosInstance from 'libs/utils/axiosInstance'
 import Toast from 'react-native-simple-toast'
-import { User } from 'libs/types'
 import { convertTime } from 'libs/utils/convertTime'
 
 const styles = StyleSheet.create({
@@ -68,7 +67,7 @@ interface VideoItemProps {
 }
 
 export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
-  const { user_id: userId, text: text, create_time: createTime, video_url: videoUrl, video_id: videoId } = video
+  const { user_id: userId, text, create_time: createTime, video_url: videoUrl, video_id: videoId } = video
 
   const videoUrlToGetThumbnail = videoUrl.split('id=')[1]
   const videoThumbnail = `https://drive.google.com/thumbnail?id=${videoUrlToGetThumbnail}`

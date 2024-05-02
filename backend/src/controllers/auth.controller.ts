@@ -68,7 +68,7 @@ class AuthController {
             message: `Error when signing in: ${(error as Error).message}`,
           });
         }
-        return;
+        return res.status(500).json({ message: "Unknown error" });
       },
     )(req, res);
   };
