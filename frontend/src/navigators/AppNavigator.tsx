@@ -46,6 +46,7 @@ export type AppStackParamList = {
   UsingGuide: undefined
   SearchResult: { searchQuery: string }
   PasswordInputReg: undefined
+  Friend: undefined
 }
 
 /**
@@ -191,6 +192,13 @@ const AppStack = () => {
       <Stack.Screen
         name="PasswordInputReg"
         component={Pages.PassWordInputReg}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="Friend"
+        component={Pages.FriendPage}
         options={{
           headerShown: false
         }}
