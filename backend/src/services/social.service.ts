@@ -18,6 +18,16 @@ class SocialService {
       throw new Error(`${_error.message}`);
     }
   };
+  countFollowing = async (userId: number): Promise<number> => {
+    try {
+      const numFollowing =
+        await SocialRepository.getInstance().countFollowing(userId);
+      return numFollowing;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
   getFollowing = async (userId: number): Promise<any> => {
     try {
       const following =

@@ -76,9 +76,20 @@ class UserRepository {
     password: string,
   ): Promise<UserModel | null> => {
     const regis_date = new Date().getTime().toString();
+
+    // generate a username from the email
+    const username =
+      "@" + email.split("@")[0] + Math.floor(Math.random() * 1000);
+
     const query = {
-      text: "INSERT INTO users(email, password, regis_date) VALUES($1, $2, $3) RETURNING *",
-      values: [email, password, regis_date],
+      text: "INSERT INTO users(email, password, username, regis_date, avatar) VALUES($1, $2, $3, $4, $5) RETURNING *",
+      values: [
+        email,
+        password,
+        username,
+        regis_date,
+        "https://img.icons8.com/ios-filled/50/user-male-circle.png",
+      ],
     };
     try {
       const result = await pool.query(query);
