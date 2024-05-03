@@ -30,13 +30,13 @@ export interface Comment {
 }
 
 export interface User {
-  uid: string
+  userId?: number
+  username: string
   email: string
-  displayName: string | null
-  photoURL?: string
-  followingCount: number
-  followersCount: number
-  likesCount: number
+  password: string
+  avatar: string | null
+  bio: string | null
+  regisDate: number
 }
 
 export interface SearchUser extends User {

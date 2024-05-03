@@ -1,9 +1,10 @@
 import { Video, ResizeMode } from 'expo-av'
 import { Post } from 'libs/types'
-import React, { useEffect, useRef, useState } from 'react'
-import { Pressable } from 'react-native'
+import React, { memo, useEffect, useRef, useState } from 'react'
+import { Pressable, Text, View } from 'react-native'
 import { Overlay } from './Overlay'
-import { useUser } from 'libs/hooks'
+import { colors } from 'theme'
+import { useUser, useVideo } from 'libs/hooks'
 
 const styles = {
   container: {
@@ -11,10 +12,11 @@ const styles = {
   }
 }
 
-export const PostSingle = ({ item, shouldPlay }: { item: Post; shouldPlay: boolean }) => {
+const PostContent = ({ item, shouldPlay }: { item: Post; shouldPlay: boolean }) => {
   const video = useRef<Video | null>(null)
+  const { user, isLoading, isError } = useUser(item.user_id?.toString())
   const [status, setStatus] = useState<any>({})
-  const user = useUser(item.user_id?.toString())
+
   useEffect(() => {
     if (!video.current) return
     if (shouldPlay) {
@@ -28,11 +30,8 @@ export const PostSingle = ({ item, shouldPlay }: { item: Post; shouldPlay: boole
   return (
     <Pressable
       onPress={() => (status.isPlaying ? video.current?.pauseAsync() : video.current?.playAsync())}
-      style={{
-        width: '100%',
-        height: '100%'
-      }}>
-      <Overlay post={item} user={user} />
+      style={styles.container}>
+      {isLoading || isError || !user ? null : <Overlay user={user} post={item} />}
       <Video
         ref={video}
         resizeMode={ResizeMode.COVER}
@@ -45,3 +44,45 @@ export const PostSingle = ({ item, shouldPlay }: { item: Post; shouldPlay: boole
     </Pressable>
   )
 }
+
+const PostSingle = ({ videoId, shouldPlay }: { videoId: string; shouldPlay: boolean }) => {
+  const { video: videoData, isLoading, isError } = useVideo(videoId)
+
+  if (isLoading) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: '100%',
+            backgroundColor: colors.black
+          }
+        ]}>
+        <Text style={{ color: colors.white }}>Loading...</Text>
+      </View>
+    )
+  } else if (isError) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: '100%',
+            backgroundColor: colors.black
+          }
+        ]}>
+        <Text style={{ color: colors.white }}>Error...</Text>
+      </View>
+    )
+  } else {
+    return <PostContent item={videoData.video} shouldPlay={shouldPlay} />
+  }
+}
+
+export const PostMemo = memo(PostSingle)

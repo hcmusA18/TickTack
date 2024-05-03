@@ -20,7 +20,7 @@ class UserController {
   };
 
   getUserById = async (req: Request, res: Response) => {
-    const userId = req.params.userId;
+    const userId = req.params.userId.toString();
 
     if (userId === undefined || userId === "") {
       res.status(400).send("User ID is required");

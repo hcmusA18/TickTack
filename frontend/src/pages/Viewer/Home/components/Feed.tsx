@@ -1,13 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react'
 import axiosInstance from 'libs/utils/axiosInstance'
 import { Dimensions, FlatList, View } from 'react-native'
-import { PostSingle } from './Post'
+import { PostMemo } from './Post'
 import { colors } from 'theme'
 import { Post } from 'libs/types'
 import useMaterialNavbarHeight from 'libs/hooks/useMaterialNavbarHeight'
 import { useIsFocused } from '@react-navigation/native'
-
-const videoIds = Array.from({ length: 100 }, (_, i) => `${i + 1}`)
+import { useAppSelector } from 'libs/redux'
 
 interface FeedProps {
   creator: string
@@ -16,10 +15,11 @@ interface FeedProps {
 }
 
 export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
-  const [posts, setPosts] = useState<Post[]>([])
-  const [remaining, setRemaining] = useState<number>(0)
+  const [videoIds, setVideoIds] = useState<string[]>([])
   const screenIsFocused = useIsFocused()
   const [currentViewableItemIndex, setCurrentViewableItemIndex] = useState<number>(0)
+  const userId = useAppSelector((state) => state.auth.authUser)
+
   const viewabilityConfig = {
     itemVisiblePercentThreshold: 50
   }
@@ -28,36 +28,30 @@ export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
       setCurrentViewableItemIndex(viewableItems[0].index)
     }
   }
+
+  useEffect(() => {
+    if (currentTab === 'For You') {
+      axiosInstance
+        .getAxios()
+        .get(`/video/recommend/${userId}?number=100`)
+        .then((res) => {
+          setVideoIds(res.data.data)
+        })
+    }
+  }, [currentTab, userId])
+
   useEffect(() => {
     if (!screenIsFocused) {
       setCurrentViewableItemIndex(-1)
     }
   }, [screenIsFocused])
 
-  const fetchAndSetPost = (videoId) => {
-    axiosInstance
-      .getAxios()
-      .get(`/recsys/video/${videoId}`)
-      .then((res) => {
-        setPosts((prev) => [...prev, res.data])
-      })
-    setRemaining((prev) => prev + 1)
-  }
-
-  useEffect(() => {
-    if (profile && creator) {
-      // fetch user's posts
-    } else if (remaining <= 2) {
-      videoIds.forEach((videoId) => fetchAndSetPost(videoId))
-    }
-  }, [creator, profile, remaining])
-
   const viewabilityConfigCallbackPairs = useRef([{ viewabilityConfig, onViewableItemsChanged }])
   const feedItemHeight = Dimensions.get('window').height - useMaterialNavbarHeight(profile)
   const renderItem = ({ item, index }) => {
     return (
-      <View style={{ height: feedItemHeight, backgroundColor: colors.palette.neutral900 }}>
-        <PostSingle item={item} shouldPlay={index === currentViewableItemIndex} />
+      <View style={{ height: feedItemHeight, backgroundColor: colors.black }}>
+        <PostMemo videoId={item} shouldPlay={index === currentViewableItemIndex} />
       </View>
     )
   }
@@ -65,13 +59,13 @@ export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        data={posts}
+        data={videoIds}
         windowSize={4}
         initialNumToRender={2}
-        maxToRenderPerBatch={2}
+        maxToRenderPerBatch={4}
         removeClippedSubviews
         renderItem={renderItem}
-        keyExtractor={(item) => item.video_id}
+        keyExtractor={(item) => item}
         pagingEnabled
         snapToAlignment="start"
         decelerationRate={'fast'}

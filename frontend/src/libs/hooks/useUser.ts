@@ -1,11 +1,16 @@
+import useSWR from 'swr'
+import { fetcher } from './fetcher'
+
+// a custom hook to fetch user data by axiosInstance and cache it
+// when userId is repeated, it will return the cached data
 export const useUser = (userId: string | null, options = {}) => {
+  const { data, isLoading, error } = useSWR(userId ? `/user/${userId}` : null, fetcher, {
+    revalidateOnFocus: false,
+    ...options
+  })
   return {
-    uid: '1',
-    email: 'nguyenckhanh71@gmail.com',
-    displayName: 'Khanh Nguyen',
-    photoURL: 'https://avatars.githubusercontent.com/u/47273242?v=4',
-    followingCount: 1000,
-    followersCount: 1000,
-    likesCount: 1000
+    user: data,
+    isLoading,
+    isError: error
   }
 }

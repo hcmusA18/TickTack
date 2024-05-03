@@ -113,19 +113,23 @@ class VideoService {
   };
 
   // get recommend video ids
-  getRecommendVideos = async (userId: string): Promise<string[]> => {
+  getRecommendVideos = async (userId: string, n: number): Promise<string[]> => {
     try {
       const RECOMMENDER_PORT = process.env.RECOMMENDER_PORT ?? "8080";
+      const RECOMMENDER_HOST =
+        process.env.RECOMMENDER_HOST ?? `localhost:${RECOMMENDER_PORT}`;
       const videos = await fetch(
-        `http://localhost:${RECOMMENDER_PORT}/recommend/${userId}`,
+        `http://${RECOMMENDER_HOST}/recommend?userId=${userId}&number=${n}`,
       ).then((res) => res.json() as Promise<string[]>);
       if (videos.length === 0) {
+        console.log("No video found");
         throw new Error("No video found");
       }
 
       return videos;
     } catch (error) {
       const _error = error as Error;
+      console.error(`Error when getting recommended videos: ${_error.message}`);
       throw new Error(`${_error.message}`);
     }
   };

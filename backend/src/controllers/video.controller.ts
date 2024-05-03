@@ -75,7 +75,7 @@ class VideoController {
   };
   getVideoById = async (req: Request, res: Response) => {
     try {
-      const videoId = parseInt(req.params.videoId);
+      const videoId = parseInt(req.params.video_id);
       const video = await VideoService.getInstance().getVideoById(videoId);
       res.status(200).json({ video });
     } catch (error) {
@@ -89,14 +89,21 @@ class VideoController {
   getRecommendVideos = async (req: Request, res: Response) => {
     try {
       const userId = req.params.user_id;
+      const n = parseInt(req.query.number as string) || 10;
       if (!userId) {
         res.status(400).json({ message: "Missing user_id" });
         return;
       }
 
-      // const results = await VideoService.getInstance().getRecommendVideos(
-      //   userId
-      // );
+      const results = await VideoService.getInstance().getRecommendVideos(
+        userId,
+        n,
+      );
+      if (results.length === 0) {
+        res.status(404).json({ message: "No video found" });
+        return;
+      }
+      res.status(200).json(results);
     } catch (error) {
       const _error = error as Error;
       res.status(500).json({

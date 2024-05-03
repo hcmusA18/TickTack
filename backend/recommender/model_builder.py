@@ -30,7 +30,7 @@ if __name__ == '__main__':
     query = "SELECT COUNT(*) FROM watched"
     new_watched_len = pd.read_sql(query, engine).iloc[0, 0]
     print(f"Users: {new_user_len}, Videos: {new_video_len}, Watched: {new_watched_len}")
-    if user_len != new_user_len or video_len != new_video_len or watched_len != new_watched_len:
+    if new_user_len - user_len > 0 or new_video_len - video_len > 0 or new_watched_len - watched_len > 100:
       init = True
       user_len, video_len, watched_len = new_user_len, new_video_len, new_watched_len
       

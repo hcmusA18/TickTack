@@ -96,7 +96,6 @@ const ActionButton = ({ iconName, text, onPress }: ActionButtonProps) => {
 
 export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   const dispatch = useAppDispatch()
-  // const navigation =
 
   // const currentUser = useAppSelector((state) => state.auth.currentUser)
   const [likeState, setLikeState] = useState({ state: false, count: 100 })
@@ -113,10 +112,6 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
       }, 1000),
     []
   )
-
-  // const handleUpdateCommentCount = () => {
-  //   setCommentsCount((prev) => prev + 1)
-  // }
 
   const animation = useSharedValue(0)
   const rotatingDeg = useDerivedValue(() => {
@@ -135,15 +130,15 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.displayName}>{user.displayName || user.email}</Text>
+        <Text style={styles.displayName}>{user.username || user.email}</Text>
         <Text style={styles.description} numberOfLines={3} lineBreakMode="tail">
           {post.text}
         </Text>
       </View>
       <View style={styles.leftContainer}>
         <TouchableOpacity>
-          {user.photoURL ? (
-            <Image source={{ uri: user.photoURL }} style={styles.avatar} />
+          {user.avatar ? (
+            <Image source={{ uri: user.avatar }} style={styles.avatar} />
           ) : (
             <Avatar.Icon size={50} icon="account" style={styles.defaultAvatar} />
           )}
