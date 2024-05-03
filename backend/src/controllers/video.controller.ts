@@ -73,6 +73,7 @@ class VideoController {
       }
     });
   };
+
   getVideoById = async (req: Request, res: Response) => {
     try {
       const videoId = parseInt(req.params.video_id);
@@ -109,6 +110,21 @@ class VideoController {
       res.status(500).json({
         message: `Error when getting recommended videos: ${_error.message}`,
       });
+    }
+  };
+
+  getRandomVideos = async (req: Request, res: Response) => {
+    try {
+      const n = parseInt(req.params.n);
+      const videos = await VideoService.getInstance().getRandomVideos(n);
+      res.status(200).json(videos);
+    } catch (error) {
+      const _error = error as Error;
+      res
+        .status(500)
+        .json({
+          message: `Error when getting random videos: ${_error.message}`,
+        });
     }
   };
 

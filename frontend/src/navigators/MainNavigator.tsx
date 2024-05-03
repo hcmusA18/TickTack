@@ -75,7 +75,6 @@ export const MainNavigator = ({ route }) => {
           }
         })}
       />
-      <Tab.Screen name="Friend" component={EmptyPage} />
       <Tab.Screen
         name="Camera"
         component={Pages.CameraPage}
@@ -86,7 +85,6 @@ export const MainNavigator = ({ route }) => {
           }
         })}
       />
-      <Tab.Screen name="Notification" component={EmptyPage} />
       <Tab.Screen name="Profile" component={Pages.PersonalProfile} />
     </Tab.Navigator>
   )

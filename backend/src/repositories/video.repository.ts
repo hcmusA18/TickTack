@@ -3,6 +3,7 @@ import pool from "./db";
 
 class VideoRepository {
   private static instance: VideoRepository | null = null;
+
   static getInstance(): VideoRepository {
     if (VideoRepository.instance === null) {
       VideoRepository.instance = new VideoRepository();
@@ -11,8 +12,15 @@ class VideoRepository {
   }
 
   private stringArrayConverter = (value: string[]): string => {
-    if (!value || value.length === 0) return `ARRAY[]::TEXT[]`;
-    return `ARRAY[${value.map(String).join(", ")}]`;
+    if (!value || value.length === 0) return "ARRAY[]::TEXT[]";
+
+    const formattedValues = value
+      .map((v) => {
+        return "'" + v.replace(/'/g, "''") + "'"; // Safely escape single quotes in SQL
+      })
+      .join(", ");
+
+    return "ARRAY[" + formattedValues + "]::TEXT[]";
   };
 
   addNewVideo = async (video: VideoModel): Promise<VideoModel | null> => {
@@ -40,6 +48,7 @@ class VideoRepository {
       throw new Error(`${_error.message}`);
     }
   };
+
   getVideoById = async (video_id: number): Promise<VideoModel | null> => {
     const query = {
       text: "SELECT * FROM videos WHERE video_id = $1",
@@ -48,6 +57,33 @@ class VideoRepository {
     try {
       const result = await pool.query(query);
       return result.rows[0];
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
+  getRandomVideos = async (n: number): Promise<VideoModel[]> => {
+    const query = {
+      text: `SELECT * FROM videos ORDER BY RANDOM() LIMIT $1`,
+      values: [n],
+    };
+    try {
+      const result = await pool.query(query);
+      return result.rows.map((video) => {
+        return {
+          videoId: video.video_id,
+          userId: video.user_id,
+          text: video.text,
+          createTime: video.create_time,
+          videoUrl: video.video_url,
+          duration: video.duration,
+          musicId: video.music_id,
+          hashtags: video.hashtags,
+          privacy: video.privacy,
+          viewCount: video.view_count,
+        };
+      });
     } catch (error) {
       const _error = error as Error;
       throw new Error(`${_error.message}`);

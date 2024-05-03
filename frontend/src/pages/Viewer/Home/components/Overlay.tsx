@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native'
 import { colors } from 'theme'
 import { Ionicons } from '@expo/vector-icons'
@@ -14,8 +14,10 @@ import Animated, {
 import { useAppDispatch } from 'libs/redux'
 import { openModal } from 'libs/redux/sliceModal'
 import { Post, User } from 'libs/types'
-import { throttle } from 'lodash'
+
 import { Avatar } from 'react-native-paper'
+
+import axiosInstance from 'libs/utils/axiosInstance'
 
 const styles = StyleSheet.create({
   container: {
@@ -85,6 +87,11 @@ interface ActionButtonsProps {
   post: Post
 }
 
+interface LikeState {
+  state: boolean
+  count: number
+}
+
 const ActionButton = ({ iconName, text, onPress }: ActionButtonProps) => {
   return (
     <TouchableOpacity style={styles.actionButton} onPress={onPress}>
@@ -97,21 +104,84 @@ const ActionButton = ({ iconName, text, onPress }: ActionButtonProps) => {
 export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   const dispatch = useAppDispatch()
 
-  // const currentUser = useAppSelector((state) => state.auth.currentUser)
-  const [likeState, setLikeState] = useState({ state: false, count: 100 })
-  const [commentsCount] = useState(100)
+  const userId = user.userId
+  let videoId = parseInt(post.video_id, 10)
 
-  // useEffect(() => {
-  //   setLikeState({ state: post.isLiked, count: post.likesCount })
-  // }, [post])
+  if (isNaN(videoId)) {
+    videoId = 0
+  }
 
-  const handleUpdateLike = useMemo(
-    () =>
-      throttle((liked: boolean) => {
-        setLikeState((prev) => ({ state: liked, count: prev.count + (liked ? 1 : -1) }))
-      }, 1000),
-    []
-  )
+  const [likeState, setLikeState] = useState<LikeState>({ state: false, count: 0 })
+  const [commentsCount, setCommentsCount] = useState<number>(0)
+
+  const getTotalLike = async (videoId: number) => {
+    try {
+      const response = await axiosInstance.getAxios().get(`/interaction/likes/count/${videoId}`)
+      let { like_count: likeCount } = response.data
+
+      if (isNaN(likeCount)) {
+        console.error('Like Count is NaN')
+        likeCount = 0
+      }
+
+      setLikeState((prevState) => ({ ...prevState, count: likeCount }))
+    } catch (error) {
+      console.error('Error fetching likes:', error)
+      // Optionally handle error state in UI
+    }
+  }
+
+  const getInitLikeState = async (videoId, userId) => {
+    try {
+      const response = await axiosInstance.getAxios().get(`/interaction/likes/check/${videoId}/${userId}`)
+
+      const isLiked = response.data.status
+      setLikeState((prevState) => ({ ...prevState, state: isLiked }))
+    } catch (error) {
+      console.error('Error fetching likes:', error)
+    }
+  }
+
+  const getCommentCount = async (videoId: number) => {
+    try {
+      const response = await axiosInstance.getAxios().get(`/comments/comments/count/${videoId}`)
+
+      if (response.status >= 200 && response.status <= 399) {
+        const resComments = response.data.count
+        setCommentsCount(resComments)
+      }
+    } catch (error) {
+      console.error('Error fetching likes:', error)
+    }
+  }
+
+  useEffect(() => {
+    // Replace 123 with your actual initial video ID
+    getTotalLike(videoId)
+    getInitLikeState(videoId, userId)
+    getCommentCount(videoId)
+  }, [])
+
+  const handleUpdateLike = async (state: boolean) => {
+    try {
+      const cnt = state ? 1 : -1
+
+      // Make the like/unlike request
+      if (state) {
+        await axiosInstance
+          .getAxios()
+          .post('/interaction/likes', { video_id: videoId, user_id: userId, time: Date.now() })
+      } else {
+        await axiosInstance.getAxios().delete('/interaction/likes', { data: { video_id: videoId, user_id: userId } })
+      }
+
+      // If the request is successful, update the like count in the state
+      setLikeState((prevState) => ({ state, count: prevState.count + cnt }))
+    } catch (error) {
+      console.error('Error updating like:', error)
+      // Optionally handle error state in UI
+    }
+  }
 
   const animation = useSharedValue(0)
   const rotatingDeg = useDerivedValue(() => {

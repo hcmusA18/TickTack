@@ -3,7 +3,6 @@ import axiosInstance from 'libs/utils/axiosInstance'
 import { Dimensions, FlatList, View } from 'react-native'
 import { PostMemo } from './Post'
 import { colors } from 'theme'
-import { Post } from 'libs/types'
 import useMaterialNavbarHeight from 'libs/hooks/useMaterialNavbarHeight'
 import { useIsFocused } from '@react-navigation/native'
 import { useAppSelector } from 'libs/redux'
@@ -23,6 +22,7 @@ export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
   const viewabilityConfig = {
     itemVisiblePercentThreshold: 50
   }
+
   const onViewableItemsChanged = ({ viewableItems }) => {
     if (viewableItems.length > 0) {
       setCurrentViewableItemIndex(viewableItems[0].index)
@@ -37,6 +37,21 @@ export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
         .then((res) => {
           setVideoIds(res.data.data)
         })
+        .catch((error) => {
+          const _error = error as Error
+          console.error('Error fetching recommended videos:', error.message)
+          // get random videos if recommendation fails
+          axiosInstance
+            .getAxios()
+            .get(`/video/random/100`)
+            .then((res) => {
+              setVideoIds(res.data)
+            })
+            .catch((error) => {
+              const _error = error as Error
+              console.error('Error fetching random videos:', error.message)
+            })
+        })
     }
   }, [currentTab, userId])
 
@@ -48,6 +63,7 @@ export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
 
   const viewabilityConfigCallbackPairs = useRef([{ viewabilityConfig, onViewableItemsChanged }])
   const feedItemHeight = Dimensions.get('window').height - useMaterialNavbarHeight(profile)
+
   const renderItem = ({ item, index }) => {
     return (
       <View style={{ height: feedItemHeight, backgroundColor: colors.black }}>
