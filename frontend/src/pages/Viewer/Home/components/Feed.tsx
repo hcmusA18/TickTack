@@ -17,12 +17,15 @@ interface FeedProps {
 
 export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
   const [posts, setPosts] = useState<Post[]>([])
+
   const [remaining, setRemaining] = useState<number>(0)
   const screenIsFocused = useIsFocused()
   const [currentViewableItemIndex, setCurrentViewableItemIndex] = useState<number>(0)
+
   const viewabilityConfig = {
     itemVisiblePercentThreshold: 50
   }
+
   const onViewableItemsChanged = ({ viewableItems }) => {
     if (viewableItems.length > 0) {
       setCurrentViewableItemIndex(viewableItems[0].index)
@@ -54,6 +57,7 @@ export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
 
   const viewabilityConfigCallbackPairs = useRef([{ viewabilityConfig, onViewableItemsChanged }])
   const feedItemHeight = Dimensions.get('window').height - useMaterialNavbarHeight(profile)
+
   const renderItem = ({ item, index }) => {
     return (
       <View style={{ height: feedItemHeight, backgroundColor: colors.palette.neutral900 }}>

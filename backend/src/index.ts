@@ -7,8 +7,12 @@ import {
   videoRouter,
   apiRouter,
   recsysRouter,
+  LikeRouter,
   musicRouter,
+  commentRouter,
 } from "@routes";
+
+import authMiddleware from "./middlewares/auth.middleware";
 import { AuthController } from "@controllers";
 import pool from "./repositories/db";
 import passportConfig from "./config/passport";
@@ -60,10 +64,13 @@ app.use("/api", apiRouter);
 app.use("/recsys", recsysRouter);
 
 // auth middleware
-// app.use(authMiddleware.authenticate);
+app.use(authMiddleware.authenticate);
 
 app.use("/user", userRouter);
 app.use("/video", videoRouter);
+app.use("/interaction", LikeRouter);
+app.use("/comments", commentRouter);
+
 app.use("/music", musicRouter);
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}!`));

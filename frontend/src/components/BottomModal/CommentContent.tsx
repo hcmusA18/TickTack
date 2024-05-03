@@ -1,11 +1,12 @@
 import { CommentItem } from './CommentItem'
 import { Comment, Post } from 'libs/types'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, TextInput, View, Image, TouchableOpacity } from 'react-native'
 import { Avatar } from 'react-native-paper'
 import { Ionicons } from '@expo/vector-icons'
 import { colors } from 'theme'
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
+import axiosInstance from 'libs/utils/axiosInstance'
 
 const styles = StyleSheet.create({
   container: {
@@ -35,14 +36,38 @@ const styles = StyleSheet.create({
 // TODO: implement commentSend Handler
 export const CommentContent = ({ post }: { post: Post }) => {
   const [comment, setComment] = useState('')
-  const [commentList, setCommentList] = useState<Comment[]>([
-    { comment: 'a', creator: 'usr2', id: '1', time: Math.floor((Date.now() - 100000000) / 1000).toString() },
-    { comment: 'b', creator: 'usr2', id: '2', time: Math.floor((Date.now() - 200000000) / 1000).toString() },
-    { comment: 'c', creator: 'usr2', id: '3', time: Math.floor((Date.now() - 110000000) / 1000).toString() },
-    { comment: 'd', creator: 'usr2', id: '4', time: Math.floor((Date.now() - 120000000) / 1000).toString() },
-    { comment: 'e', creator: 'usr2', id: '5', time: Math.floor(Date.now() / 1000).toString() }
-  ])
+  const [commentList, setCommentList] = useState<Comment[]>([])
   const currentUser = null
+
+  const getCommentCount = async (videoId: number) => {
+    try {
+      const response = await axiosInstance.getAxios().get(`/comments/comments/${videoId}`)
+      // console.debug(videoId, ' + ', userId, ' + ', response.data)
+
+      let rpComments = response.data
+      rpComments = rpComments.map((element) => {
+        const commentId = element.user_id.toString() + element.video_id.toString() + element.time.toString()
+        return {
+          id: commentId,
+          creator: element.user_id,
+          comment: element.comment_text,
+          time: Math.floor(element.time / 1000).toString()
+        }
+      })
+
+      console.debug('comments: ', rpComments)
+      setCommentList(rpComments)
+      // const isLiked = response.data.status
+      // setLikeState((prevState) => ({ ...prevState, state: isLiked }))
+    } catch (error) {
+      console.error('Error fetching likes:', error)
+      // Optionally handle error state in UI
+    }
+  }
+
+  useEffect(() => {
+    getCommentCount(Number(post.video_id))
+  }, [])
 
   const handleCommentSend = () => {
     if (comment.length === 0) return

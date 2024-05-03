@@ -4,24 +4,30 @@ import { VideoItem } from './VideoItem'
 import { colors } from 'theme'
 import axiosInstance from 'libs/utils/axiosInstance'
 import Toast from 'react-native-simple-toast'
+import { useAppSelector } from 'libs/redux'
 
 interface SearchResultVideosProps {
-  searchQuery: string
   top: boolean
   navigation: any
 }
-export const SearchResultVideos: FC<SearchResultVideosProps> = ({ searchQuery, top, navigation }) => {
+export const SearchResultVideos: FC<SearchResultVideosProps> = ({ top, navigation }) => {
   const [posts, setPosts] = useState([])
+  const searchQuery = useAppSelector((state) => state.search.searchQuery)
+
+  console.log('searchQuery in search result videos: ', searchQuery)
 
   const searchPosts = async () => {
     try {
-      const reponse = await axiosInstance.getAxios().get(`/video/search/${searchQuery}?getFull=true`)
+      const response = await axiosInstance
+        .getAxios()
+        .get(`/video/search/${searchQuery}?getFull=true&timestamp=${new Date().getTime()}`)
 
-      if (reponse.status !== 200) {
-        Toast.show(reponse.data.message, Toast.LONG)
+      if (response.status !== 200) {
+        Toast.show(response.data.message, Toast.LONG)
         return
       }
-      setPosts(reponse.data.videos)
+
+      setPosts(response.data.videos)
     } catch (error) {
       console.error('Error fetching posts:', error)
       Toast.show('Error fetching posts', Toast.LONG)
@@ -56,11 +62,9 @@ export const SearchResultVideos: FC<SearchResultVideosProps> = ({ searchQuery, t
       )}
       <FlatList
         data={posts}
-        renderItem={({ item, index }) =>
-          index < posts.length - (posts.length % 2) && <VideoItem video={item} navigation={navigation} />
-        }
+        renderItem={({ item }) => <VideoItem video={item} navigation={navigation} />}
         keyExtractor={(_, index) => index.toString()}
-        initialNumToRender={4}
+        initialNumToRender={1}
         maxToRenderPerBatch={5}
         numColumns={2}
         ListFooterComponent={<View style={{ height: 200 }} />}

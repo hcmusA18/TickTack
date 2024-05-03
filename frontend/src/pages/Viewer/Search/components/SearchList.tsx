@@ -1,49 +1,10 @@
-import React, { FC, useEffect, useState } from 'react'
-import { TouchableOpacity, View, StyleSheet, Text, FlatList } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import { useAppSelector, useAppDispatch } from 'libs/redux'
+import React, { FC, useEffect, useState } from 'react'
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { setSearchQuery, setPreviousSearch } from 'libs/redux/sliceSearch'
 
 const tiktokGrey = '#E8E8ED'
-
-const previousSearches = [
-  'cat',
-  'dog',
-  'funny',
-  'food',
-  'dance',
-  'music',
-  'art',
-  'gaming',
-  'sports',
-  'travel',
-  'fashion',
-  'beauty',
-  'education',
-  'science',
-  'technology',
-  'history',
-  'politics',
-  'news',
-  'covid',
-  'vaccine',
-  'cute',
-  'tiktok'
-]
-
-const neverMeets = [
-  'food tiktok',
-  'dance tiktok',
-  'game tiktok',
-  'music tiktok',
-  'food eating video',
-  'food mukbang',
-  'movie hot',
-  'movie action',
-  'review',
-  'food review',
-  'movie review',
-  'game review',
-  'funny video'
-]
 
 const styles = StyleSheet.create({
   searchItemTouchable: {
@@ -69,7 +30,6 @@ interface SearchItemProps {
 }
 
 interface SearchListProps {
-  searchQuery: string
   navigation?: any
 }
 
@@ -93,40 +53,38 @@ const SearchItem: FC<SearchItemProps> = ({ searched, text, onRemove, onClick }) 
   )
 }
 
-export const SearchList: FC<SearchListProps> = ({ searchQuery, navigation }) => {
+export const SearchList: FC<SearchListProps> = ({ navigation }) => {
+  const previousSearch = useAppSelector((state) => state.search.previousSearch)
+  const neverMeet = useAppSelector((state) => state.search.neverMeet)
+
+  const dispatch = useAppDispatch()
+
   const [queryData, setQueryData] = useState<string[]>([])
   useEffect(() => {
-    setQueryData(searchQuery.trim().length === 0 ? previousSearches : previousSearches.concat(neverMeets))
-  }, [searchQuery])
+    setQueryData(previousSearch.concat(neverMeet))
+  }, [previousSearch, neverMeet])
 
   const onRemove = (item: string) => {
-    const index = queryData.indexOf(item)
-    console.log('remove', index)
-    if (index > -1) {
-      setQueryData((prev) => {
-        const copy = [...prev]
-        copy.splice(index, 1)
-        return copy
-      })
-    }
+    dispatch(setPreviousSearch(previousSearch.filter((i) => i !== item)))
   }
 
-  const filteredData = queryData.filter((item) => item.toLowerCase().includes(searchQuery.toLowerCase()))
   return (
     <FlatList
-      data={filteredData}
+      data={queryData}
       maxToRenderPerBatch={5}
       initialNumToRender={5}
       windowSize={10}
       renderItem={({ item }) => (
         <SearchItem
-          searched={previousSearches.includes(item)}
+          searched={previousSearch.includes(item)}
           text={item}
           onRemove={() => onRemove(item)}
-          onClick={() => navigation.navigate('SearchResult', { searchQuery: item })}
+          onClick={() => {
+            dispatch(setSearchQuery(item))
+          }}
         />
       )}
-      keyExtractor={(item) => item}
+      keyExtractor={(item, index) => `${item}_${index}`}
     />
   )
 }
