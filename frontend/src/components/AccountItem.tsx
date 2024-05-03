@@ -92,7 +92,15 @@ const FollowButton = ({ followStatus, toggleFollow, isHorizontal }: FollowButton
   const horizontalFollowButtonTextStyle = isHorizontal ? styles.followButtonStyleHori : styles.followButtonStyle // not follow
   const followButtonStyle = followStatus == 2 ? horizontalFollowedButtonStyle : horizontalFollowButtonTextStyle
   const followButtonTextStyle = followStatus == 2 ? styles.followedButtonText : styles.followButtonText
-  const followButtonContent = followStatus == 0 ? 'Follow' : followStatus == 1 ? 'Follow back' : 'Following'
+  let followButtonContent: string
+  if (followStatus == 0) {
+    followButtonContent = 'Follow'
+  } else if (followStatus == 1) {
+    followButtonContent = 'Follow back'
+  } else {
+    followButtonContent = 'Following'
+  }
+
   return (
     <TouchableOpacity style={followButtonStyle} onPress={() => toggleFollow()}>
       <Text style={followButtonTextStyle}>{followButtonContent}</Text>

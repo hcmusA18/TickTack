@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
 })
 
 export const TopBar = () => {
-  // const { title } = props;
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Friend</Text>

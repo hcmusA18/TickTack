@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import React, { FC } from 'react'
+import { View, StyleSheet } from 'react-native'
 import { MainTabScreenProps } from 'navigators'
 import { colors } from 'theme'
 import { Screen } from 'components'
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export const FriendPage: FC<FriendPageProps> = ({}) => {
+export const FriendPage: FC<FriendPageProps> = () => {
   const user = useAppSelector((state) => state.auth.user)
   const userId = user?.user_id ?? 1
 
