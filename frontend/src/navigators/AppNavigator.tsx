@@ -44,7 +44,7 @@ export type AppStackParamList = {
   PasswordInput: undefined
   OnboardingPage: undefined
   UsingGuide: undefined
-  SearchResult: { searchQuery: string }
+  SearchResult: undefined
   PasswordInputReg: undefined
 }
 
