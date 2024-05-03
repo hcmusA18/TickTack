@@ -64,6 +64,8 @@ export const FriendList: FC<FriendListProps> = ({ userId }) => {
         data={accounts}
         renderItem={({ item }) => (
           <AccountItem
+            userId={userId}
+            accountId={item.userId}
             avatar={item.avatar}
             name={item.username}
             followers={100}

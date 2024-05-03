@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { colors } from 'theme'
-import { set } from 'lodash'
+import axiosInstance from 'libs/utils/axiosInstance'
+import Toast from 'react-native-simple-toast'
 
 const styles = StyleSheet.create({
   accountItem: {
@@ -151,16 +152,45 @@ const VerticalAccountItem = ({
   )
 }
 
-export const AccountItem = ({ avatar, name, followers, isFriendList, curFollowStatus, isHorizontal }) => {
+export const AccountItem = ({
+  userId,
+  accountId,
+  avatar,
+  name,
+  followers,
+  isFriendList,
+  curFollowStatus,
+  isHorizontal
+}) => {
   const [followStatus, setFollowStatus] = useState(0)
   useEffect(() => {
     setFollowStatus(curFollowStatus)
   }, [curFollowStatus])
 
-  const toggleFollow = () => {
+  const toggleFollow = async () => {
     if (followStatus == 2) {
+      const response = await axiosInstance.getAxios().post(`/user/unfollow`, {
+        userId: userId,
+        unfollowId: accountId
+      })
+
+      if (response.status !== 200) {
+        Toast.show(response.data.message, Toast.LONG)
+        return
+      }
+
       setFollowStatus(0)
     } else {
+      const response = await axiosInstance.getAxios().post(`/user/follow`, {
+        userId: userId,
+        followId: accountId
+      })
+
+      if (response.status !== 200) {
+        Toast.show(response.data.message, Toast.LONG)
+        return
+      }
+
       setFollowStatus(2)
     }
   }
