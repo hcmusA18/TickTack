@@ -57,16 +57,20 @@ LikeRouter.post("/dislikes", async (req: Request, res: Response) => {
   }
 });
 
-LikeRouter.get("/likes/check", async (req: Request, res: Response) => {
-  try {
-    const { user_id, video_id } = req.body;
-    const isLiked = await likeService.checkLike(user_id, video_id);
-    res.status(201).json({ status: isLiked });
-  } catch (error) {
-    const _error = error as Error;
-    res.status(500).json({ error: _error.message });
-  }
-});
+LikeRouter.get(
+  "/likes/check/:videoId/:userId",
+  async (req: Request, res: Response) => {
+    try {
+      const user_id = parseInt(req.params.userId, 10);
+      const video_id = parseInt(req.params.videoId, 10);
+      const isLiked = await likeService.checkLike(user_id, video_id);
+      res.status(201).json({ status: isLiked });
+    } catch (error) {
+      const _error = error as Error;
+      res.status(500).json({ error: _error.message });
+    }
+  },
+);
 
 // DELETE endpoint to remove a dislike
 LikeRouter.delete("/dislikes", async (req: Request, res: Response) => {

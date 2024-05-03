@@ -134,11 +134,10 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
 
   const getInitLikeState = async (videoId, userId) => {
     try {
-      const response = await axiosInstance
-        .getAxios()
-        .get(`/interaction/likes/check`, { video_id: videoId, user_id: userId, time: 1 })
+      const response = await axiosInstance.getAxios().get(`/interaction/likes/check/${videoId}/${userId}`)
 
       const isLiked = response.data.status
+      console.debug('isLiked:', isLiked)
       setLikeState((prevState) => ({ ...prevState, state: isLiked }))
     } catch (error) {
       console.error('Error fetching likes:', error)
