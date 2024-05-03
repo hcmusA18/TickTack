@@ -182,5 +182,19 @@ class VideoController {
       });
     }
   };
+
+  // get count of videos that a user has liked
+  countLikedVideos = async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const count = await VideoService.getInstance().countLikedVideos(userId);
+      res.status(200).json({ data: count });
+    } catch (error) {
+      const _error = error as Error;
+      res.status(500).json({
+        message: `Error when counting liked videos: ${_error.message}`,
+      });
+    }
+  };
 }
 export { VideoController };

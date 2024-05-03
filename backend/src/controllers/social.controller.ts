@@ -141,6 +141,34 @@ class SocialController {
       });
     }
   };
+
+  getNumFollowers = async (req: Request, res: Response) => {
+    const userId = req.params.userId;
+
+    if (userId === undefined || userId === "") {
+      res.status(400).send("User ID is required");
+    }
+
+    const numFollowers = await SocialService.getInstance().countFollowers(
+      parseInt(userId),
+    );
+
+    res.status(200).json({ data: numFollowers });
+  };
+
+  getNumFollowing = async (req: Request, res: Response) => {
+    const userId = req.params.userId;
+
+    if (userId === undefined || userId === "") {
+      res.status(400).send("User ID is required");
+    }
+
+    const numFollowing = await SocialService.getInstance().countFollowing(
+      parseInt(userId),
+    );
+
+    res.status(200).json({ data: numFollowing });
+  };
 }
 
 export { SocialController };

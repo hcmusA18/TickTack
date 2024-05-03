@@ -144,6 +144,17 @@ class VideoService {
       throw new Error(`${_error.message}`);
     }
   };
+
+  countLikedVideos = async (userId: number): Promise<number> => {
+    try {
+      const count =
+        await VideoRepository.getInstance().countLikedVideos(userId);
+      return count;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
 export { VideoService };

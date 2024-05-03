@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { View, TouchableOpacity } from 'react-native'
 import { Text, Avatar } from 'react-native-paper'
 import { MainTabScreenProps } from 'navigators'
@@ -9,6 +9,10 @@ import { MyVideosContent } from './components/MyVideos'
 import { LikedVideosContent } from './components/LikedVideos'
 import { SavedPostsContent } from './components/SavedPosts'
 import { Feather } from '@expo/vector-icons'
+import { useAppSelector } from 'libs/redux'
+import { AuthUser } from 'libs/types'
+import axiosInstance from 'libs/utils/axiosInstance'
+import { colors } from 'theme'
 
 type TabType = 'MyVideos' | 'LikedVideos' | 'SavedPosts'
 
@@ -43,6 +47,31 @@ const TabItem = ({
 export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
   const { navigation } = props
   const [activeTab, setActiveTab] = useState<TabType>('MyVideos')
+  const user = useAppSelector((state) => state.auth.user) as AuthUser
+  const [likeCnt, setLikeCnt] = useState(0)
+  const [followerCnt, setFollowerCnt] = useState(0)
+  const [followingCnt, setFollowingCnt] = useState(0)
+
+  const fetchData = async () => {
+    const likeResponse = await axiosInstance.getAxios().get(`/user/video/likesCount/${user.user_id}`)
+    if (likeResponse.status === 200 && likeResponse.data) {
+      setLikeCnt(parseInt(likeResponse.data.data))
+    }
+
+    const followerResponse = await axiosInstance.getAxios().get(`/user/followers/count/${user.user_id}`)
+    if (followerResponse.status === 200 && followerResponse.data) {
+      setFollowerCnt(followerResponse.data.data)
+    }
+
+    const followingResponse = await axiosInstance.getAxios().get(`/user/following/count/${user.user_id}`)
+    if (followingResponse.status === 200 && followingResponse.data) {
+      setFollowingCnt(followingResponse.data.data)
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  })
 
   const renderContent = () => {
     switch (activeTab) {
@@ -63,12 +92,12 @@ export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
 
       {/* Profile Header */}
       <View style={styles.headerContainer}>
-        <Avatar.Icon size={100} icon={'account'} />
-        <Text style={styles.username}>@tiger050794</Text>
+        <Avatar.Image size={100} source={{ uri: user?.avatar }} style={{ backgroundColor: colors.white }} />
+        <Text style={styles.username}>{user?.username}</Text>
         <View style={styles.countContainer}>
-          <CountItem label="Following" count="0" />
-          <CountItem label="Followers" count="4.9M" />
-          <CountItem label="Likes" count="44.7M" />
+          <CountItem label="Following" count={followingCnt.toString()} />
+          <CountItem label="Followers" count={followerCnt.toString()} />
+          <CountItem label="Likes" count={likeCnt.toString()} />
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('ProfileEditor')}>
