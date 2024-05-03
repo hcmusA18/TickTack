@@ -136,7 +136,7 @@ class UserRepository {
       text: getFull
         ? "SELECT * FROM users WHERE username ILIKE $1"
         : "SELECT username FROM users WHERE username ILIKE $1",
-      values: [`${keyword}%`],
+      values: [`%${keyword}%`],
     };
     try {
       const result = await pool.query(query);

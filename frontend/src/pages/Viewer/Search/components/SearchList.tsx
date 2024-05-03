@@ -54,7 +54,6 @@ const SearchItem: FC<SearchItemProps> = ({ searched, text, onRemove, onClick }) 
 }
 
 export const SearchList: FC<SearchListProps> = ({ navigation }) => {
-  const searchQuery = useAppSelector((state) => state.search.searchQuery)
   const previousSearch = useAppSelector((state) => state.search.previousSearch)
   const neverMeet = useAppSelector((state) => state.search.neverMeet)
 
@@ -62,18 +61,10 @@ export const SearchList: FC<SearchListProps> = ({ navigation }) => {
 
   const [queryData, setQueryData] = useState<string[]>([])
   useEffect(() => {
-    setQueryData(searchQuery.trim().length === 0 ? previousSearch : previousSearch.concat(neverMeet))
+    setQueryData(previousSearch.concat(neverMeet))
   }, [previousSearch, neverMeet])
 
   const onRemove = (item: string) => {
-    // const index = queryData.indexOf(item)
-    // if (index > -1) {
-    //   setQueryData((prev) => {
-    //     const copy = [...prev]
-    //     copy.splice(index, 1)
-    //     return copy
-    //   })
-    // }
     dispatch(setPreviousSearch(previousSearch.filter((i) => i !== item)))
   }
 
