@@ -196,5 +196,38 @@ class VideoController {
       });
     }
   };
+
+  getLikedVideos = async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      let videos: VideoModel[] = [];
+      if (userId != -1) {
+        videos = await VideoService.getInstance().getLikedVideos(3);
+      }
+      console.log("Video controller getLikedVideos", videos.length);
+      res.status(200).json({ videos });
+    } catch (error) {
+      const _error = error as Error;
+      res.status(500).json({
+        message: `Error when getting liked videos: ${_error.message}`,
+      });
+    }
+  };
+
+  getVideosByUserId = async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      let videos: VideoModel[] = [];
+      if (userId != -1) {
+        videos = await VideoService.getInstance().getVideosByUserId(3);
+      }
+      res.status(200).json({ videos });
+    } catch (error) {
+      const _error = error as Error;
+      res.status(500).json({
+        message: `Error when getting videos by user id: ${_error.message}`,
+      });
+    }
+  };
 }
 export { VideoController };

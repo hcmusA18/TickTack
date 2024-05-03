@@ -155,6 +155,66 @@ class VideoRepository {
       throw new Error(`${_error.message}`);
     }
   };
+
+  getLikedVideos = async (userId: number): Promise<VideoModel[]> => {
+    const query = {
+      text: `
+        select v.* from
+        videos v join likes l on v.video_id = l.video_id
+        where l.user_id = $1
+      `,
+      values: [userId],
+    };
+    try {
+      const result = await pool.query(query);
+
+      return result.rows.map((video) => {
+        return {
+          videoId: video.video_id,
+          userId: video.user_id,
+          text: video.text,
+          createTime: video.create_time,
+          videoUrl: video.video_url,
+          duration: video.duration,
+          musicId: video.music_id,
+          hashtags: video.hashtags,
+          privacy: video.privacy,
+          viewCount: video.view_count,
+        };
+      });
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
+  getVideosByUserId = async (userId: number): Promise<VideoModel[]> => {
+    const query = {
+      text: `SELECT * FROM videos WHERE user_id = $1`,
+      values: [userId],
+    };
+    try {
+      const result = await pool.query(query);
+
+      return result.rows.map((video) => {
+        return {
+          videoId: video.video_id,
+          userId: video.user_id,
+          text: video.text,
+          createTime: video.create_time,
+          videoUrl: video.video_url,
+          duration: video.duration,
+          musicId: video.music_id,
+          hashtags: video.hashtags,
+          privacy: video.privacy,
+          viewCount: video.view_count,
+        };
+      });
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
 export { VideoRepository };

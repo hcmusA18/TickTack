@@ -63,4 +63,12 @@ router.get("/video/likesCount/:userId", (req, res) => {
   VideoController.getInstance().countLikedVideos(req, res);
 });
 
+router.get("/video/liked/:userId", (req, res) => {
+  VideoController.getInstance().getLikedVideos(req, res);
+});
+
+router.get("/video/:userId", (req, res) => {
+  VideoController.getInstance().getVideosByUserId(req, res);
+});
+
 export { router as userRouter };

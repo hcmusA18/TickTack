@@ -6,7 +6,6 @@ import { Screen } from 'components'
 import { ProfileNavbar } from './components/Navbar'
 import { styles } from './styles'
 import { MyVideosContent } from './components/MyVideos'
-import { LikedVideosContent } from './components/LikedVideos'
 import { SavedPostsContent } from './components/SavedPosts'
 import { Feather } from '@expo/vector-icons'
 import { useAppSelector } from 'libs/redux'
@@ -14,7 +13,11 @@ import { AuthUser } from 'libs/types'
 import axiosInstance from 'libs/utils/axiosInstance'
 import { colors } from 'theme'
 
-type TabType = 'MyVideos' | 'LikedVideos' | 'SavedPosts'
+export enum TabType {
+  MyVideos = 'MyVideos',
+  LikedVideos = 'LikedVideos',
+  SavedPosts = 'SavedPosts'
+}
 
 interface PersonalProfileProps extends MainTabScreenProps<'Profile'> {}
 
@@ -46,24 +49,26 @@ const TabItem = ({
 
 export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
   const { navigation } = props
-  const [activeTab, setActiveTab] = useState<TabType>('MyVideos')
+  const [activeTab, setActiveTab] = useState<TabType>(TabType.MyVideos)
   const user = useAppSelector((state) => state.auth.user) as AuthUser
   const [likeCnt, setLikeCnt] = useState(0)
   const [followerCnt, setFollowerCnt] = useState(0)
   const [followingCnt, setFollowingCnt] = useState(0)
 
+  const userId = user ? user.user_id : -1
+
   const fetchData = async () => {
-    const likeResponse = await axiosInstance.getAxios().get(`/user/video/likesCount/${user.user_id}`)
+    const likeResponse = await axiosInstance.getAxios().get(`/user/video/likesCount/${userId}`)
     if (likeResponse.status === 200 && likeResponse.data) {
       setLikeCnt(parseInt(likeResponse.data.data))
     }
 
-    const followerResponse = await axiosInstance.getAxios().get(`/user/followers/count/${user.user_id}`)
+    const followerResponse = await axiosInstance.getAxios().get(`/user/followers/count/${userId}`)
     if (followerResponse.status === 200 && followerResponse.data) {
       setFollowerCnt(followerResponse.data.data)
     }
 
-    const followingResponse = await axiosInstance.getAxios().get(`/user/following/count/${user.user_id}`)
+    const followingResponse = await axiosInstance.getAxios().get(`/user/following/count/${userId}`)
     if (followingResponse.status === 200 && followingResponse.data) {
       setFollowingCnt(followingResponse.data.data)
     }
@@ -71,14 +76,14 @@ export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
 
   useEffect(() => {
     fetchData()
-  })
+  }, [])
 
   const renderContent = () => {
     switch (activeTab) {
       case 'MyVideos':
-        return <MyVideosContent />
+        return <MyVideosContent navigation={navigation} type={TabType.MyVideos} />
       case 'LikedVideos':
-        return <LikedVideosContent />
+        return <MyVideosContent navigation={navigation} type={TabType.LikedVideos} />
       case 'SavedPosts':
         return <SavedPostsContent />
       default:
@@ -113,9 +118,9 @@ export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
 
       {/* Tab Bar */}
       <View style={styles.tabBar}>
-        <TabItem tabName="MyVideos" iconName="video" activeTab={activeTab} setActiveTab={setActiveTab} />
-        <TabItem tabName="LikedVideos" iconName="heart" activeTab={activeTab} setActiveTab={setActiveTab} />
-        <TabItem tabName="SavedPosts" iconName="bookmark" activeTab={activeTab} setActiveTab={setActiveTab} />
+        <TabItem tabName={TabType.MyVideos} iconName="video" activeTab={activeTab} setActiveTab={setActiveTab} />
+        <TabItem tabName={TabType.LikedVideos} iconName="heart" activeTab={activeTab} setActiveTab={setActiveTab} />
+        <TabItem tabName={TabType.SavedPosts} iconName="bookmark" activeTab={activeTab} setActiveTab={setActiveTab} />
       </View>
 
       {renderContent()}

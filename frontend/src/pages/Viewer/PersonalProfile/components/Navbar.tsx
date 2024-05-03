@@ -1,9 +1,8 @@
-import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { Feather } from '@expo/vector-icons'
-import { colors } from 'theme'
 import { useAppSelector } from 'libs/redux'
-import { AuthUser } from 'libs/types'
+import React from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { colors } from 'theme'
 
 interface ProfileNavbarProps {
   // title: string;
@@ -29,14 +28,16 @@ const styles = StyleSheet.create({
 })
 
 export const ProfileNavbar = (props: ProfileNavbarProps) => {
-  const user = useAppSelector((state) => state.auth.user) as AuthUser
+  const user = useAppSelector((state) => state.auth.user)
+  const email = user ? user.email.split('@')[0] : ''
+
   return (
     <View style={styles.container}>
       <TouchableOpacity>
         <Feather name="user-plus" size={20}></Feather>
       </TouchableOpacity>
 
-      <Text style={styles.text}>{user?.email.split('@')[0]}</Text>
+      <Text style={styles.text}>{email}</Text>
 
       <TouchableOpacity>
         <Feather name="menu" size={20}></Feather>

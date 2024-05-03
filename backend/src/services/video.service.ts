@@ -155,6 +155,27 @@ class VideoService {
       throw new Error(`${_error.message}`);
     }
   };
+
+  getLikedVideos = async (userId: number): Promise<VideoModel[]> => {
+    try {
+      const videos = await VideoRepository.getInstance().getLikedVideos(userId);
+      return videos;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
+  getVideosByUserId = async (userId: number): Promise<VideoModel[]> => {
+    try {
+      const videos =
+        await VideoRepository.getInstance().getVideosByUserId(userId);
+      return videos;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
 export { VideoService };
