@@ -137,7 +137,6 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
       const response = await axiosInstance.getAxios().get(`/interaction/likes/check/${videoId}/${userId}`)
 
       const isLiked = response.data.status
-      console.debug('isLiked:', isLiked)
       setLikeState((prevState) => ({ ...prevState, state: isLiked }))
     } catch (error) {
       console.error('Error fetching likes:', error)
@@ -150,12 +149,10 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
 
       if (response.status >= 200 && response.status <= 399) {
         const resComments = response.data.count
-        console.debug('comments:', resComments) // comments
         setCommentsCount(resComments)
       }
     } catch (error) {
       console.error('Error fetching likes:', error)
-      // Optionally handle error state in UI
     }
   }
 
