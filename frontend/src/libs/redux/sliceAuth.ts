@@ -4,6 +4,7 @@ import { merge } from 'lodash'
 type AuthState = {
   authToken: string | null
   authEmail: string | null
+  authUser: string | null // user id
   firstOpen: boolean
 }
 
@@ -12,6 +13,7 @@ const AuthSlice = createSlice({
   initialState: {
     authToken: null,
     authEmail: null,
+    authUser: null,
     firstOpen: true
   } as AuthState,
   reducers: {
@@ -27,6 +29,12 @@ const AuthSlice = createSlice({
         authEmail: action.payload
       }
     },
+    setAuthUser(state, action: PayloadAction<string>) {
+      return {
+        ...state,
+        authUser: action.payload
+      }
+    },
     setFirstOpen(state) {
       return {
         ...state,
@@ -40,11 +48,12 @@ const AuthSlice = createSlice({
       return {
         authToken: null,
         authEmail: null,
+        authUser: null,
         firstOpen: false
       }
     }
   }
 })
 
-export const { setAuthToken, setAuthEmail, setAuth, setFirstOpen, clearAuth } = AuthSlice.actions
+export const { setAuthToken, setAuthEmail, setAuthUser, setAuth, setFirstOpen, clearAuth } = AuthSlice.actions
 export const AuthReducer = AuthSlice.reducer

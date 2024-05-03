@@ -112,6 +112,24 @@ class VideoService {
     }
   };
 
+  // get recommend video ids
+  getRecommendVideos = async (userId: string): Promise<string[]> => {
+    try {
+      const RECOMMENDER_PORT = process.env.RECOMMENDER_PORT ?? "8080";
+      const videos = await fetch(
+        `http://localhost:${RECOMMENDER_PORT}/recommend/${userId}`,
+      ).then((res) => res.json() as Promise<string[]>);
+      if (videos.length === 0) {
+        throw new Error("No video found");
+      }
+
+      return videos;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
   getVideosByKeyword = async (
     keyword: string,
     getFull: boolean | null = null,

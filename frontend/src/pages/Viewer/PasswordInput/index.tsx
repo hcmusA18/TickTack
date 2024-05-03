@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from 'libs/redux'
-import { setAuthToken } from 'libs/redux/sliceAuth'
+import { setAuthToken, setAuthUser } from 'libs/redux/sliceAuth'
 import axiosInstance from 'libs/utils/axiosInstance'
 import { AppStackScreenProps } from 'navigators'
 import React, { FC, useState } from 'react'
@@ -51,6 +51,8 @@ export const PasswordInput: FC<PassWordInputProps> = (props) => {
         dispatch(setAuthToken(token))
         axiosInstance.setAuthToken(token)
         console.log('Login successful')
+        const userId = await axiosInstance.getAxios().get(`/user/email/${email}`)
+        dispatch(setAuthUser(userId.data))
         navigation.navigate('Main')
         Toast.show('Login successful', Toast.LONG)
       } else {

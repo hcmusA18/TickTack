@@ -86,6 +86,25 @@ class VideoController {
     }
   };
 
+  getRecommendVideos = async (req: Request, res: Response) => {
+    try {
+      const userId = req.params.user_id;
+      if (!userId) {
+        res.status(400).json({ message: "Missing user_id" });
+        return;
+      }
+
+      // const results = await VideoService.getInstance().getRecommendVideos(
+      //   userId
+      // );
+    } catch (error) {
+      const _error = error as Error;
+      res.status(500).json({
+        message: `Error when getting recommended videos: ${_error.message}`,
+      });
+    }
+  };
+
   setPrivacy = async (req: Request, res: Response) => {
     try {
       const { videoId, privacy } = req.body;

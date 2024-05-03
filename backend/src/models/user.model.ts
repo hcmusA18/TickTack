@@ -1,3 +1,5 @@
+import { QueryResultRow } from "pg";
+
 class UserModel {
   userId?: number;
   username: string;
@@ -23,6 +25,18 @@ class UserModel {
     this.avatar = avatar;
     this.bio = bio;
     this.regisDate = regisDate;
+  }
+
+  static fromDb(data: QueryResultRow): UserModel {
+    return new UserModel(
+      data.user_id,
+      data.username,
+      data.email,
+      data.password,
+      data.avatar,
+      data.bio,
+      data.regis_date,
+    );
   }
 }
 
