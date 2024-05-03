@@ -1,15 +1,23 @@
 import { Screen } from 'components'
-import { useAppSelector } from 'libs/redux'
+import { useAppSelector, useAppDispatch } from 'libs/redux'
 import { AppStackScreenProps } from 'navigators'
 import React, { FC, useState } from 'react'
 import { View } from 'react-native'
 import { SearchBar } from '../Search/components'
 import { CategoryBar, SearchResultUsers, SearchResultVideos } from './components'
+import { addPreviousSearch } from 'libs/redux/sliceSearch'
 
 interface SearchResultPageProps extends AppStackScreenProps<'SearchResult'> {}
 
 export const SearchResultPage: FC<SearchResultPageProps> = ({ navigation }) => {
   const searchQuery = useAppSelector((state) => state.search.searchQuery)
+  const previousSearch = useAppSelector((state) => state.search.previousSearch)
+  const dispatch = useAppDispatch()
+
+  if (!previousSearch.includes(searchQuery)) {
+    dispatch(addPreviousSearch(searchQuery))
+  }
+
   const categories = ['Top', 'Videos', 'Users']
   const [currentTab, setCurrentTab] = useState(0)
   return (

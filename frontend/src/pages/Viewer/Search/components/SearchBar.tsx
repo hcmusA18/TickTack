@@ -73,7 +73,9 @@ export const SearchBar: FC<SearchBarProps> = ({ navigation, onFocus }) => {
   }
 
   const performSearch = () => {
-    if (searchQuery.length > 0) {
+    if (onFocus !== undefined) {
+      onFocus()
+    } else if (searchQuery.length > 0) {
       navigation.navigate('SearchResult')
     } else {
       Toast.show('Please enter a search query', Toast.LONG)

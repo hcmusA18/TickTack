@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useAppSelector, useAppDispatch } from 'libs/redux'
 import React, { FC, useEffect, useState } from 'react'
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { setSearchQuery } from 'libs/redux/sliceSearch'
+import { setSearchQuery, setPreviousSearch } from 'libs/redux/sliceSearch'
 
 const tiktokGrey = '#E8E8ED'
 
@@ -62,19 +62,19 @@ export const SearchList: FC<SearchListProps> = ({ navigation }) => {
 
   const [queryData, setQueryData] = useState<string[]>([])
   useEffect(() => {
-    console.log(previousSearch, neverMeet)
     setQueryData(searchQuery.trim().length === 0 ? previousSearch : previousSearch.concat(neverMeet))
   }, [previousSearch, neverMeet])
 
   const onRemove = (item: string) => {
-    const index = queryData.indexOf(item)
-    if (index > -1) {
-      setQueryData((prev) => {
-        const copy = [...prev]
-        copy.splice(index, 1)
-        return copy
-      })
-    }
+    // const index = queryData.indexOf(item)
+    // if (index > -1) {
+    //   setQueryData((prev) => {
+    //     const copy = [...prev]
+    //     copy.splice(index, 1)
+    //     return copy
+    //   })
+    // }
+    dispatch(setPreviousSearch(previousSearch.filter((i) => i !== item)))
   }
 
   return (
@@ -90,11 +90,10 @@ export const SearchList: FC<SearchListProps> = ({ navigation }) => {
           onRemove={() => onRemove(item)}
           onClick={() => {
             dispatch(setSearchQuery(item))
-            navigation.navigate('SearchResult')
           }}
         />
       )}
-      keyExtractor={(item) => item}
+      keyExtractor={(item, index) => `${item}_${index}`}
     />
   )
 }
