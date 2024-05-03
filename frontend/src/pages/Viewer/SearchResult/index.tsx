@@ -30,9 +30,9 @@ export const SearchResultPage: FC<SearchResultPageProps> = ({ navigation }) => {
       />
       <CategoryBar categories={categories} currentTab={currentTab} setCurrentTab={setCurrentTab} />
       <View style={{ display: 'flex', width: '100%', height: '100%' }}>
-        {currentTab === 0 && <SearchResultVideos searchQuery={searchQuery} top navigation={navigation} />}
-        {currentTab === 1 && <SearchResultVideos searchQuery={searchQuery} top={false} navigation={navigation} />}
-        {currentTab === 2 && <SearchResultUsers searchQuery={searchQuery} />}
+        {currentTab === 0 && <SearchResultVideos top navigation={navigation} />}
+        {currentTab === 1 && <SearchResultVideos top={false} navigation={navigation} />}
+        {currentTab === 2 && <SearchResultUsers />}
       </View>
     </Screen>
   )

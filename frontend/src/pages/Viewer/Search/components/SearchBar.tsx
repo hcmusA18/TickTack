@@ -50,14 +50,14 @@ export const SearchBar: FC<SearchBarProps> = ({ navigation, onFocus }) => {
     dispatch(setSearchQuery(text))
 
     if (Math.abs(text.length - wordCnt) > 2 && text.length > 2) {
-      const vidResponse = await axiosInstance.getAxios().get(`/video/search/${text}`)
+      const vidResponse = await axiosInstance.getAxios().get(`/video/search/${text}?timestamp=${new Date().getTime()}`)
       let videos = []
       if (vidResponse.status === 200 && vidResponse.data.videos) {
         videos = vidResponse.data.videos.slice(0, 10).map((video: any) => video.text)
         videos = [...new Set(videos)]
       }
 
-      const userResponse = await axiosInstance.getAxios().get(`/user/search/${text}`)
+      const userResponse = await axiosInstance.getAxios().get(`/user/search/${text}?timestamp=${new Date().getTime()}`)
       let users = []
       if (userResponse.status === 200 && userResponse.data.users) {
         users = userResponse.data.users.slice(0, 10).map((user: any) => user.username)
