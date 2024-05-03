@@ -72,4 +72,4 @@ class RecSysService {
   };
 }
 
-export { RecSysService };
+export default { RecSysService };

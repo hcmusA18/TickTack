@@ -19,6 +19,20 @@ class UserController {
     res.send("Getting users from database");
   };
 
+  getUserCommentInfo = async (req: Request, res: Response) => {
+    const userId = parseInt(req.params.userId, 10);
+
+    try {
+      const result = await UserService.getInstance().getUserCommentInfo(userId);
+      res.status(200).json({ result });
+    } catch (error) {
+      const _error = error as Error;
+      res.status(500).json({
+        message: `Error when getting user comment info: ${_error.message}`,
+      });
+    }
+  };
+
   getUserById = async (req: Request, res: Response) => {
     const userId = req.params.userId;
 
@@ -51,6 +65,7 @@ class UserController {
       res.status(200).send(userId);
     }
   };
+
   getAllUserIds = async (_req: Request, res: Response) => {
     try {
       const userIds = await UserService.getInstance().getAllUserIds();

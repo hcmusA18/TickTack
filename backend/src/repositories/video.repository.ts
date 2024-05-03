@@ -3,6 +3,7 @@ import pool from "./db";
 
 class VideoRepository {
   private static instance: VideoRepository | null = null;
+
   static getInstance(): VideoRepository {
     if (VideoRepository.instance === null) {
       VideoRepository.instance = new VideoRepository();
@@ -11,8 +12,15 @@ class VideoRepository {
   }
 
   private stringArrayConverter = (value: string[]): string => {
-    if (!value || value.length === 0) return `ARRAY[]::TEXT[]`;
-    return `ARRAY[${value.map(String).join(", ")}]`;
+    if (!value || value.length === 0) return "ARRAY[]::TEXT[]";
+
+    const formattedValues = value
+      .map((v) => {
+        return "'" + v.replace(/'/g, "''") + "'"; // Safely escape single quotes in SQL
+      })
+      .join(", ");
+
+    return "ARRAY[" + formattedValues + "]::TEXT[]";
   };
 
   addNewVideo = async (video: VideoModel): Promise<VideoModel | null> => {
