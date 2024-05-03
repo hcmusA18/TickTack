@@ -60,6 +60,16 @@ export interface Message {
   message: string
 }
 
+export interface AuthUser {
+  user_id: number
+  username: string | null
+  email: string
+  password: string
+  avatar: string | null
+  bio: string | null
+  regis_date: string
+}
+
 export enum ModalType {
   NONE = -1,
   COMMENT = 0,

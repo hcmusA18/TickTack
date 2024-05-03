@@ -53,7 +53,6 @@ app.post("/signup", (req, res) => {
 });
 
 app.post("/signin", (req, res) => {
-  console.log(req.body);
   AuthController.getInstance().signIn(req, res);
 });
 

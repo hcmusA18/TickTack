@@ -4,6 +4,8 @@ import { MainTabScreenProps } from 'navigators'
 import { colors } from 'theme'
 import { Screen } from 'components'
 import { TopBar, FriendList } from './components'
+import { useAppSelector } from 'libs/redux'
+import { AuthUser } from 'libs/types'
 
 interface FriendPageProps extends MainTabScreenProps<'Friend'> {}
 
@@ -21,11 +23,14 @@ const styles = StyleSheet.create({
 })
 
 export const FriendPage: FC<FriendPageProps> = ({ navigation }) => {
+  const user = useAppSelector((state) => state.auth.user)
+  const userId = user?.user_id ?? 1
+
   return (
     <Screen preset="fixed" safeAreaEdges={['top', 'bottom']}>
       <TopBar />
       <View style={{ display: 'flex', width: '100%', height: '100%' }}>
-        <FriendList userId={1} />
+        <FriendList userId={userId} />
       </View>
     </Screen>
   )
