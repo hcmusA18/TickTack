@@ -78,19 +78,6 @@ export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
     fetchData()
   }, [])
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'MyVideos':
-        return <MyVideosContent navigation={navigation} type={TabType.MyVideos} />
-      case 'LikedVideos':
-        return <MyVideosContent navigation={navigation} type={TabType.LikedVideos} />
-      case 'SavedPosts':
-        return <SavedPostsContent />
-      default:
-        return null
-    }
-  }
-
   return (
     <Screen preset="fixed" safeAreaEdges={['top', 'bottom']} contentContainerStyle={styles.container}>
       <ProfileNavbar />
@@ -123,7 +110,11 @@ export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
         <TabItem tabName={TabType.SavedPosts} iconName="bookmark" activeTab={activeTab} setActiveTab={setActiveTab} />
       </View>
 
-      {renderContent()}
+      <View style={{ display: 'flex', width: '100%', height: '100%' }}>
+        {activeTab === 'MyVideos' && <MyVideosContent navigation={navigation} type={TabType.MyVideos} />}
+        {activeTab === 'LikedVideos' && <MyVideosContent navigation={navigation} type={TabType.LikedVideos} />}
+        {activeTab === 'SavedPosts' && <SavedPostsContent />}
+      </View>
       {/* Tab bar */}
     </Screen>
   )

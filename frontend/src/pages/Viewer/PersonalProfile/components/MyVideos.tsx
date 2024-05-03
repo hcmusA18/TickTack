@@ -21,7 +21,7 @@ interface MyVideosContentProps {
 }
 
 export const MyVideosContent: FC<MyVideosContentProps> = ({ navigation, type }) => {
-  const [posts, setPosts] = useState(null)
+  const [posts, setPosts] = useState({} as any)
   const user = useAppSelector((state) => state.auth.user) as AuthUser
   const userId = user ? user.user_id : -1
   const url = type === TabType.MyVideos ? `/user/video/${userId}` : `/user/video/liked/${userId}`
@@ -30,12 +30,10 @@ export const MyVideosContent: FC<MyVideosContentProps> = ({ navigation, type }) 
     const response = await axiosInstance.getAxios().get(url)
     if (response.status === 200 && response.data) {
       setPosts(response.data.videos)
-      console.log('MyVideosContent fetchData', posts.length)
     }
   }
 
   useEffect(() => {
-    console.log('MyVideosContent useEffect')
     fetchData()
   }, [])
 
@@ -49,7 +47,7 @@ export const MyVideosContent: FC<MyVideosContentProps> = ({ navigation, type }) 
         keyExtractor={(_, index) => index.toString()}
         initialNumToRender={4}
         maxToRenderPerBatch={5}
-        numColumns={3}
+        numColumns={2}
         ListFooterComponent={<View style={{ height: 200 }} />}
       />
     </View>

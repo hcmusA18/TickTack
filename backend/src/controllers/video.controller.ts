@@ -202,7 +202,7 @@ class VideoController {
       const userId = parseInt(req.params.userId);
       let videos: VideoModel[] = [];
       if (userId != -1) {
-        videos = await VideoService.getInstance().getLikedVideos(3);
+        videos = await VideoService.getInstance().getLikedVideos(userId);
       }
       console.log("Video controller getLikedVideos", videos.length);
       res.status(200).json({ videos });
@@ -219,7 +219,7 @@ class VideoController {
       const userId = parseInt(req.params.userId);
       let videos: VideoModel[] = [];
       if (userId != -1) {
-        videos = await VideoService.getInstance().getVideosByUserId(3);
+        videos = await VideoService.getInstance().getVideosByUserId(userId);
       }
       res.status(200).json({ videos });
     } catch (error) {
