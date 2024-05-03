@@ -23,3 +23,5 @@ export * from './OnBoarding'
 export * from './UsingGuide'
 export * from './SearchResult'
 export * from './PasswordInputReg'
+// Friend section
+export * from './Friend'

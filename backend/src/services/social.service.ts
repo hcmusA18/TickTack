@@ -18,6 +18,84 @@ class SocialService {
       throw new Error(`${_error.message}`);
     }
   };
+  getFollowing = async (userId: number): Promise<any> => {
+    try {
+      const following =
+        await SocialRepository.getInstance().getFollowing(userId);
+      return following;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+  getUnfollowing = async (
+    userId: number,
+    isFollower: boolean | null = null,
+  ): Promise<any> => {
+    try {
+      isFollower = isFollower ?? false;
+      const unfollowing = await SocialRepository.getInstance().getUnfollowing(
+        userId,
+        isFollower,
+      );
+      return unfollowing;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+  getFollowers = async (
+    userId: number,
+    isFollowBack: boolean | null = null,
+  ): Promise<any> => {
+    try {
+      isFollowBack = isFollowBack ?? false;
+      const followers = await SocialRepository.getInstance().getFollowers(
+        userId,
+        isFollowBack,
+      );
+      return followers;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+  isFollowing = async (userId: number, checkId: number): Promise<boolean> => {
+    try {
+      const isFollowing = await SocialRepository.getInstance().isFollowing(
+        userId,
+        checkId,
+      );
+      return isFollowing;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+  follow = async (userId: number, followId: number): Promise<boolean> => {
+    try {
+      const isFollowed = await SocialRepository.getInstance().follow(
+        userId,
+        followId,
+      );
+      return isFollowed;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+  unfollow = async (userId: number, unfollowId: number): Promise<boolean> => {
+    try {
+      const isUnfollowed = await SocialRepository.getInstance().unfollow(
+        userId,
+        unfollowId,
+      );
+      return isUnfollowed;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
 }
 
 export { SocialService };

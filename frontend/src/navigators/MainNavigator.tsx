@@ -75,7 +75,7 @@ export const MainNavigator = ({ route }) => {
           }
         })}
       />
-      <Tab.Screen name="Friend" component={EmptyPage} />
+      <Tab.Screen name="Friend" component={Pages.FriendPage} />
       <Tab.Screen
         name="Camera"
         component={Pages.CameraPage}
