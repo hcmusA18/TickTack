@@ -1,19 +1,11 @@
 import React, { FC, useEffect, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { VideoItem } from '../../SearchResult/components/VideoItem'
 import axiosInstance from 'libs/utils/axiosInstance'
 import { useAppSelector } from 'libs/redux'
 import { AuthUser } from 'libs/types'
 import { TabType } from '../index'
-
-const bgColor = 'red'
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: bgColor
-  }
-})
 
 interface MyVideosContentProps {
   navigation: any
