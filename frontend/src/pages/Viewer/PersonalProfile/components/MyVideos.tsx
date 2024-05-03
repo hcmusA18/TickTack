@@ -3,18 +3,18 @@ import { View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { VideoItem } from '../../SearchResult/components/VideoItem'
 import axiosInstance from 'libs/utils/axiosInstance'
-import { useAppSelector } from 'libs/redux'
 import { AuthUser } from 'libs/types'
 import { TabType } from '../index'
 
 interface MyVideosContentProps {
   navigation: any
   type: TabType
+  user: AuthUser
 }
 
-export const MyVideosContent: FC<MyVideosContentProps> = ({ navigation, type }) => {
+export const MyVideosContent: FC<MyVideosContentProps> = ({ navigation, type, user }) => {
   const [posts, setPosts] = useState({} as any)
-  const user = useAppSelector((state) => state.auth.user) as AuthUser
+
   const userId = user ? user.user_id : -1
   const url = type === TabType.MyVideos ? `/user/video/${userId}` : `/user/video/liked/${userId}`
 

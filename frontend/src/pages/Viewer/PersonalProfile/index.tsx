@@ -28,6 +28,17 @@ const CountItem = ({ label, count }: { label: string; count: string }) => (
   </View>
 )
 
+const fetchCountData = async (url: string, updater: (data: number) => void) => {
+  try {
+    const response = await axiosInstance.getAxios().get(url)
+    if (response.status === 200 && response.data) {
+      updater(parseInt(response.data.data))
+    }
+  } catch (error) {
+    console.error('Failed to fetch data:', error)
+  }
+}
+
 const TabItem = ({
   tabName,
   iconName,
@@ -47,6 +58,13 @@ const TabItem = ({
   )
 }
 
+const TabContent = ({ navigation, type, user }) => {
+  if (type === TabType.SavedPosts) {
+    return <SavedPostsContent />
+  }
+  return <MyVideosContent navigation={navigation} type={type} user={user} />
+}
+
 export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
   const { navigation } = props
   const [activeTab, setActiveTab] = useState<TabType>(TabType.MyVideos)
@@ -54,24 +72,25 @@ export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
   const [likeCnt, setLikeCnt] = useState(0)
   const [followerCnt, setFollowerCnt] = useState(0)
   const [followingCnt, setFollowingCnt] = useState(0)
+  const tabs = [
+    { tabName: TabType.MyVideos, iconName: 'video' },
+    { tabName: TabType.LikedVideos, iconName: 'heart' },
+    { tabName: TabType.SavedPosts, iconName: 'bookmark' }
+  ]
+  const counts = [
+    { label: 'Following', count: followingCnt.toString() },
+    { label: 'Followers', count: followerCnt.toString() },
+    { label: 'Likes', count: likeCnt.toString() }
+  ]
 
   const userId = user ? user.user_id : -1
 
   const fetchData = async () => {
-    const likeResponse = await axiosInstance.getAxios().get(`/user/video/likesCount/${userId}`)
-    if (likeResponse.status === 200 && likeResponse.data) {
-      setLikeCnt(parseInt(likeResponse.data.data))
-    }
-
-    const followerResponse = await axiosInstance.getAxios().get(`/user/followers/count/${userId}`)
-    if (followerResponse.status === 200 && followerResponse.data) {
-      setFollowerCnt(followerResponse.data.data)
-    }
-
-    const followingResponse = await axiosInstance.getAxios().get(`/user/following/count/${userId}`)
-    if (followingResponse.status === 200 && followingResponse.data) {
-      setFollowingCnt(followingResponse.data.data)
-    }
+    await Promise.all([
+      fetchCountData(`/user/video/likesCount/${userId}`, setLikeCnt),
+      fetchCountData(`/user/followers/count/${userId}`, setFollowerCnt),
+      fetchCountData(`/user/following/count/${userId}`, setFollowingCnt)
+    ])
   }
 
   useEffect(() => {
@@ -87,9 +106,9 @@ export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
         <Avatar.Image size={100} source={{ uri: user?.avatar }} style={{ backgroundColor: colors.white }} />
         <Text style={styles.username}>{user?.username}</Text>
         <View style={styles.countContainer}>
-          <CountItem label="Following" count={followingCnt.toString()} />
-          <CountItem label="Followers" count={followerCnt.toString()} />
-          <CountItem label="Likes" count={likeCnt.toString()} />
+          {counts.map((count) => (
+            <CountItem key={count.label} label={count.label} count={count.count} />
+          ))}
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('ProfileEditor')}>
@@ -105,15 +124,21 @@ export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
 
       {/* Tab Bar */}
       <View style={styles.tabBar}>
-        <TabItem tabName={TabType.MyVideos} iconName="video" activeTab={activeTab} setActiveTab={setActiveTab} />
-        <TabItem tabName={TabType.LikedVideos} iconName="heart" activeTab={activeTab} setActiveTab={setActiveTab} />
-        <TabItem tabName={TabType.SavedPosts} iconName="bookmark" activeTab={activeTab} setActiveTab={setActiveTab} />
+        {tabs.map((tab) => (
+          <TabItem
+            key={tab.tabName}
+            tabName={tab.tabName}
+            iconName={tab.iconName as keyof typeof Feather.glyphMap}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
+        ))}
       </View>
 
       <View style={{ display: 'flex', width: '100%', height: '100%' }}>
-        {activeTab === 'MyVideos' && <MyVideosContent navigation={navigation} type={TabType.MyVideos} />}
-        {activeTab === 'LikedVideos' && <MyVideosContent navigation={navigation} type={TabType.LikedVideos} />}
-        {activeTab === 'SavedPosts' && <SavedPostsContent />}
+        {tabs.map((tab) => (
+          <TabContent key={tab.tabName} navigation={navigation} type={tab.tabName} user={user} />
+        ))}
       </View>
       {/* Tab bar */}
     </Screen>
