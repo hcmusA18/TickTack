@@ -1,6 +1,19 @@
 import { VideoModel } from "@models";
 import pool from "./db";
 
+type VideoQuery = {
+  video_id: number;
+  user_id: number;
+  text: string;
+  create_time: number;
+  video_url: string;
+  duration: number;
+  music_id: string | null;
+  hashtags: string[];
+  privacy: "public" | "private" | "friends";
+  view_count: number;
+};
+
 class VideoRepository {
   private static instance: VideoRepository | null = null;
   static getInstance(): VideoRepository {
@@ -168,20 +181,7 @@ class VideoRepository {
     try {
       const result = await pool.query(query);
 
-      return result.rows.map((video) => {
-        return {
-          videoId: video.video_id,
-          userId: video.user_id,
-          text: video.text,
-          createTime: video.create_time,
-          videoUrl: video.video_url,
-          duration: video.duration,
-          musicId: video.music_id,
-          hashtags: video.hashtags,
-          privacy: video.privacy,
-          viewCount: video.view_count,
-        };
-      });
+      return result.rows.map((video) => VideoRepository.toVideoModel(video));
     } catch (error) {
       const _error = error as Error;
       throw new Error(`${_error.message}`);
@@ -196,24 +196,26 @@ class VideoRepository {
     try {
       const result = await pool.query(query);
 
-      return result.rows.map((video) => {
-        return {
-          videoId: video.video_id,
-          userId: video.user_id,
-          text: video.text,
-          createTime: video.create_time,
-          videoUrl: video.video_url,
-          duration: video.duration,
-          musicId: video.music_id,
-          hashtags: video.hashtags,
-          privacy: video.privacy,
-          viewCount: video.view_count,
-        };
-      });
+      return result.rows.map((video) => VideoRepository.toVideoModel(video));
     } catch (error) {
       const _error = error as Error;
       throw new Error(`${_error.message}`);
     }
+  };
+
+  static readonly toVideoModel = (video: VideoQuery): VideoModel => {
+    return {
+      videoId: video.video_id,
+      userId: video.user_id,
+      text: video.text,
+      createTime: video.create_time,
+      videoUrl: video.video_url,
+      duration: video.duration,
+      musicId: video.music_id,
+      hashtags: video.hashtags,
+      privacy: video.privacy,
+      viewCount: video.view_count,
+    };
   };
 }
 
