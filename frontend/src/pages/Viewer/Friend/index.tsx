@@ -5,7 +5,6 @@ import { colors } from 'theme'
 import { Screen } from 'components'
 import { TopBar, FriendList } from './components'
 import { useAppSelector } from 'libs/redux'
-import { AuthUser } from 'libs/types'
 
 interface FriendPageProps extends MainTabScreenProps<'Friend'> {}
 
@@ -22,7 +21,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export const FriendPage: FC<FriendPageProps> = ({ navigation }) => {
+export const FriendPage: FC<FriendPageProps> = ({}) => {
   const user = useAppSelector((state) => state.auth.user)
   const userId = user?.user_id ?? 1
 

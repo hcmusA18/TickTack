@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { colors } from 'theme'
+import { set } from 'lodash'
 
 const styles = StyleSheet.create({
   accountItem: {
@@ -73,23 +74,24 @@ interface AccountItemProps {
   avatar: string
   name: string
   followers: number
+  isFriendList: boolean
+  followStatus: number
   isHorizontal: boolean
-  isFollowed: boolean
   toggleFollow: () => void
 }
 
 interface FollowButtonProps {
-  isFollowed: boolean
+  followStatus: number
   toggleFollow: () => void
   isHorizontal: boolean
 }
 
-const FollowButton = ({ isFollowed, toggleFollow, isHorizontal }: FollowButtonProps) => {
+const FollowButton = ({ followStatus, toggleFollow, isHorizontal }: FollowButtonProps) => {
   const horizontalFollowedButtonStyle = isHorizontal ? styles.followedButtonStyleHori : styles.followedButtonStyle // followed
   const horizontalFollowButtonTextStyle = isHorizontal ? styles.followButtonStyleHori : styles.followButtonStyle // not follow
-  const followButtonStyle = isFollowed ? horizontalFollowedButtonStyle : horizontalFollowButtonTextStyle
-  const followButtonTextStyle = isFollowed ? styles.followedButtonText : styles.followButtonText
-  const followButtonContent = isFollowed ? 'Following' : 'Follow'
+  const followButtonStyle = followStatus == 2 ? horizontalFollowedButtonStyle : horizontalFollowButtonTextStyle
+  const followButtonTextStyle = followStatus == 2 ? styles.followedButtonText : styles.followButtonText
+  const followButtonContent = followStatus == 0 ? 'Follow' : followStatus == 1 ? 'Follow back' : 'Following'
   return (
     <TouchableOpacity style={followButtonStyle} onPress={() => toggleFollow()}>
       <Text style={followButtonTextStyle}>{followButtonContent}</Text>
@@ -97,11 +99,11 @@ const FollowButton = ({ isFollowed, toggleFollow, isHorizontal }: FollowButtonPr
   )
 }
 
-const AccountInfo = ({ name, followers }) => {
+const AccountInfo = ({ name, followers, isFriendList }) => {
   return (
     <View style={styles.textContainer}>
       <Text style={styles.textName}>{name}</Text>
-      <Text>{followers} Followers</Text>
+      {isFriendList ? <Text>User you may know</Text> : <Text>{followers} followers</Text>}
     </View>
   )
 }
@@ -110,28 +112,37 @@ const HorizontalAccountItem = ({
   avatar,
   name,
   followers,
+  isFriendList,
+  followStatus,
   isHorizontal,
-  isFollowed,
   toggleFollow
 }: AccountItemProps) => {
   return (
     <View style={[styles.accountItem, { marginRight: 10, width: 150 }]}>
       <Image source={{ uri: avatar }} style={{ width: 100, height: 100, borderRadius: 100, marginBottom: 5 }} />
-      <AccountInfo name={name} followers={followers} />
-      <FollowButton isFollowed={isFollowed} toggleFollow={toggleFollow} isHorizontal={isHorizontal} />
+      <AccountInfo name={name} followers={followers} isFriendList={isFriendList} />
+      <FollowButton followStatus={followStatus} toggleFollow={toggleFollow} isHorizontal={isHorizontal} />
     </View>
   )
 }
 
-const VerticalAccountItem = ({ avatar, name, followers, isHorizontal, isFollowed, toggleFollow }: AccountItemProps) => {
+const VerticalAccountItem = ({
+  avatar,
+  name,
+  followers,
+  isFriendList,
+  followStatus,
+  isHorizontal,
+  toggleFollow
+}: AccountItemProps) => {
   return (
     <View style={[styles.accountItem, { flexDirection: 'row', justifyContent: 'space-between' }]}>
       <View style={styles.leftContainer}>
         <Image source={{ uri: avatar }} style={{ width: 60, height: 60, borderRadius: 100 }} />
-        <AccountInfo name={name} followers={followers} />
+        <AccountInfo name={name} followers={followers} isFriendList={isFriendList} />
       </View>
       <View style={styles.rightContainer}>
-        <FollowButton isFollowed={isFollowed} toggleFollow={toggleFollow} isHorizontal={isHorizontal} />
+        <FollowButton followStatus={followStatus} toggleFollow={toggleFollow} isHorizontal={isHorizontal} />
         <TouchableOpacity>
           <Feather name={'x'} size={20} color={colors.textGray}></Feather>
         </TouchableOpacity>
@@ -140,13 +151,18 @@ const VerticalAccountItem = ({ avatar, name, followers, isHorizontal, isFollowed
   )
 }
 
-export const AccountItem = ({ avatar, name, followers, isHorizontal }) => {
-  const [isFollowed, setIsFollowed] = useState(false)
+export const AccountItem = ({ avatar, name, followers, isFriendList, curFollowStatus, isHorizontal }) => {
+  const [followStatus, setFollowStatus] = useState(0)
+  useEffect(() => {
+    setFollowStatus(curFollowStatus)
+  }, [curFollowStatus])
 
   const toggleFollow = () => {
-    setIsFollowed(!isFollowed) // Toggle the follow state
-    // TODO: Send a request to the server to update the follow status
-    // update the followr count
+    if (followStatus == 2) {
+      setFollowStatus(0)
+    } else {
+      setFollowStatus(2)
+    }
   }
 
   return isHorizontal ? (
@@ -154,8 +170,9 @@ export const AccountItem = ({ avatar, name, followers, isHorizontal }) => {
       avatar={avatar}
       name={name}
       followers={followers}
+      isFriendList={isFriendList}
+      followStatus={followStatus}
       isHorizontal={isHorizontal}
-      isFollowed={isFollowed}
       toggleFollow={toggleFollow}
     />
   ) : (
@@ -163,8 +180,9 @@ export const AccountItem = ({ avatar, name, followers, isHorizontal }) => {
       avatar={avatar}
       name={name}
       followers={followers}
+      isFriendList={isFriendList}
+      followStatus={followStatus}
       isHorizontal={isHorizontal}
-      isFollowed={isFollowed}
       toggleFollow={toggleFollow}
     />
   )

@@ -65,11 +65,19 @@ class SocialRepository {
         : `
         SELECT u.user_id, u.username, u.avatar
         FROM users u
-        WHERE u.user_id NOT IN (
-          SELECT s.following_id
-          FROM socials s
-          WHERE s.user_id = $1
-        )
+        WHERE u.user_id != $1
+            AND NOT EXISTS (
+                SELECT 1
+                FROM socials s
+                WHERE s.user_id = $1
+                    AND s.following_id = u.user_id
+            )
+            AND NOT EXISTS (
+                SELECT 1
+                FROM socials s
+                WHERE s.following_id = $1
+                    AND s.user_id = u.user_id
+    );
       `,
       values: [userId],
     };
