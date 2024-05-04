@@ -27,16 +27,9 @@ export const SearchResultUsers: FC<SearchResultUsersProps> = () => {
 
       const { users, numFollowers } = response.data
 
-      // get the follow status of each user with the loggedUserId and add it to a const
-      let followStatuses = []
-      users.map(async (user) => {
-        followStatuses.push(await axiosInstance.getAxios().get(`/user/isfollowing/${loggedUserId}/${user.userId}`))
-      })
-
       const transformedAccounts = users.map((user, i) => ({
         ...user,
-        followers: numFollowers[i] || 0,
-        followStatus: followStatuses[i].data.message === 'Following' ? 2 : 0
+        followers: numFollowers[i] || 0
       }))
 
       setAccounts(transformedAccounts)
@@ -62,7 +55,7 @@ export const SearchResultUsers: FC<SearchResultUsersProps> = () => {
             name={item.username}
             followers={item.followers}
             isFriendList={false}
-            curFollowStatus={item.followStatus}
+            curFollowStatus={0}
             isHorizontal={false}
           />
         )}
