@@ -11,7 +11,6 @@ router.get("/", (req, res) => {
   UserController.getInstance().getUserDetail(req, res);
 });
 
-
 router.get("/comments/:userId", (req, res) => {
   UserController.getInstance().getUserCommentInfo(req, res);
 });
@@ -52,7 +51,7 @@ router.get("/followers/count/:userId", (req, res) => {
   SocialController.getInstance().getNumFollowers(req, res);
 });
 
-router.get("/isfollowing", (req, res) => {
+router.get("/isfollowing/:userId/:checkId", (req, res) => {
   // check if I am following a user
   SocialController.getInstance().isFollowing(req, res);
 });
