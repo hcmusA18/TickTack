@@ -95,6 +95,7 @@ def get_engine():
 def load_data() -> Dict[Text, tf.data.Dataset]:
     # Load the data
     engine = get_engine()
+    print("Connected to database")
     users_df = pd.read_sql_query("SELECT user_id FROM users", engine)
     videos_df = pd.read_sql_query("SELECT video_id FROM videos", engine)
     watched_df = pd.read_sql_query(

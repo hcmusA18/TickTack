@@ -34,7 +34,9 @@ export const MyVideosContent: FC<MyVideosContentProps> = ({ navigation, type, us
       <FlatList
         data={posts}
         renderItem={({ item, index }) =>
-          index < posts.length - (posts.length % 2) && <VideoItem video={item} navigation={navigation} />
+          index < posts.length - (posts.length % 2) && (
+            <VideoItem video={item} navigation={navigation} creatorPost={posts} />
+          )
         }
         keyExtractor={(_, index) => index.toString()}
         initialNumToRender={4}

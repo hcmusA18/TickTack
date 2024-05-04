@@ -41,7 +41,6 @@ const AuthSlice = createSlice({
       merge(state, action.payload)
     },
     setUser(state, action: PayloadAction<AuthUser>) {
-      console.log('setting user', action.payload)
       return {
         ...state,
         user: action.payload

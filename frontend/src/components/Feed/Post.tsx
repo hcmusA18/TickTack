@@ -1,10 +1,11 @@
-import { Video, ResizeMode } from 'expo-av'
+import { Video, ResizeMode, Audio } from 'expo-av'
 import { Post } from 'libs/types'
 import React, { memo, useEffect, useRef, useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { Overlay } from './Overlay'
 import { colors } from 'theme'
-import { useUser, useVideo } from 'libs/hooks'
+import { useMusic, useUser, useVideo } from 'libs/hooks'
+import { loadBackgroundMusic } from 'libs/utils/loadBackgroundMusic'
 
 const styles = {
   container: {
@@ -15,17 +16,31 @@ const styles = {
 const PostContent = ({ item, shouldPlay }: { item: Post; shouldPlay: boolean }) => {
   const video = useRef<Video | null>(null)
   const { user, isLoading, isError } = useUser(item.user_id?.toString())
+  const { music, isLoading: musicLoading, isError: musicError } = useMusic(item.music_id?.toString())
   const [status, setStatus] = useState<any>({})
+  const [muteVideo, setMuteVideo] = useState<boolean>(false)
+
+  const soundObject = useRef<Audio.Sound | null>(null)
 
   useEffect(() => {
+    const currentSoundObject = soundObject.current
     if (!video.current) return
     if (shouldPlay) {
       video.current.playAsync()
+      if (music && !musicLoading && !musicError && !music.music_url?.includes('lis.tn')) {
+        setMuteVideo(true)
+        loadBackgroundMusic({ music, soundObject: soundObject.current })
+      }
     } else {
       video.current.pauseAsync()
+      soundObject.current?.unloadAsync()
       video.current.setPositionAsync(0) // reset video to start
     }
-  }, [shouldPlay])
+    return () => {
+      currentSoundObject?.unloadAsync()
+      setMuteVideo(false)
+    }
+  }, [music, musicError, musicLoading, shouldPlay])
 
   return (
     <Pressable
@@ -37,6 +52,7 @@ const PostContent = ({ item, shouldPlay }: { item: Post; shouldPlay: boolean }) 
         resizeMode={ResizeMode.COVER}
         style={styles.container}
         isLooping
+        isMuted={muteVideo}
         source={{ uri: item.video_url }}
         useNativeControls={false}
         onPlaybackStatusUpdate={(status) => setStatus(() => status)}

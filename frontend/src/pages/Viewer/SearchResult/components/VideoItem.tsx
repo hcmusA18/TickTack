@@ -63,10 +63,11 @@ const styles = StyleSheet.create({
 
 interface VideoItemProps {
   video: any
+  creatorPost?: any[]
   navigation: any
 }
 
-export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
+export const VideoItem: FC<VideoItemProps> = ({ video, creatorPost, navigation }) => {
   const videoUrlToGetThumbnail = video.videoUrl.split('id=')[1]
   const videoThumbnail = `https://drive.google.com/thumbnail?id=${videoUrlToGetThumbnail}`
 
@@ -120,7 +121,10 @@ export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
   }, [video.videoId])
 
   const handlePress = () =>
-    navigation.navigate('Main', { screen: 'Home', params: { video: video.userId, profile: true } })
+    navigation.navigate('CreatorFeed', {
+      creatorPost,
+      videoId: video.videoId
+    })
   return (
     <TouchableOpacity onPress={handlePress} style={{ flex: 1, width: '50%' }}>
       <View style={styles.container}>
