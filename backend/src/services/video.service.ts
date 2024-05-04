@@ -112,6 +112,57 @@ class VideoService {
     }
   };
 
+  // get recommend video ids
+  getRecommendVideos = async (userId: string, n: number): Promise<string[]> => {
+    try {
+      const RECOMMENDER_PORT = process.env.RECOMMENDER_PORT ?? "8080";
+      const RECOMMENDER_HOST =
+        process.env.RECOMMENDER_HOST ?? `localhost:${RECOMMENDER_PORT}`;
+      // set timeout for 50 seconds
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 70000);
+
+      const videos = await fetch(
+        `http://${RECOMMENDER_HOST}/recommend?userId=${userId}&number=${n}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          signal: controller.signal,
+        },
+      )
+        .then((res) => res.json() as Promise<string[]>)
+        .catch((error) => {
+          console.error(`Error when getting recommended videos: ${error}`);
+          throw new Error(`${error}`);
+        })
+        .finally(() => clearTimeout(timeout));
+      if (videos.length === 0) {
+        console.log("No video found");
+        throw new Error("No video found");
+      }
+
+      return videos;
+    } catch (error) {
+      const _error = error as Error;
+      console.error(`Error when getting recommended videos: ${_error.message}`);
+      throw new Error(`${_error.message}`);
+    }
+  };
+
+  getRandomVideos = async (n: number): Promise<(string | undefined)[]> => {
+    try {
+      const videos = await VideoRepository.getInstance().getRandomVideos(n);
+      // return only video ids
+      const video_ids = videos.map((video) => video?.videoId?.toString());
+      return video_ids;
+    } catch (error) {
+      const _error = error as Error;
+      throw new Error(`${_error.message}`);
+    }
+  };
+
   getVideosByKeyword = async (
     keyword: string,
     getFull: boolean | null = null,

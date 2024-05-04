@@ -1,7 +1,6 @@
 import { createMaterialBottomTabNavigator, MaterialBottomTabScreenProps } from '@react-navigation/material-bottom-tabs'
 import { CompositeScreenProps, getFocusedRouteNameFromRoute } from '@react-navigation/native'
 import React, { useState, useEffect } from 'react'
-import { Text, View } from 'react-native'
 // import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { AppStackParamList, AppStackScreenProps } from './AppNavigator'
 import * as Pages from '../pages'
@@ -9,7 +8,7 @@ import { colors } from 'theme'
 import { TabBarIcon } from './IconConfig'
 
 export type MainTabParamList = {
-  Home: { creator: string | null; profile: boolean }
+  Home: undefined
   Camera: undefined
   Profile: undefined
   Notification: undefined
@@ -23,14 +22,6 @@ export type MainTabScreenProps<T extends keyof MainTabParamList> = CompositeScre
 >
 
 const Tab = createMaterialBottomTabNavigator<MainTabParamList>()
-
-const EmptyPage = () => {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Empty Page</Text>
-    </View>
-  )
-}
 
 export const MainNavigator = ({ route }) => {
   // const insets = useSafeAreaInsets()
@@ -66,13 +57,9 @@ export const MainNavigator = ({ route }) => {
       <Tab.Screen
         name="Home"
         component={Pages.HomePage}
-        initialParams={{ profile: false, creator: null }}
-        listeners={({ navigation }) => ({
+        listeners={() => ({
           focus: () => setHome(true),
-          blur: () => {
-            setHome(false)
-            navigation.setParams({ creator: null, profile: false })
-          }
+          blur: () => setHome(false)
         })}
       />
       <Tab.Screen name="Friend" component={Pages.FriendPage} />
@@ -86,7 +73,6 @@ export const MainNavigator = ({ route }) => {
           }
         })}
       />
-      <Tab.Screen name="Notification" component={EmptyPage} />
       <Tab.Screen name="Profile" component={Pages.PersonalProfile} />
     </Tab.Navigator>
   )

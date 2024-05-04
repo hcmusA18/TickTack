@@ -3,13 +3,13 @@ import { fetcher } from './fetcher'
 
 // a custom hook to fetch user data by axiosInstance and cache it
 // when userId is repeated, it will return the cached data
-export const useUser = (userId: string | null, options = {}) => {
-  const { data, isLoading, error } = useSWR(userId ? `/user/${userId}` : null, fetcher, {
+export const useMusic = (musicId: string | null, options = {}) => {
+  const { data, isLoading, error } = useSWR(musicId ? `/music/${musicId}` : null, fetcher, {
     revalidateOnFocus: false,
     ...options
   })
   return {
-    user: data,
+    music: data?.data,
     isLoading,
     isError: error
   }

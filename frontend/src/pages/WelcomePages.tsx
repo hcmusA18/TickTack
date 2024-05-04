@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { Screen } from '../components'
 import { AppStackScreenProps } from '../navigators'
@@ -32,8 +32,17 @@ export const WelcomePage: FC<WelcomePageProps> = (props) => {
   const { firstOpen, authToken } = useAppSelector((state) => state.auth)
   const dispatch = useAppDispatch()
 
-  const goNext = () => {
+  useEffect(() => {
+    if (authToken) {
+      navigation.navigate('Main')
+    }
     if (firstOpen) {
+      navigation.navigate('OnboardingPage')
+    }
+  }, [authToken, firstOpen])
+
+  const goNext = () => {
+    if (firstOpen || !authToken) {
       dispatch(setFirstOpen())
       navigation.navigate('OnboardingPage')
     } else if (authToken) {

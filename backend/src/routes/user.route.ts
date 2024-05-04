@@ -11,13 +11,16 @@ router.get("/", (req, res) => {
   UserController.getInstance().getUserDetail(req, res);
 });
 
-
 router.get("/comments/:userId", (req, res) => {
   UserController.getInstance().getUserCommentInfo(req, res);
 });
 
 router.get("/:userId", (req, res) => {
   UserController.getInstance().getUserById(req, res);
+});
+
+router.get("/email/:email", (req, res) => {
+  UserController.getInstance().getUserByEmail(req, res);
 });
 
 router.get("/search/:keyword", (req, res) => {

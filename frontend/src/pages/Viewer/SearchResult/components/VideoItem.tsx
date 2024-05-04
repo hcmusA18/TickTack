@@ -63,10 +63,11 @@ const styles = StyleSheet.create({
 
 interface VideoItemProps {
   video: any
+  creatorPost?: any[]
   navigation: any
 }
 
-export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
+export const VideoItem: FC<VideoItemProps> = ({ video, creatorPost, navigation }) => {
   const videoUrlToGetThumbnail = video.videoUrl.split('id=')[1]
   const videoThumbnail = `https://drive.google.com/thumbnail?id=${videoUrlToGetThumbnail}`
 
@@ -82,13 +83,12 @@ export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
       }
 
       const res = {
-        uid: response.data.user_id,
+        userId: response.data.user_id,
         email: response.data.email,
-        displayName: response.data.username,
-        photoURL: response.data.avatar,
-        followingCount: 0,
-        followersCount: 0,
-        likesCount: 0
+        username: response.data.username,
+        avatar: response.data.avatar,
+        regisDate: response.data.regis_date,
+        bio: response.data.bio
       }
 
       setUser(res)
@@ -121,7 +121,10 @@ export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
   }, [video.videoId])
 
   const handlePress = () =>
-    navigation.navigate('Main', { screen: 'Home', params: { video: video.userId, profile: true } })
+    navigation.navigate('CreatorFeed', {
+      creatorPost,
+      videoId: video.videoId
+    })
   return (
     <TouchableOpacity onPress={handlePress} style={{ flex: 1, width: '50%' }}>
       <View style={styles.container}>
@@ -136,8 +139,8 @@ export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
         {/* Account info */}
         <View style={styles.accountContainer}>
           <View style={styles.info}>
-            <Image source={{ uri: user.photoURL }} style={styles.avatar} />
-            <Text style={styles.name}>{user.displayName}</Text>
+            <Image source={{ uri: user.avatar }} style={styles.avatar} />
+            <Text style={styles.name}>{user.username}</Text>
           </View>
           <Text style={styles.follower}>
             <Feather name="heart" size={12} color="gray" style={{ fontWeight: 'bold' }} />

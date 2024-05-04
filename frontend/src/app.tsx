@@ -64,11 +64,7 @@ const App = (props: AppProps) => {
         <GestureHandlerRootView style={containerStyle}>
           <Provider store={store}>
             <PaperProvider>
-              <AppNavigator
-                linking={linking}
-                initialState={initialNavigationState}
-                onStateChange={onNavigationStateChange}
-              />
+              <AppNavigator linking={linking} onStateChange={onNavigationStateChange} />
               <Modal />
             </PaperProvider>
           </Provider>

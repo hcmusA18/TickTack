@@ -25,7 +25,10 @@ const AuthSlice = createSlice({
     setAuthEmail(state, action: PayloadAction<string>) {
       return {
         ...state,
-        authEmail: action.payload
+        user: {
+          ...state.user,
+          email: action.payload
+        }
       }
     },
     setFirstOpen(state) {
@@ -38,7 +41,10 @@ const AuthSlice = createSlice({
       merge(state, action.payload)
     },
     setUser(state, action: PayloadAction<AuthUser>) {
-      state.user = action.payload
+      return {
+        ...state,
+        user: action.payload
+      }
     },
     clearAuth(_state) {
       return {

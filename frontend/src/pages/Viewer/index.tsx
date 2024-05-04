@@ -25,3 +25,5 @@ export * from './SearchResult'
 export * from './PasswordInputReg'
 // Friend section
 export * from './Friend'
+
+export * from './CreatorFeed'

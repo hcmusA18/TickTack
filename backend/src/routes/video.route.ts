@@ -11,8 +11,12 @@ router.get("/:video_id", (req, res) => {
   VideoController.getInstance().getVideoById(req, res);
 });
 
-router.get("/:video_id", (req, res) => {
-  VideoController.getInstance().getVideoById(req, res);
+router.get("/recommend/:user_id", (req, res) => {
+  VideoController.getInstance().getRecommendVideos(req, res);
+});
+
+router.get("/random/:n", (req, res) => {
+  VideoController.getInstance().getRandomVideos(req, res);
 });
 
 router.post("/privacy", (req, res) => {

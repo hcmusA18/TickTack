@@ -34,7 +34,7 @@ class UserController {
   };
 
   getUserById = async (req: Request, res: Response) => {
-    const userId = req.params.userId;
+    const userId = req.params.userId.toString();
 
     if (userId === undefined || userId === "") {
       res.status(400).send("User ID is required");
@@ -46,6 +46,23 @@ class UserController {
       res.status(500).send("Internal Server Error");
     } else {
       res.status(200).json(user);
+    }
+  };
+
+  getUserByEmail = async (req: Request, res: Response) => {
+    const email = req.params.email;
+
+    if (email === undefined || email === "") {
+      res.status(400).send("Email is required");
+    }
+
+    const user = await UserService.getInstance().getUserByEmail(email);
+    const userId = user?.userId;
+
+    if (userId === undefined) {
+      res.status(500).send("Internal Server Error");
+    } else {
+      res.status(200).json(userId);
     }
   };
 

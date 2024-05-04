@@ -30,13 +30,14 @@ export interface Comment {
 }
 
 export interface User {
-  uid: string
+  userId?: number
+  user_id?: number
+  username: string
   email: string
-  displayName: string | null
-  photoURL?: string
-  followingCount: number
-  followersCount: number
-  likesCount: number
+  password?: string
+  avatar: string | null
+  bio: string | null
+  regisDate: number
 }
 
 export interface SearchUser extends User {
@@ -61,13 +62,13 @@ export interface Message {
 }
 
 export interface AuthUser {
-  user_id: number
+  userId: number
   username: string | null
   email: string
   password: string
   avatar: string | null
   bio: string | null
-  regis_date: string
+  regisDate: string
 }
 
 export enum ModalType {

@@ -20,7 +20,7 @@ export const PasswordInput: FC<PassWordInputProps> = (props) => {
   const [isValid, setIsValid] = useState(true)
   const [password, setPassword] = useState('')
 
-  const email = useAppSelector((state) => state.auth.authEmail)
+  const { email } = useAppSelector((state) => state.auth.user)
   const dispatch = useAppDispatch()
 
   const checkBoxClicked = () => {

@@ -47,6 +47,7 @@ export type AppStackParamList = {
   SearchResult: undefined
   PasswordInputReg: undefined
   Friend: undefined
+  CreatorFeed: { creatorPost: any[]; videoId: string }
 }
 
 /**
@@ -199,6 +200,13 @@ const AppStack = () => {
       <Stack.Screen
         name="Friend"
         component={Pages.FriendPage}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="CreatorFeed"
+        component={Pages.CreatorFeed}
         options={{
           headerShown: false
         }}

@@ -9,6 +9,7 @@ import { ModalType } from 'libs/types'
 import { openModal } from 'libs/redux/sliceModal'
 import axiosInstance from 'libs/utils/axiosInstance'
 import { setMusic } from 'libs/redux/sliceVideoPost'
+import { loadBackgroundMusic } from 'libs/utils/loadBackgroundMusic'
 
 interface VideoPreviewerProps extends AppStackScreenProps<'VideoPreviewer'> {}
 
@@ -18,48 +19,33 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
   const music = useAppSelector((state) => state.videoPost.music)
   const videoUrl = useAppSelector((state) => state.videoPost.videoUrl)
   const videoRef = useRef(null)
-  let soundObject = null
+  const soundObject = useRef<Audio.Sound | null>(null)
 
   let musicData = []
 
   useEffect(() => {
     videoRef.current?.playAsync()
+    const currentSoundObject = soundObject.current
 
-    loadBackgroundMusic()
+    loadBackgroundMusic({ music, soundObject: soundObject.current })
 
     getAllMusics()
 
     return () => {
-      if (soundObject !== null) {
-        soundObject.unloadAsync()
-      }
+      currentSoundObject?.unloadAsync()
     }
   })
 
   const handleNext = () => {
     // destroy the video previewer
     videoRef.current?.pauseAsync()
-    soundObject?.unloadAsync()
+    soundObject.current?.unloadAsync()
     navigation.navigate('SavePost')
-  }
-
-  const loadBackgroundMusic = async () => {
-    try {
-      const { sound } = await Audio.Sound.createAsync({
-        uri: music?.music_url
-      })
-      // await sound.loadAsync()
-      soundObject = sound
-      await soundObject.setIsLoopingAsync(true)
-      await soundObject.playAsync()
-    } catch (error) {
-      console.log('Error loading sound', error)
-    }
   }
 
   const handlePlaybackStatusUpdate = (status) => {
     if (status.didJustFinish && soundObject !== null) {
-      soundObject.replayAsync()
+      soundObject.current?.replayAsync()
     }
   }
 

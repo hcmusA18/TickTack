@@ -104,8 +104,7 @@ const ActionButton = ({ iconName, text, onPress }: ActionButtonProps) => {
 export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   const dispatch = useAppDispatch()
 
-  // const navigation =
-  const userId = parseInt(user.uid, 10)
+  const userId = user?.user_id
   let videoId = parseInt(post.video_id, 10)
 
   if (isNaN(videoId)) {
@@ -201,15 +200,15 @@ export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.displayName}>{user.displayName || user.email}</Text>
+        <Text style={styles.displayName}>{user.username || user.email}</Text>
         <Text style={styles.description} numberOfLines={3} lineBreakMode="tail">
           {post.text}
         </Text>
       </View>
       <View style={styles.leftContainer}>
         <TouchableOpacity>
-          {user.photoURL ? (
-            <Image source={{ uri: user.photoURL }} style={styles.avatar} />
+          {user.avatar ? (
+            <Image source={{ uri: user.avatar }} style={styles.avatar} />
           ) : (
             <Avatar.Icon size={50} icon="account" style={styles.defaultAvatar} />
           )}

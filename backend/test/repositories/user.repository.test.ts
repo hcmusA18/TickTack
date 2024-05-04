@@ -60,10 +60,18 @@ describe("UserRepository", () => {
         avatar: "test image",
         regisDate: 123456789,
       };
-      (pool.query as jest.Mock).mockResolvedValueOnce({ rows: [user] });
+      const responseUser = {
+        user_id: user.userId,
+        username: user.username,
+        email: user.email,
+        password: user.password,
+        avatar: user.avatar,
+        bio: user.bio,
+        regis_date: user.regisDate,
+      };
+      (pool.query as jest.Mock).mockResolvedValueOnce({ rows: [responseUser] });
 
       const result = await userRepository.getUserByEmail(email);
-
       expect(result).toEqual(user);
       expect(pool.query).toHaveBeenCalledWith({
         text: "SELECT * FROM users WHERE email = $1",

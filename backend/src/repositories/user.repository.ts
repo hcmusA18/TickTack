@@ -64,7 +64,7 @@ class UserRepository {
     };
     try {
       const result = await pool.query(query);
-      return result.rows[0];
+      return UserModel.fromDb(result.rows[0]);
     } catch (error) {
       const _error = error as Error;
       throw new Error(`${_error.message}`);

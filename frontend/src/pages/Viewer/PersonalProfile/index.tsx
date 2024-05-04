@@ -83,7 +83,7 @@ export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
     { label: 'Likes', count: likeCnt.toString() }
   ]
 
-  const userId = user ? user.user_id : -1
+  const userId = user ? user.userId : -1
 
   const fetchData = async () => {
     await Promise.all([
