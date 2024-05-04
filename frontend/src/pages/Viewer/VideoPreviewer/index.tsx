@@ -43,20 +43,6 @@ export const VideoPreviewer: FC<VideoPreviewerProps> = (props) => {
     navigation.navigate('SavePost')
   }
 
-  // const loadBackgroundMusic = async () => {
-  //   try {
-  //     const { sound } = await Audio.Sound.createAsync({
-  //       uri: music?.music_url
-  //     })
-  //     // await sound.loadAsync()
-  //     soundObject = sound
-  //     await soundObject.setIsLoopingAsync(true)
-  //     await soundObject.playAsync()
-  //   } catch (error) {
-  //     console.log('Error loading sound', error)
-  //   }
-  // }
-
   const handlePlaybackStatusUpdate = (status) => {
     if (status.didJustFinish && soundObject !== null) {
       soundObject.current?.replayAsync()
