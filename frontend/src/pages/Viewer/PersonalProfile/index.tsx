@@ -147,9 +147,7 @@ export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
       </View>
 
       <View style={{ display: 'flex', width: '100%', height: '100%' }}>
-        {tabs.map((tab) => (
-          <TabContent key={tab.tabName} navigation={navigation} type={tab.tabName} user={user} focusKey={focusKey} />
-        ))}
+        <TabContent key={activeTab} navigation={navigation} type={activeTab} user={user} focusKey={focusKey} />
       </View>
       {/* Tab bar */}
     </Screen>
