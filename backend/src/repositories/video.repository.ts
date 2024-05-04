@@ -24,7 +24,7 @@ class VideoRepository {
     return VideoRepository.instance;
   }
 
-  private stringArrayConverter = (value: string[]): string => {
+  static stringArrayConverter = (value: string[]): string => {
     if (!value || value.length === 0) return "ARRAY[]::TEXT[]";
 
     const formattedValues = value
@@ -38,9 +38,16 @@ class VideoRepository {
 
   addNewVideo = async (video: VideoModel): Promise<VideoModel | null> => {
     if (!video.musicId) video.musicId = null;
+    // check text contains SQL injection
+    if (
+      video.text.match(/(delete|drop|update|insert|create|alter|select|table)/i)
+    ) {
+      throw new Error("SQL injection detected");
+    }
     const query = {
-      text: `INSERT INTO videos(user_id, text, create_time, video_url, duration, music_id, hashtags, privacy, view_count) 
-      VALUES($1, $2, $3, $4, $5, ${video.musicId}, ${this.stringArrayConverter(
+      text: `INSERT INTO videos(user_id, text, create_time, video_url, duration, music_id, hashtags, privacy, view_count) VALUES($1, $2, $3, $4, $5, ${
+        video.musicId
+      }, ${VideoRepository.stringArrayConverter(
         video.hashtags,
       )}, $6, $7) RETURNING *`,
       values: [
@@ -55,7 +62,7 @@ class VideoRepository {
     };
     try {
       const result = await pool.query(query);
-      return result.rows[0];
+      return result.rows[0] ?? null;
     } catch (error) {
       const _error = error as Error;
       throw new Error(`${_error.message}`);
@@ -68,7 +75,7 @@ class VideoRepository {
     };
     try {
       const result = await pool.query(query);
-      return result.rows[0];
+      return result.rows[0] ?? null;
     } catch (error) {
       const _error = error as Error;
       throw new Error(`${_error.message}`);
