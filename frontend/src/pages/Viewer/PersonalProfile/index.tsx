@@ -1,17 +1,18 @@
-import React, { FC, useEffect, useState } from 'react'
-import { View, TouchableOpacity } from 'react-native'
-import { Text, Avatar } from 'react-native-paper'
-import { MainTabScreenProps } from 'navigators'
-import { Screen } from 'components'
-import { ProfileNavbar } from './components/Navbar'
-import { styles } from './styles'
-import { MyVideosContent } from './components/MyVideos'
-import { SavedPostsContent } from './components/SavedPosts'
 import { Feather } from '@expo/vector-icons'
+import { useFocusEffect } from '@react-navigation/native'
+import { Screen } from 'components'
 import { useAppSelector } from 'libs/redux'
 import { AuthUser } from 'libs/types'
 import axiosInstance from 'libs/utils/axiosInstance'
+import { MainTabScreenProps } from 'navigators'
+import React, { FC, useState } from 'react'
+import { TouchableOpacity, View } from 'react-native'
+import { Avatar, Text } from 'react-native-paper'
 import { colors } from 'theme'
+import { MyVideosContent } from './components/MyVideos'
+import { ProfileNavbar } from './components/Navbar'
+import { SavedPostsContent } from './components/SavedPosts'
+import { styles } from './styles'
 
 export enum TabType {
   MyVideos = 'MyVideos',
@@ -58,11 +59,15 @@ const TabItem = ({
   )
 }
 
-const TabContent = ({ navigation, type, user }) => {
-  if (type === TabType.SavedPosts) {
-    return <SavedPostsContent />
-  }
-  return <MyVideosContent navigation={navigation} type={type} user={user} />
+const TabContent = ({ navigation, type, user, focusKey }) => {
+  return (
+    <React.Fragment>
+      {type !== TabType.SavedPosts && (
+        <MyVideosContent navigation={navigation} type={type} user={user} focusKey={focusKey} />
+      )}
+      {type === TabType.SavedPosts && <SavedPostsContent navigation={navigation} />}
+    </React.Fragment>
+  )
 }
 
 export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
@@ -72,6 +77,8 @@ export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
   const [likeCnt, setLikeCnt] = useState(0)
   const [followerCnt, setFollowerCnt] = useState(0)
   const [followingCnt, setFollowingCnt] = useState(0)
+  const [focusKey, setFocusKey] = useState(0)
+
   const tabs = [
     { tabName: TabType.MyVideos, iconName: 'video' },
     { tabName: TabType.LikedVideos, iconName: 'heart' },
@@ -93,9 +100,13 @@ export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
     ])
   }
 
-  useEffect(() => {
-    fetchData()
-  }, [])
+  // react use callback with useFocusEffect
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchData()
+      setFocusKey((prev) => prev + 1)
+    }, [])
+  )
 
   return (
     <Screen preset="fixed" safeAreaEdges={['top', 'bottom']} contentContainerStyle={styles.container}>
@@ -137,7 +148,7 @@ export const PersonalProfile: FC<PersonalProfileProps> = (props) => {
 
       <View style={{ display: 'flex', width: '100%', height: '100%' }}>
         {tabs.map((tab) => (
-          <TabContent key={tab.tabName} navigation={navigation} type={tab.tabName} user={user} />
+          <TabContent key={tab.tabName} navigation={navigation} type={tab.tabName} user={user} focusKey={focusKey} />
         ))}
       </View>
       {/* Tab bar */}

@@ -67,11 +67,13 @@ interface VideoItemProps {
 }
 
 export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
-  const videoUrlToGetThumbnail = video.videoUrl.split('id=')[1]
-  const videoThumbnail = `https://drive.google.com/thumbnail?id=${videoUrlToGetThumbnail}`
-
   const [user, setUser] = useState<User>({} as User)
   const [likesCount, setLikesCount] = useState<number>(0)
+
+  if (!video || !video.videoUrl) return <></>
+
+  const videoUrlToGetThumbnail = video.videoUrl.split('id=')[1]
+  const videoThumbnail = `https://drive.google.com/thumbnail?id=${videoUrlToGetThumbnail}`
 
   const getUser = async () => {
     try {
