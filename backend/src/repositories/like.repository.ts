@@ -30,7 +30,7 @@ class LikeRepository {
       }
     } catch (error) {
       const _error = error as Error;
-      console.error("Error checking like:", _error);
+      // console.error("Error checking like:", _error);
       throw new Error(`Error checking like: ${_error.message}`);
     }
   };
@@ -47,7 +47,7 @@ class LikeRepository {
       return result.rows[0];
     } catch (error) {
       const _error = error as Error;
-      console.error("Error adding like:", _error);
+      // console.error("Error adding like:", _error);
       throw new Error(`Error adding like: ${_error.message}`);
     }
   };
@@ -64,7 +64,7 @@ class LikeRepository {
       return result.rowCount !== null && result.rowCount > 0;
     } catch (error) {
       const _error = error as Error;
-      console.error("Error removing like:", _error);
+      // console.error("Error removing like:", _error);
       throw new Error(`Error removing like: ${_error.message}`);
     }
   };
@@ -81,7 +81,7 @@ class LikeRepository {
       return result.rows[0];
     } catch (error) {
       const _error = error as Error;
-      console.error("Error adding like:", _error);
+      // console.error("Error adding like:", _error);
       throw new Error(`Error adding like: ${_error.message}`);
     }
   };
@@ -101,7 +101,7 @@ class LikeRepository {
       return result.rowCount !== null && result.rowCount > 0;
     } catch (error) {
       const _error = error as Error;
-      console.error("Error removing like:", _error);
+      // console.error("Error removing like:", _error);
       throw new Error(`Error removing like: ${_error.message}`);
     }
   };
@@ -118,7 +118,7 @@ class LikeRepository {
       return parseInt(result.rows[0].like_count, 10);
     } catch (error) {
       const _error = error as Error;
-      console.error("Error counting likes:", _error);
+      // console.error("Error counting likes:", _error);
       throw new Error(`Error counting likes: ${_error.message}`);
     }
   };
@@ -129,7 +129,7 @@ class LikeRepository {
       return result.rows;
     } catch (error) {
       const _error = error as Error;
-      console.error("Error retrieving likes:", _error);
+      // console.error("Error retrieving likes:", _error);
       throw new Error(`Error retrieving likes: ${_error.message}`);
     }
   };
