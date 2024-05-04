@@ -17,7 +17,7 @@ class MusicRepository {
     };
     try {
       const result = await pool.query(query);
-      return result.rows[0];
+      return result.rows[0] || null;
     } catch (error) {
       const _error = error as Error;
       throw new Error(`${_error.message}`);
