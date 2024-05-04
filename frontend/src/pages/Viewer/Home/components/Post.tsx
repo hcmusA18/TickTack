@@ -31,7 +31,7 @@ const PostContent = ({ item, shouldPlay }: { item: Post; shouldPlay: boolean }) 
     <Pressable
       onPress={() => (status.isPlaying ? video.current?.pauseAsync() : video.current?.playAsync())}
       style={styles.container}>
-      {isLoading || isError || !user ? null : <Overlay user={user} post={item} />}
+      {(isLoading || isError) && !user ? null : <Overlay user={user} post={item} />}
       <Video
         ref={video}
         resizeMode={ResizeMode.COVER}

@@ -118,7 +118,7 @@ describe("AuthController", () => {
       );
 
       expect(mockResponse.status).toHaveBeenCalledWith(200);
-      expect(mockResponse.json).toHaveBeenCalledWith({ data: token });
+      expect(mockResponse.json).toHaveBeenCalledWith({ token, user: {} });
     });
 
     it("should handle authentication failure", async () => {

@@ -1,11 +1,11 @@
-import React, { FC, useState, useEffect } from 'react'
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
-import { Post, User } from 'libs/types'
 import Feather from '@expo/vector-icons/Feather'
-import { colors } from 'theme'
+import { User } from 'libs/types'
 import axiosInstance from 'libs/utils/axiosInstance'
-import Toast from 'react-native-simple-toast'
 import { convertTime } from 'libs/utils/convertTime'
+import React, { FC, useEffect, useState } from 'react'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import Toast from 'react-native-simple-toast'
+import { colors } from 'theme'
 
 const styles = StyleSheet.create({
   container: {
@@ -62,14 +62,12 @@ const styles = StyleSheet.create({
 })
 
 interface VideoItemProps {
-  video: Post
+  video: any
   navigation: any
 }
 
 export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
-  const { user_id: userId, text, create_time: createTime, video_url: videoUrl, video_id: videoId } = video
-
-  const videoUrlToGetThumbnail = videoUrl.split('id=')[1]
+  const videoUrlToGetThumbnail = video.videoUrl.split('id=')[1]
   const videoThumbnail = `https://drive.google.com/thumbnail?id=${videoUrlToGetThumbnail}`
 
   const [user, setUser] = useState<User>({} as User)
@@ -77,20 +75,19 @@ export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
 
   const getUser = async () => {
     try {
-      const response = await axiosInstance.getAxios().get(`/user/${userId}`)
+      const response = await axiosInstance.getAxios().get(`/user/${video.userId}`)
       if (response.status !== 200) {
         Toast.show(response.data.message, Toast.LONG)
         return
       }
 
       const res = {
-        uid: response.data.user_id,
+        userId: response.data.user_id,
         email: response.data.email,
-        displayName: response.data.username,
-        photoURL: response.data.avatar,
-        followingCount: 0,
-        followersCount: 0,
-        likesCount: 0
+        username: response.data.username,
+        avatar: response.data.avatar,
+        regisDate: response.data.regis_date,
+        bio: response.data.bio
       }
 
       setUser(res)
@@ -102,11 +99,11 @@ export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
 
   useEffect(() => {
     getUser()
-  }, [userId])
+  }, [video.userId])
 
   const getLikesCount = async () => {
     try {
-      const response = await axiosInstance.getAxios().get(`/video/likes/${videoId}`)
+      const response = await axiosInstance.getAxios().get(`/video/likes/${video.videoId}`)
       if (response.status !== 200) {
         Toast.show(response.data.message, Toast.LONG)
         return
@@ -120,25 +117,26 @@ export const VideoItem: FC<VideoItemProps> = ({ video, navigation }) => {
 
   useEffect(() => {
     getLikesCount()
-  }, [videoId])
+  }, [video.videoId])
 
-  const handlePress = () => navigation.navigate('Main', { screen: 'Home', params: { userId, profile: true } })
+  const handlePress = () =>
+    navigation.navigate('Main', { screen: 'Home', params: { video: video.userId, profile: true } })
   return (
     <TouchableOpacity onPress={handlePress} style={{ flex: 1, width: '50%' }}>
       <View style={styles.container}>
         {/* Video Thumbnail */}
         <View style={styles.videoContainer}>
           <Image source={{ uri: videoThumbnail }} style={{ width: 180, height: 293 }} />
-          <Text style={styles.date}>{convertTime(createTime)}</Text>
+          <Text style={styles.date}>{convertTime(video.createTime)}</Text>
           <Text style={styles.description} numberOfLines={2}>
-            {text}
+            {video.text}
           </Text>
         </View>
         {/* Account info */}
         <View style={styles.accountContainer}>
           <View style={styles.info}>
-            <Image source={{ uri: user.photoURL }} style={styles.avatar} />
-            <Text style={styles.name}>{user.displayName}</Text>
+            <Image source={{ uri: user.avatar }} style={styles.avatar} />
+            <Text style={styles.name}>{user.username}</Text>
           </View>
           <Text style={styles.follower}>
             <Feather name="heart" size={12} color="gray" style={{ fontWeight: 'bold' }} />

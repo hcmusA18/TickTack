@@ -1,10 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { merge } from 'lodash'
+import { AuthUser } from '../types'
 
 type AuthState = {
   authToken: string | null
-  authEmail: string | null
-  authUser: string | null // user id
+  user: AuthUser | null
   firstOpen: boolean
 }
 
@@ -12,8 +12,7 @@ const AuthSlice = createSlice({
   name: 'auth',
   initialState: {
     authToken: null,
-    authEmail: null,
-    authUser: null,
+    user: null,
     firstOpen: true
   } as AuthState,
   reducers: {
@@ -26,13 +25,10 @@ const AuthSlice = createSlice({
     setAuthEmail(state, action: PayloadAction<string>) {
       return {
         ...state,
-        authEmail: action.payload
-      }
-    },
-    setAuthUser(state, action: PayloadAction<string>) {
-      return {
-        ...state,
-        authUser: action.payload
+        user: {
+          ...state.user,
+          email: action.payload
+        }
       }
     },
     setFirstOpen(state) {
@@ -44,16 +40,22 @@ const AuthSlice = createSlice({
     setAuth(state, action: PayloadAction<AuthState>) {
       merge(state, action.payload)
     },
+    setUser(state, action: PayloadAction<AuthUser>) {
+      console.log('setting user', action.payload)
+      return {
+        ...state,
+        user: action.payload
+      }
+    },
     clearAuth(_state) {
       return {
         authToken: null,
-        authEmail: null,
-        authUser: null,
-        firstOpen: false
+        firstOpen: false,
+        user: null
       }
     }
   }
 })
 
-export const { setAuthToken, setAuthEmail, setAuthUser, setAuth, setFirstOpen, clearAuth } = AuthSlice.actions
+export const { setAuthToken, setAuthEmail, setAuth, setUser, setFirstOpen, clearAuth } = AuthSlice.actions
 export const AuthReducer = AuthSlice.reducer

@@ -31,9 +31,10 @@ export interface Comment {
 
 export interface User {
   userId?: number
+  user_id?: number
   username: string
   email: string
-  password: string
+  password?: string
   avatar: string | null
   bio: string | null
   regisDate: number
@@ -58,6 +59,16 @@ export interface Message {
   id: string
   creator: string
   message: string
+}
+
+export interface AuthUser {
+  userId: number
+  username: string | null
+  email: string
+  password: string
+  avatar: string | null
+  bio: string | null
+  regisDate: string
 }
 
 export enum ModalType {

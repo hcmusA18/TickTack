@@ -3,16 +3,21 @@ import { View, FlatList } from 'react-native'
 import { AccountItem } from 'components'
 import axiosInstance from 'libs/utils/axiosInstance'
 import Toast from 'react-native-simple-toast'
+import { useAppSelector } from 'libs/redux'
 
 interface SearchResultUsersProps {
-  searchQuery: string
+  undefined
 }
-export const SearchResultUsers: FC<SearchResultUsersProps> = ({ searchQuery }) => {
+export const SearchResultUsers: FC<SearchResultUsersProps> = () => {
   const [accounts, setAccounts] = useState([])
+
+  const searchQuery = useAppSelector((state) => state.search.searchQuery)
 
   const searchAccounts = async () => {
     try {
-      const response = await axiosInstance.getAxios().get(`/user/search/${searchQuery}?getFull=true`)
+      const response = await axiosInstance
+        .getAxios()
+        .get(`/user/search/${searchQuery}?getFull=true&timestamp=${new Date().getTime()}`)
 
       if (response.status !== 200) {
         Toast.show(response.data.message, Toast.LONG)

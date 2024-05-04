@@ -1,10 +1,11 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { Screen } from 'components'
 import { MainTabScreenProps } from 'navigators'
 import { Topbar, Feed } from './components'
 import Feather from '@expo/vector-icons/Feather'
 import { colors } from 'theme'
+import { useAppSelector } from 'libs/redux'
 
 interface HomePageProps extends MainTabScreenProps<'Home'> {}
 
@@ -38,6 +39,13 @@ const BackBar: FC<{ navigation: any }> = ({ navigation }) => {
 
 export const HomePage: FC<HomePageProps> = ({ navigation, route }) => {
   const [currentTab, setCurrentTab] = useState<string>('For You')
+  const authToken = useAppSelector((state) => state.auth.authToken)
+
+  useEffect(() => {
+    if (!authToken) {
+      navigation.navigate('Welcome')
+    }
+  }, [authToken])
 
   const { creator, profile } = route.params
   console.log('creator', creator, 'profile', profile)

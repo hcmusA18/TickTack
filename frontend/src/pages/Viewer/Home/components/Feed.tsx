@@ -17,7 +17,7 @@ export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
   const [videoIds, setVideoIds] = useState<string[]>([])
   const screenIsFocused = useIsFocused()
   const [currentViewableItemIndex, setCurrentViewableItemIndex] = useState<number>(0)
-  const userId = useAppSelector((state) => state.auth.authUser)
+  const { userId } = useAppSelector((state) => state.auth.user)
 
   const viewabilityConfig = {
     itemVisiblePercentThreshold: 50
@@ -29,29 +29,28 @@ export const Feed = ({ creator, profile, currentTab }: FeedProps) => {
     }
   }
 
+  const fetchVideos = async (n: number) => {
+    try {
+      const res = await axiosInstance.getAxios().get(`/video/recommend/${userId}?number=${n}`)
+      setVideoIds(res.data.data)
+    } catch (error) {
+      const _error = error as Error
+      console.error('Error fetching recommended videos:', _error.message)
+      // get random videos if recommendation fails
+      console.log('Fetching random videos')
+      try {
+        const res = await axiosInstance.getAxios().get(`/video/random/${n}`)
+        setVideoIds(res.data)
+      } catch (error) {
+        const _error = error as Error
+        console.error('Error fetching random videos:', _error.message)
+      }
+    }
+  }
+
   useEffect(() => {
     if (currentTab === 'For You') {
-      axiosInstance
-        .getAxios()
-        .get(`/video/recommend/${userId}?number=100`)
-        .then((res) => {
-          setVideoIds(res.data.data)
-        })
-        .catch((error) => {
-          const _error = error as Error
-          console.error('Error fetching recommended videos:', error.message)
-          // get random videos if recommendation fails
-          axiosInstance
-            .getAxios()
-            .get(`/video/random/100`)
-            .then((res) => {
-              setVideoIds(res.data)
-            })
-            .catch((error) => {
-              const _error = error as Error
-              console.error('Error fetching random videos:', error.message)
-            })
-        })
+      fetchVideos(100)
     }
   }, [currentTab, userId])
 

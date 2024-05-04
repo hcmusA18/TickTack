@@ -120,11 +120,9 @@ class VideoController {
       res.status(200).json(videos);
     } catch (error) {
       const _error = error as Error;
-      res
-        .status(500)
-        .json({
-          message: `Error when getting random videos: ${_error.message}`,
-        });
+      res.status(500).json({
+        message: `Error when getting random videos: ${_error.message}`,
+      });
     }
   };
 
@@ -221,6 +219,53 @@ class VideoController {
       const _error = error as Error;
       res.status(500).json({
         message: `Error when counting likes of video: ${_error.message}`,
+      });
+    }
+  };
+
+  // get count of videos that a user has liked
+  countLikedVideos = async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const count = await VideoService.getInstance().countLikedVideos(userId);
+      res.status(200).json({ data: count });
+    } catch (error) {
+      const _error = error as Error;
+      res.status(500).json({
+        message: `Error when counting liked videos: ${_error.message}`,
+      });
+    }
+  };
+
+  getLikedVideos = async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      let videos: VideoModel[] = [];
+      if (userId != -1) {
+        videos = await VideoService.getInstance().getLikedVideos(userId);
+      }
+      console.log("Video controller getLikedVideos", videos.length);
+      res.status(200).json({ videos });
+    } catch (error) {
+      const _error = error as Error;
+      res.status(500).json({
+        message: `Error when getting liked videos: ${_error.message}`,
+      });
+    }
+  };
+
+  getVideosByUserId = async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      let videos: VideoModel[] = [];
+      if (userId != -1) {
+        videos = await VideoService.getInstance().getVideosByUserId(userId);
+      }
+      res.status(200).json({ videos });
+    } catch (error) {
+      const _error = error as Error;
+      res.status(500).json({
+        message: `Error when getting videos by user id: ${_error.message}`,
       });
     }
   };

@@ -104,7 +104,7 @@ const ActionButton = ({ iconName, text, onPress }: ActionButtonProps) => {
 export const Overlay: FC<ActionButtonsProps> = ({ user, post }) => {
   const dispatch = useAppDispatch()
 
-  const userId = user.userId
+  const userId = user?.user_id
   let videoId = parseInt(post.video_id, 10)
 
   if (isNaN(videoId)) {

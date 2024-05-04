@@ -7,6 +7,7 @@ import { useIsMounted } from 'libs/utils/useIsMounted'
 import type { AppStackParamList, NavigationProps } from './AppNavigator'
 
 import * as storage from 'libs/utils/storage'
+import { useAppSelector } from 'libs/redux'
 type Storage = typeof storage
 
 /**

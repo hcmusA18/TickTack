@@ -79,15 +79,3 @@ CREATE TABLE watched (
     time BIGINT,
     PRIMARY KEY (user_id, video_id)
 );
-
-insert into "users" (username, email, password, avatar, bio, regis_date) values
-('John Doe', 'johndoe@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am John', 1709900870272),
-('Jane Doe', 'janedoe@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am Jane', 1709900870272),
-('Daniel Smith', 'johnsmith@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am John', 1709900870272),
-('Emily Johnson', 'emilyjohnson@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am Emily', 1709900870272),
-('Michael Brown', 'michaelbrown@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am Michael', 1709900870272),
-('Olivia Williams', 'oliviawilliams@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am Olivia', 1709900870272),
-('William Jones', 'williamjones@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am William', 1709900870272),
-('Sophia Martinez', 'sophiamartinez@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am Sophia', 1709900870272),
-('James Taylor', 'jamestaylor@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am James', 1709900870272),
-('Ava Anderson', 'avaanderson@gmail.com', '123456', 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50', 'I am Ava', 1709900870272);

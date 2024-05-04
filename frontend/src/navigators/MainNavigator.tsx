@@ -24,14 +24,6 @@ export type MainTabScreenProps<T extends keyof MainTabParamList> = CompositeScre
 
 const Tab = createMaterialBottomTabNavigator<MainTabParamList>()
 
-const EmptyPage = () => {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Empty Page</Text>
-    </View>
-  )
-}
-
 export const MainNavigator = ({ route }) => {
   // const insets = useSafeAreaInsets()
   const [home, setHome] = useState(true)
@@ -75,6 +67,7 @@ export const MainNavigator = ({ route }) => {
           }
         })}
       />
+      <Tab.Screen name="Friend" component={Pages.FriendPage} />
       <Tab.Screen
         name="Camera"
         component={Pages.CameraPage}

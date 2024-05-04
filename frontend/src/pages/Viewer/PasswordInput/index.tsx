@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from 'libs/redux'
-import { setAuthToken, setAuthUser } from 'libs/redux/sliceAuth'
+import { setAuthToken, setUser } from 'libs/redux/sliceAuth'
 import axiosInstance from 'libs/utils/axiosInstance'
 import { AppStackScreenProps } from 'navigators'
 import React, { FC, useState } from 'react'
@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import { TopBar } from '../Login/components/LoginTopBar'
 import { colors } from '../Login/components/MyColors'
 import { styles } from './styles'
+import { AuthUser } from 'libs/types'
 
 interface PassWordInputProps extends AppStackScreenProps<'PasswordInput'> {}
 
@@ -19,7 +20,7 @@ export const PasswordInput: FC<PassWordInputProps> = (props) => {
   const [isValid, setIsValid] = useState(true)
   const [password, setPassword] = useState('')
 
-  const email = useAppSelector((state) => state.auth.authEmail)
+  const { email } = useAppSelector((state) => state.auth.user)
   const dispatch = useAppDispatch()
 
   const checkBoxClicked = () => {
@@ -47,12 +48,13 @@ export const PasswordInput: FC<PassWordInputProps> = (props) => {
         password
       })
       if (response.status === 200) {
-        const token = response.data.data
+        const token = response.data.token
+        const user = response.data.user as AuthUser
+
         dispatch(setAuthToken(token))
+        dispatch(setUser(user))
+
         axiosInstance.setAuthToken(token)
-        console.log('Login successful')
-        const userId = await axiosInstance.getAxios().get(`/user/email/${email}`)
-        dispatch(setAuthUser(userId.data))
         navigation.navigate('Main')
         Toast.show('Login successful', Toast.LONG)
       } else {
