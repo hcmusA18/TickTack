@@ -4,14 +4,15 @@ import { AccountItem } from 'components'
 import axiosInstance from 'libs/utils/axiosInstance'
 import Toast from 'react-native-simple-toast'
 import { useAppSelector } from 'libs/redux'
+import { log } from 'console'
 
-interface SearchResultUsersProps {
-  undefined
-}
+interface SearchResultUsersProps {}
 export const SearchResultUsers: FC<SearchResultUsersProps> = () => {
   const [accounts, setAccounts] = useState([])
 
   const searchQuery = useAppSelector((state) => state.search.searchQuery)
+  const loggedUser = useAppSelector((state) => state.auth.user)
+  const loggedUserId = loggedUser?.userId ?? 1
 
   const searchAccounts = async () => {
     try {
@@ -47,7 +48,16 @@ export const SearchResultUsers: FC<SearchResultUsersProps> = () => {
       <FlatList
         data={accounts}
         renderItem={({ item }) => (
-          <AccountItem avatar={item.avatar} name={item.username} followers={item.followers} isHorizontal={false} />
+          <AccountItem
+            userId={loggedUserId}
+            accountId={item.userId}
+            avatar={item.avatar}
+            name={item.username}
+            followers={item.followers}
+            isFriendList={false}
+            curFollowStatus={0}
+            isHorizontal={false}
+          />
         )}
         keyExtractor={(_, index) => index.toString()}
         initialNumToRender={10}

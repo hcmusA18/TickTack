@@ -211,6 +211,7 @@ class VideoRepository {
         select v.* from
         videos v join likes l on v.video_id = l.video_id
         where l.user_id = $1
+        order by l.time desc
       `,
       values: [userId],
     };
@@ -226,7 +227,7 @@ class VideoRepository {
 
   getVideosByUserId = async (userId: number): Promise<VideoModel[]> => {
     const query = {
-      text: `SELECT * FROM videos WHERE user_id = $1`,
+      text: `SELECT * FROM videos WHERE user_id = $1 order BY create_time DESC`,
       values: [userId],
     };
     try {

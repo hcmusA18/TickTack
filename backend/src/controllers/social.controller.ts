@@ -65,7 +65,8 @@ class SocialController {
   };
 
   isFollowing = async (req: Request, res: Response) => {
-    const { userId, checkId } = req.body;
+    const userId = parseInt(req.params.userId);
+    const checkId = parseInt(req.params.checkId);
 
     try {
       const isFollowing = await SocialService.getInstance().isFollowing(

@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 
 export const FriendPage: FC<FriendPageProps> = () => {
   const user = useAppSelector((state) => state.auth.user)
-  const userId = user?.user_id ?? 1
+  const userId = user?.userId ?? 1
 
   return (
     <Screen preset="fixed" safeAreaEdges={['top', 'bottom']}>
